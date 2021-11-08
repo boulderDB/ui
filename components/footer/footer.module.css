@@ -1,0 +1,13 @@
+.root {
+  display: flex;
+  padding: calc(2 * var(--spacing-unit)) calc(3 * var(--spacing-unit));
+  align-items: flex-end;
+}
+
+.item {
+  margin-left: calc(2 * var(--spacing-unit));
+}
+
+.item:first-child {
+  margin-left: 0;
+}

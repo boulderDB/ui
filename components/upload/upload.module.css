@@ -1,0 +1,16 @@
+.root {
+  display: inline-flex;
+  align-items: center;
+}
+
+.root .loader {
+  margin: 0;
+}
+
+.preview {
+  width: 40px;
+  height: 40px;
+  background-size: 100%;
+  background-repeat: no-repeat;
+  border: 1px solid var(--color-lila);
+}

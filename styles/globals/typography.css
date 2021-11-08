@@ -1,0 +1,20 @@
+@font-face {
+    font-family: 'Karla';
+    src: url("/public/fonts/Karla-VariableFont_wght.ttf") format("truetype");
+    font-weight: normal;
+}
+
+@font-face {
+    font-family: 'IBM Plex Mono';
+    src: url("/public/fonts/IBMPlexMono-Regular.ttf") format("truetype");
+    font-weight: normal;
+}
+
+body {
+    /*noinspection CssUnknownProperty*/
+    text-size-adjust: none;
+    text-rendering: optimizeLegibility;
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-font-smoothing: antialiased;
+    font-feature-settings: "kern" 1, "liga" 1;
+}

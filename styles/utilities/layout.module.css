@@ -1,0 +1,14 @@
+.grid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  margin: 0 auto;
+  max-width: 1200px;
+}
+
+.sideTitle {
+  grid-column: 1 / span 4;
+}
+
+.sideContent {
+  grid-column: 5 / span 8;
+}

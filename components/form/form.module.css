@@ -1,0 +1,7 @@
+.row {
+  padding: 24px 0;
+}
+
+.row > * {
+  width: 100%;
+}

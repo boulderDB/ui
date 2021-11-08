@@ -1,0 +1,5 @@
+.root {
+  background: var(--color-lila);
+  color: var(--color-white);
+  padding: calc(var(--spacing-unit) * 1.25) calc(var(--spacing-unit) * 6);
+}

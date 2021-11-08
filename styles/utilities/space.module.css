@@ -1,0 +1,27 @@
+._ {
+  --aspect-ratio: 1;
+}
+
+.aspectRatio {
+  &::before {
+    content: "";
+    width: 1px;
+    margin-left: -1px;
+    float: left;
+    height: 0;
+    padding-top: var(--aspect-ratio);
+  }
+  &::after {
+    content: "";
+    display: table;
+    clear: both;
+  }
+}
+
+._aspectRatioFit {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
