@@ -1,9 +1,8 @@
-import React, { useContext, useCallback, useState } from "react";
+import React, { useContext, useCallback } from "react";
 import { useRequest } from "../../hooks/useRequest";
 import styles from "./header.module.css";
 import cn from "classnames";
 import { AppContext } from "../../pages/_app";
-import { Burger, Close } from "../icon/icon";
 import { textStyles } from "../../styles/utilities";
 import Link from "next/link";
 import useLocation from "../../hooks/useLocation";
@@ -32,8 +31,8 @@ export default function Header() {
     isAuthenticated,
     lastVisitedLocation,
   } = useContext(AppContext);
+
   const location = useLocation();
-  const [mobileNavOpen, setMobileNavOpen] = useState(false);
   const { data: locations } = useRequest("/locations", false, false);
 
   const switchLocation = useCallback(
@@ -62,18 +61,16 @@ export default function Header() {
   if (!location && lastVisitedLocation) {
     return (
       <header className={styles.root}>
-        <Link href={`/${lastVisitedLocation.url}`}>
-          <a className={styles.logo}>
-            {"<-"} back to {lastVisitedLocation.name}
-          </a>
-        </Link>
+        <NavItem href={`/${lastVisitedLocation.url}`}>
+          back to {lastVisitedLocation.name}
+        </NavItem>
       </header>
     );
   }
 
   return (
     <header className={cn(styles.root, textStyles.eta)}>
-      <div className={styles.logo}>
+      <nav className={styles.logo}>
         <Link href={`/${location}`}>
           <a className={cn(styles.title)}>BoulderDB</a>
         </Link>
@@ -94,37 +91,22 @@ export default function Header() {
             })}
         </select>
 
-        <nav>
-          <NavItem href={`/${location}/boulder`}>Boulder</NavItem>
+        <NavItem href={`/${location}/boulder`}>Boulder</NavItem>
 
-          {user && user.visible && (
-            <NavItem href={`/${location}/ranking/current`}>Ranking</NavItem>
-          )}
-
-          {isAdmin && <NavItem href={`/${location}/admin`}>Admin</NavItem>}
-        </nav>
-      </div>
-
-      <nav
-        className={cn(
-          styles.nav,
-          mobileNavOpen ? styles.isOpenMobileNav : null
+        {user && user.visible && (
+          <NavItem href={`/${location}/ranking/current`}>Ranking</NavItem>
         )}
-        onClick={() => setMobileNavOpen(false)}
-      >
+
+        {isAdmin && <NavItem href={`/${location}/admin`}>Admin</NavItem>}
+      </nav>
+
+      <nav>
         <NavItem href={`/account`}>[{user && user.username}]</NavItem>
 
         <span onClick={() => reset()} className={styles.navItem}>
           Logout
         </span>
       </nav>
-
-      <div
-        className={styles.toggle}
-        onClick={() => setMobileNavOpen(!mobileNavOpen)}
-      >
-        {mobileNavOpen ? <Close /> : <Burger />}
-      </div>
     </header>
   );
 }

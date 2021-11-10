@@ -1,5 +1,5 @@
 import { useHttp } from "../hooks/useRequest";
-import { useContext } from "react";
+import { useContext, useMemo } from "react";
 import { AppContext } from "./_app";
 import { useRouter } from "next/router";
 import toast from "../utilties/toast";
@@ -11,26 +11,28 @@ import TextField from "@material-ui/core/TextField";
 import cn from "classnames";
 import Form from "../components/form/form";
 
-const formFields = [
-  {
-    name: "username",
-    label: "Username / E-Mail",
-    Component: TextField,
-    componentProps: {},
-  },
-  {
-    name: "password",
-    label: "Password",
-    Component: TextField,
-    componentProps: {
-      type: "password",
-    },
-  },
-];
-
 export default function Login() {
   const router = useRouter();
   const globalHttp = useHttp(false, false);
+
+  const formFields = useMemo(() => {
+    return [
+      {
+        name: "username",
+        label: "Username / E-Mail",
+        Component: TextField,
+        componentProps: {},
+      },
+      {
+        name: "password",
+        label: "Password",
+        Component: TextField,
+        componentProps: {
+          type: "password",
+        },
+      },
+    ];
+  }, []);
 
   const {
     dispatchMessage,

@@ -1,7 +1,6 @@
 import useSWR from "swr";
 import axios from "axios";
 import { useMemo } from "react";
-import { useRouter } from "next/router";
 import extractErrorMessage from "../utilties/extractErrorMessage";
 import useLocation from "./useLocation";
 

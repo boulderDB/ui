@@ -1,7 +1,7 @@
 import { useRequest } from "../../hooks/useRequest";
-import Select from "../Select/Select";
 import React from "react";
 import sortItemsAlphabetically from "../../utilties/sortItemsAlphabetically";
+import Select from "../select/select";
 
 function EntitySelect({ value, resource, ...rest }) {
   const { data } = useRequest(resource, true);

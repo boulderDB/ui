@@ -22,7 +22,7 @@ function Form({ defaults, fields, onSubmit, submitLabel }) {
         handleSubmit(onSubmit);
       }}
     >
-      {fields.map(({ name, Component, componentProps }) => {
+      {fields.map(({ name, label, Component, componentProps }) => {
         const value = name in formData ? formData[name] : "";
 
         if (Component === EntitySelect || Component === Select) {
@@ -37,14 +37,12 @@ function Form({ defaults, fields, onSubmit, submitLabel }) {
           componentProps.onSuccess = (value) => setKeyValue(name, value);
         }
 
-        componentProps.label = name;
-
         return (
           <div className={styles.row} key={name}>
             <Component
               name={name}
               id={name}
-              label={name}
+              label={label}
               value={value}
               onChange={observeField}
               {...componentProps}
