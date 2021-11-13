@@ -3,12 +3,28 @@
   grid-template-columns: repeat(12, 1fr);
   margin: 0 auto;
   max-width: var(--content-max-width);
+
+  @media (--m) {
+    grid-template-columns: repeat(8, 1fr);
+  }
+
+  @media (--s) {
+    grid-template-columns: repeat(4, 1fr);
+  }
 }
 
 .sideTitle {
   grid-column: 1 / span 4;
+
+  @media (--l-to-s) {
+    grid-column: 1 / -1;
+  }
 }
 
 .sideContent {
   grid-column: 5 / span 8;
+
+  @media (--l-to-s) {
+    grid-column: 1 / -1;
+  }
 }

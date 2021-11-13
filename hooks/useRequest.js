@@ -1,8 +1,8 @@
 import useSWR from "swr";
 import axios from "axios";
-import { useMemo } from "react";
+import { useContext, useMemo } from "react";
 import extractErrorMessage from "../utilties/extractErrorMessage";
-import useLocation from "./useLocation";
+import { AppContext } from "../pages/_app";
 
 function useAxios(authentication = true, location = null) {
   return useMemo(() => {
@@ -47,7 +47,7 @@ function useRequest(
 
         return data;
       } catch (error) {
-        console.error(extractErrorMessage(error));
+        /*console.error(extractErrorMessage(error));*/
       }
     },
     swrConfig
@@ -55,9 +55,9 @@ function useRequest(
 }
 
 function useHttp(location = true, authentication = true) {
-  const currentLocation = useLocation();
+  const { location: currentLocation } = useContext(AppContext);
 
-  return useAxios(authentication, currentLocation ? currentLocation : null);
+  return useAxios(authentication, currentLocation ? currentLocation.url : null);
 }
 
 export { useRequest, useHttp };

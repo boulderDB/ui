@@ -1,16 +1,17 @@
 import styles from "./button.module.css";
 import cn from "classnames";
-import { textStyles } from "../../styles/utilities";
+import { typography } from "../../styles/utilities";
 import capitalize from "../../utilties/capitalize";
 
-function Button({ children, variant, ...rest }) {
+function Button({ children, variant, className, ...rest }) {
   return (
     <button
       {...rest}
       className={cn(
         styles.root,
         styles[`is${capitalize(variant)}`],
-        textStyles.epsilon
+        typography.delta,
+        className
       )}
     >
       {children}

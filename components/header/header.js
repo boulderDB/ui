@@ -1,112 +1,133 @@
-import React, { useContext, useCallback } from "react";
-import { useRequest } from "../../hooks/useRequest";
+import React, { useContext, useMemo } from "react";
 import styles from "./header.module.css";
 import cn from "classnames";
 import { AppContext } from "../../pages/_app";
-import { textStyles } from "../../styles/utilities";
+import { typography } from "../../styles/utilities";
 import Link from "next/link";
-import useLocation from "../../hooks/useLocation";
 
-function NavItem({ href, children, ...rest }) {
+function NavItem({ href, children, className, onClick, ...rest }) {
+  if (onClick) {
+    return (
+      <span
+        className={cn(styles.item, typography.delta, className)}
+        onClick={onClick}
+        {...rest}
+      >
+        {children}
+      </span>
+    );
+  }
+
   return (
     <Link href={href}>
-      <a className={cn(styles.navItem)} {...rest}>
+      <a className={cn(styles.item, typography.delta, className)} {...rest}>
         {children}
       </a>
     </Link>
   );
 }
 
-function DoubtCountNavItem({ href }) {
-  const { data } = useRequest(`/ascent-doubts/count`);
-
-  return <NavItem href={href}>Doubts ({data ? data : 0})</NavItem>;
-}
-
-export default function Header() {
+export default function Header({ locations }) {
   const {
+    currentLocation,
+    isAuthenticated,
+    lastLocation,
     user,
     isAdmin,
-    reset,
-    isAuthenticated,
-    lastVisitedLocation,
   } = useContext(AppContext);
 
-  const location = useLocation();
-  const { data: locations } = useRequest("/locations", false, false);
+  const reset = () => {
+    alert("alert");
+  };
 
-  const switchLocation = useCallback(
-    (locationId) => {
-      const newLocation = locations.find(
-        (location) => location.id === parseInt(locationId)
-      );
+  const menu = useMemo(() => {
+    const items = {
+      primary: [
+        () => {
+          let href = "/login";
+          let label = "BoulderDB";
 
-      if (!newLocation) {
-        return;
-      }
-    },
-    [locations]
-  );
+          if (currentLocation && isAuthenticated) {
+            href = `/${currentLocation?.url}`;
+          }
 
-  if (!isAuthenticated) {
-    return (
-      <header className={styles.root}>
-        <Link href="/login">
-          <a className={styles.logo}>BoulderDB</a>
-        </Link>
-      </header>
-    );
-  }
+          if (!currentLocation && lastLocation && isAuthenticated) {
+            href = `/${lastLocation?.url}`;
+            label = `back to ${lastLocation?.name}`;
+          }
 
-  if (!location && lastVisitedLocation) {
-    return (
-      <header className={styles.root}>
-        <NavItem href={`/${lastVisitedLocation.url}`}>
-          back to {lastVisitedLocation.name}
+          return (
+            <NavItem href={href} className={typography.delta700}>
+              {label}
+            </NavItem>
+          );
+        },
+      ],
+      secondary: [],
+    };
+
+    if (!isAuthenticated || !currentLocation) {
+      return items;
+    }
+
+    items.primary.push(() => (
+      <NavItem href={`/${currentLocation?.url}/boulder`}>Boulder</NavItem>
+    ));
+
+    if (user?.visible) {
+      items.primary.push(() => (
+        <NavItem href={`/${currentLocation?.url}/rankings/current`}>
+          Ranking
         </NavItem>
-      </header>
+      ));
+    }
+
+    items.secondary.push(
+      () => <NavItem href={`/account`}>Account</NavItem>,
+      () => <NavItem onClick={reset}>Logout</NavItem>
     );
-  }
+
+    if (isAdmin) {
+      items.secondary.push(() => (
+        <NavItem href={`/${currentLocation?.url}/admin`}>Admin</NavItem>
+      ));
+    }
+
+    return items;
+  }, [isAuthenticated, currentLocation, user]);
 
   return (
-    <header className={cn(styles.root, textStyles.eta)}>
-      <nav className={styles.logo}>
-        <Link href={`/${location}`}>
-          <a className={cn(styles.title)}>BoulderDB</a>
-        </Link>
+    <header className={styles.root}>
+      <nav className={styles.nav}>
+        <div className={styles.primary}>
+          {menu.primary.map((Item, index) => (
+            <Item key={index} />
+          ))}
+        </div>
 
-        <select
-          className={cn(styles.locationSelect, textStyles.eta)}
-          onChange={(event) => switchLocation(event.target.value)}
-        >
-          <option value=""> @{location}</option>
-
-          {locations &&
-            locations.map(({ name }) => {
-              return (
-                <option value={name} key={name}>
-                  @{name}
-                </option>
-              );
-            })}
-        </select>
-
-        <NavItem href={`/${location}/boulder`}>Boulder</NavItem>
-
-        {user && user.visible && (
-          <NavItem href={`/${location}/ranking/current`}>Ranking</NavItem>
-        )}
-
-        {isAdmin && <NavItem href={`/${location}/admin`}>Admin</NavItem>}
-      </nav>
-
-      <nav>
-        <NavItem href={`/account`}>[{user && user.username}]</NavItem>
-
-        <span onClick={() => reset()} className={styles.navItem}>
-          Logout
-        </span>
+        <div className={styles.secondary}>
+          {menu.secondary.map((Item, index) => (
+            <Item key={index} />
+          ))}
+        </div>
       </nav>
     </header>
   );
+
+  function LocationSelect() {
+    return (
+      <select
+        className={cn(styles.locationSelect, typography.eta)}
+        onChange={(event) => switchLocation(event.target.value)}
+      >
+        <option value="">{location}</option>
+
+        {locations.map(({ name, url }) => (
+          <option value={url} key={name}>
+            @{name}
+          </option>
+        ))}
+      </select>
+    );
+  }
 }

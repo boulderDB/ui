@@ -1,9 +1,8 @@
 import Layout from "../components/layout/layout";
 import { useHttp } from "../hooks/useRequest";
-import { layoutStyles, textStyles } from "../styles/utilities";
+import { layoutStyles, typography } from "../styles/utilities";
 import cn from "classnames";
 import Meta from "../components/meta/meta";
-import TextField from "@material-ui/core/TextField";
 import { mutate } from "swr";
 import { useContext } from "react";
 import { AppContext } from "./_app";
@@ -14,6 +13,7 @@ import Switch from "../components/switch/switch";
 import Select from "../components/select/select";
 import Button from "../components/button/button";
 import withAuthentication from "../utilties/withAuthentication";
+import TextField from "../components/textField/textField";
 
 export default function Account({ settings }) {
   const http = useHttp(false);
@@ -106,7 +106,7 @@ export default function Account({ settings }) {
       <Meta title={"Account"} />
 
       <div className={layoutStyles.grid}>
-        <h1 className={cn(layoutStyles.sideTitle, textStyles.alpha)}>
+        <h1 className={cn(layoutStyles.sideTitle, typography.alpha)}>
           Settings
         </h1>
 
@@ -128,7 +128,7 @@ export default function Account({ settings }) {
       </div>
 
       <div className={layoutStyles.grid}>
-        <h1 className={cn(layoutStyles.sideTitle, textStyles.alpha)}>
+        <h1 className={cn(layoutStyles.sideTitle, typography.alpha)}>
           Password
         </h1>
 
@@ -157,14 +157,12 @@ export const getServerSideProps = (context) =>
     } catch (error) {
       throw error;
       /*if (!user) {
-                                      return {
-                                        redirect: {
-                                          destination: "/login",
-                                          permanent: false,
-                                        },
-                                      };
-                                    }*/
-
-      console.error(error?.response);
+                                        return {
+                                          redirect: {
+                                            destination: "/login",
+                                            permanent: false,
+                                          },
+                                        };
+                                      }*/
     }
   });

@@ -6,10 +6,12 @@ import toast from "../utilties/toast";
 import extractErrorMessage from "../utilties/extractErrorMessage";
 import Layout from "../components/layout/layout";
 import Meta from "../components/meta/meta";
-import { layoutStyles, textStyles } from "../styles/utilities";
-import TextField from "@material-ui/core/TextField";
+import { layoutStyles, typography, colors } from "../styles/utilities";
 import cn from "classnames";
 import Form from "../components/form/form";
+import styles from "./login.module.css";
+import Link from "next/link";
+import TextField from "../components/textField/textField";
 
 export default function Login() {
   const router = useRouter();
@@ -39,7 +41,6 @@ export default function Login() {
     setUser,
     setExpiration,
     setLastVisitedLocation,
-    setDevelopmentToken,
   } = useContext(AppContext);
 
   const onSubmit = async (payload) => {
@@ -50,10 +51,6 @@ export default function Login() {
       setUser(user);
       setExpiration(expiration);
       setLastVisitedLocation(location);
-
-      if (data.developmentToken) {
-        setDevelopmentToken(data.developmentToken);
-      }
 
       if (!targetLocation) {
         router.push(`/setup`);
@@ -70,12 +67,24 @@ export default function Login() {
       <Meta title="Login" />
 
       <div className={layoutStyles.grid}>
-        <h1 className={cn(textStyles.alpha, layoutStyles.sideTitle)}>
-          Please sign in to access BoulderDB.
+        <h1 className={cn(typography.alpha700, layoutStyles.sideTitle)}>
+          Sign in
         </h1>
 
         <div className={cn(layoutStyles.sideContent)}>
           <Form submitLabel={"Login"} onSubmit={onSubmit} fields={formFields} />
+
+          <div className={styles.links}>
+            <Link href={"/sign-up"}>
+              <a className={cn(typography.eta, colors.black)}>Sign up</a>
+            </Link>
+
+            <Link href={"/reset-password"}>
+              <a className={cn(typography.eta, colors.midGrey)}>
+                Reset password
+              </a>
+            </Link>
+          </div>
         </div>
       </div>
     </Layout>

@@ -3,14 +3,14 @@ import Meta from "../components/meta/meta";
 import { layoutStyles, typography } from "../styles/utilities";
 import cn from "classnames";
 
-export default function Index() {
+export default function ResetPassword() {
   return (
     <Layout>
-      <Meta title={"Account"} />
+      <Meta title={"Reset password"} />
 
       <div className={layoutStyles.grid}>
-        <h1 className={cn(layoutStyles.sideTitle, typography.alpha700)}>
-          Dashboard
+        <h1 className={cn(typography.alpha700, layoutStyles.sideTitle)}>
+          Reset password
         </h1>
 
         <div className={layoutStyles.sideContent}>123</div>

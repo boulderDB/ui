@@ -5,7 +5,12 @@ import styles from "./footer.module.css";
 export const Footer = () => {
   return (
     <div className={styles.root}>
-      <a href="https://github.com/boulderdb" className={styles.item}>
+      <a
+        href="https://github.com/boulderdb"
+        target={"_blank"}
+        rel={"noreferrer noopener"}
+        className={styles.item}
+      >
         Github
       </a>
 

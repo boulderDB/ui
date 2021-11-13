@@ -1,10 +1,21 @@
 import axios from "axios";
 
 async function withAuthentication(context, callable) {
+  const token = context.req.cookies.BEARER;
+
+  if (!token) {
+    return {
+      redirect: {
+        destination: "/login",
+        permanent: false,
+      },
+    };
+  }
+
   let options = {
     baseURL: process.env.API_PROXY + "/api",
     headers: {
-      Authorization: `Bearer ${context.req.cookies.BEARER}`,
+      Authorization: `Bearer ${token}`,
     },
   };
 

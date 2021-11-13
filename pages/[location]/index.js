@@ -1,6 +1,6 @@
 import Layout from "../../components/layout/layout";
 import Meta from "../../components/meta/meta";
-import { layoutStyles, textStyles } from "../../styles/utilities";
+import { layoutStyles, typography } from "../../styles/utilities";
 import cn from "classnames";
 import { useContext } from "react";
 import { AppContext } from "../_app";
@@ -13,7 +13,7 @@ export default function Index() {
       <Meta title={"Account"} />
 
       <div className={layoutStyles.grid}>
-        <h1 className={cn(layoutStyles.sideTitle, textStyles.alpha)}>
+        <h1 className={cn(layoutStyles.sideTitle, typography.alpha)}>
           Welcome back {user?.username} 👋
         </h1>
 
@@ -21,4 +21,10 @@ export default function Index() {
       </div>
     </Layout>
   );
+}
+
+export async function getServerSideProps(context) {
+  return {
+    props: {}, // will be passed to the page component as props
+  };
 }

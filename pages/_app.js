@@ -1,93 +1,95 @@
 import "../styles/globals/index.css";
-import { createContext, useEffect, useMemo, useState } from "react";
-import usePersistentState from "../hooks/usePersistentState";
-import getLocalStorage from "../utilties/getLocalStorage";
+import { createContext, useEffect, useState } from "react";
 import Toaster from "../components/toaster/toaster";
 import Header from "../components/header/header";
 import { Footer } from "../components/footer/footer";
-import useLocation from "../hooks/useLocation";
-import { useRouter } from "next/router";
+import App from "next/app";
+import axios from "axios";
+import jwtDecode from "jwt-decode";
+import usePersistentState from "../hooks/usePersistentState";
 
 export const AppContext = createContext(null);
 
-function MyApp({ Component, pageProps }) {
-  const location = useLocation();
-  const router = useRouter();
-
-  const [user, setUser] = usePersistentState("user", null);
-  const [lastVisitedLocation, setLastVisitedLocation] = usePersistentState(
-    "location",
+function MyApp({
+  Component,
+  pageProps,
+  locations,
+  currentLocation,
+  isAuthenticated,
+  isAdmin,
+}) {
+  const [message, setMessage] = useState(null);
+  const [lastLocation, setLastLocation] = usePersistentState(
+    "lastLocation",
     null
   );
-  const [expiration, setExpiration] = usePersistentState("expiration", null);
-  const [developmentToken, setDevelopmentToken] = usePersistentState(
-    "developmentToken",
-    null
-  );
-  const [messageQueue, setMessageQueue] = useState([]);
 
-  const dispatchMessage = (newToast) => {
-    setMessageQueue([...messageQueue, newToast]);
-  };
-
-  const isAuthenticated = useMemo(() => {
-    if (!user || !expiration) {
-      return false;
-    }
-
-    return new Date().getTime() / 1000 <= expiration;
-  }, [user, expiration]);
-
-  const isAdmin = useMemo(() => {
-    if (!user || !location) {
-      return false;
-    }
-
-    if (!Array.isArray(user.roles)) {
-      return false;
-    }
-
-    return user.roles.includes(`ROLE_ADMIN@${location}`);
-  }, [user, location]);
-
-  const reset = () => {
-    setUser(null);
-    setExpiration(null);
-
-    getLocalStorage()?.clear();
+  const dispatchMessage = (newMessage) => {
+    setMessage(newMessage);
   };
 
   useEffect(() => {
-    if (!isAuthenticated) {
-      reset();
-      router.push("/login");
+    if (currentLocation !== undefined) {
+      setLastLocation(currentLocation);
     }
-  }, [isAuthenticated]);
+  }, [currentLocation]);
+
+  useEffect(() => {
+    setTimeout(() => setMessage(null), 3000);
+  }, [message]);
 
   return (
     <AppContext.Provider
       value={{
-        user,
-        setUser,
-        lastVisitedLocation,
-        setLastVisitedLocation,
-        expiration,
-        setExpiration,
-        isAdmin,
-        isAuthenticated,
-        reset,
-        developmentToken,
-        setDevelopmentToken,
         dispatchMessage,
+        currentLocation,
+        lastLocation,
+        isAuthenticated,
+        isAdmin,
+        user: {
+          public: true,
+        },
       }}
     >
-      <Header />
+      <Header locations={locations} />
       <Component {...pageProps} />
       <Footer />
 
-      <Toaster queue={messageQueue} />
+      <Toaster message={message} />
     </AppContext.Provider>
   );
 }
+
+MyApp.getInitialProps = async (appContext) => {
+  const appProps = await App.getInitialProps(appContext);
+
+  const token = appContext?.ctx?.req?.cookies?.BEARER;
+  const locationParameter = appContext.router?.query?.location;
+  const tokenPayload = token ? jwtDecode(token) : {};
+
+  console.log(`${process.env.API_PROXY}/api/locations`);
+
+  const { data: locations } = await axios.get(
+    `${process.env.API_PROXY}/api/locations`
+  );
+
+  const currentLocation = locations.find(
+    (location) => location.url === locationParameter
+  );
+
+  const isAuthenticated = new Date().getTime() / 1000 <= tokenPayload?.exp;
+  const isAdmin = tokenPayload?.roles?.includes(
+    `ROLE_ADMIN@${currentLocation?.url}`
+  );
+
+  return {
+    ...appProps,
+    locations,
+    isAuthenticated,
+    isAdmin,
+    currentLocation,
+    tokenPayload,
+  };
+};
 
 export default MyApp;

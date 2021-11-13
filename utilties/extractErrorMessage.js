@@ -1,20 +1,22 @@
 function extractErrorMessage(error) {
-  console.error(error);
-
   if (!error.response) {
-    return null;
+    return "No response";
   }
 
   const { data } = error.response;
 
-  if (data.type === "formError") {
+  if (data?.type === "formError") {
     const errors = error.response.data.errors;
     const fields = Object.keys(errors);
 
     return fields.map((field) => `${field}: ⚠️ ${errors[field]}`);
   }
 
-  return data.message;
+  if (data.message) {
+    return data.message;
+  }
+
+  return error.response.statusText;
 }
 
 export default extractErrorMessage;

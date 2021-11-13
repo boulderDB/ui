@@ -12,12 +12,13 @@ module.exports = {
 		'--hover': '(any-hover: hover) and (pointer: fine)'
 	},
 	customProperties: {
-		'--color-black': '#000',
-		'--color-dark': '#333',
+		'--color-black': '#333333',
+		'--color-migrey': '#a2a2a2',
 		'--color-light': '#fff',
+		'--color-dark': '#333',
 		'--color-lightgrey': 'rgba(51, 51, 51, 0.25)',
 		'--color-error': '#ff0000',
-		'--color-grey': 'rgba(51, 51, 51, 0.5)',
+		'--color-grey': '#a2a2a2',
 		'--color-blue': '#5759fb',
 		'--color-lightblue': '#cdcefe',
 		'--color-flash': '#1687ff',
@@ -32,6 +33,7 @@ module.exports = {
 		'--font-family-sans': '"Karla", sans-serif',
 		'--font-family-mono': '"IBM Plex Mono", monospace',
 		'--spacing-unit': '8px',
+		'--content-max-width': '1200px',
 		'--available-screen-height': '100vh'
 	},
 	customSelectors: {

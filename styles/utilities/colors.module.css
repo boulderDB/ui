@@ -1,0 +1,11 @@
+.black {
+  color: var(--color-black);
+}
+
+.white {
+  color: var(--color-white);
+}
+
+.midGrey {
+  color: var(--color-migrey);
+}
