@@ -23,6 +23,7 @@ function MyApp({
     "lastLocation",
     null
   );
+  const [tokenExpiration, setTokenExpiration] = usePersistentState("exp", null);
 
   const dispatchMessage = (newMessage) => {
     setMessage(newMessage);
@@ -46,6 +47,8 @@ function MyApp({
         lastLocation,
         isAuthenticated,
         isAdmin,
+        tokenExpiration,
+        setTokenExpiration,
         user: {
           public: true,
         },
@@ -67,10 +70,8 @@ MyApp.getInitialProps = async (appContext) => {
   const locationParameter = appContext.router?.query?.location;
   const tokenPayload = token ? jwtDecode(token) : {};
 
-  console.log(`${process.env.API_PROXY}/api/locations`);
-
   const { data: locations } = await axios.get(
-    `${process.env.API_PROXY}/api/locations`
+    `${process.env.NEXT_PUBLIC_API_PROXY}/api/locations`
   );
 
   const currentLocation = locations.find(

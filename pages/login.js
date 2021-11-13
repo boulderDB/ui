@@ -15,7 +15,7 @@ import TextField from "../components/textField/textField";
 
 export default function Login() {
   const router = useRouter();
-  const globalHttp = useHttp(false, false);
+  const http = useHttp();
 
   const formFields = useMemo(() => {
     return [
@@ -36,28 +36,22 @@ export default function Login() {
     ];
   }, []);
 
-  const {
-    dispatchMessage,
-    setUser,
-    setExpiration,
-    setLastVisitedLocation,
-  } = useContext(AppContext);
+  const { dispatchMessage, setTokenExpiration } = useContext(AppContext);
 
   const onSubmit = async (payload) => {
     try {
-      const { data } = await globalHttp.post("/login", payload);
-      const { expiration, user, targetLocation, location } = data;
+      const { data } = await http.post("/login", payload);
+      const { targetLocation, expiration } = data;
 
-      setUser(user);
-      setExpiration(expiration);
-      setLastVisitedLocation(location);
+      setTokenExpiration(expiration);
 
       if (!targetLocation) {
-        router.push(`/setup`);
+        await router.push(`/setup`);
       } else {
-        router.push(`${targetLocation}`);
+        await router.push(`${targetLocation}`);
       }
     } catch (error) {
+      console.error(error);
       dispatchMessage(toast("Error", extractErrorMessage(error), "error"));
     }
   };

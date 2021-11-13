@@ -13,7 +13,7 @@ async function withAuthentication(context, callable) {
   }
 
   let options = {
-    baseURL: process.env.API_PROXY + "/api",
+    baseURL: process.env.NEXT_PUBLIC_API_PROXY + "/api",
     headers: {
       Authorization: `Bearer ${token}`,
     },
