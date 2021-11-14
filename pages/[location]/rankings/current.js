@@ -125,7 +125,7 @@ export default function Current({ ranking, boulderCount }) {
 
   return (
     <Layout>
-      <Meta title={"Account"} />
+      <Meta title={"Current ranking"} />
 
       <div className={layoutStyles.grid}>
         <h1 className={cn(layoutStyles.sideTitle, typography.alpha700)}>
