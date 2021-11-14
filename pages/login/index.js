@@ -1,19 +1,19 @@
-import { useHttp } from "../hooks/useRequest";
+import { useHttp } from "../../hooks/useRequest";
 import { useContext, useMemo } from "react";
-import { AppContext } from "./_app";
+import { AppContext } from "../_app";
 import { useRouter } from "next/router";
-import toast from "../utilties/toast";
-import extractErrorMessage from "../utilties/extractErrorMessage";
-import Layout from "../components/layout/layout";
-import Meta from "../components/meta/meta";
-import { layoutStyles, typography, colors } from "../styles/utilities";
+import toast from "../../utilties/toast";
+import extractErrorMessage from "../../utilties/extractErrorMessage";
+import Layout from "../../components/layout/layout";
+import Meta from "../../components/meta/meta";
+import { layoutStyles, typography, colors } from "../../styles/utilities";
 import cn from "classnames";
-import Form from "../components/form/form";
-import styles from "./login.module.css";
+import Form from "../../components/form/form";
+import styles from "./index.module.css";
 import Link from "next/link";
-import TextField from "../components/textField/textField";
+import TextField from "../../components/textField/textField";
 
-export default function Login() {
+export default function Index() {
   const router = useRouter();
   const http = useHttp();
 
@@ -36,19 +36,19 @@ export default function Login() {
     ];
   }, []);
 
-  const { dispatchMessage, setTokenExpiration } = useContext(AppContext);
+  const { dispatchMessage, setTokenPayload } = useContext(AppContext);
 
   const onSubmit = async (payload) => {
     try {
       const { data } = await http.post("/login", payload);
-      const { targetLocation, expiration } = data;
+      const { lastVisitedLocation } = data;
 
-      setTokenExpiration(expiration);
+      setTokenPayload(data);
 
-      if (!targetLocation) {
+      if (!lastVisitedLocation) {
         await router.push(`/setup`);
       } else {
-        await router.push(`${targetLocation}`);
+        await router.push(`${lastVisitedLocation.url}`);
       }
     } catch (error) {
       console.error(error);

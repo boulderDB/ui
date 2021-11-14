@@ -1,21 +1,22 @@
-import Layout from "../components/layout/layout";
-import { useHttp } from "../hooks/useRequest";
-import { layoutStyles, typography } from "../styles/utilities";
+import Layout from "../../components/layout/layout";
+import { useHttp } from "../../hooks/useRequest";
+import { layoutStyles, typography } from "../../styles/utilities";
 import cn from "classnames";
-import Meta from "../components/meta/meta";
+import Meta from "../../components/meta/meta";
 import { mutate } from "swr";
 import { useContext } from "react";
-import { AppContext } from "./_app";
-import toast from "../utilties/toast";
-import extractErrorMessage from "../utilties/extractErrorMessage";
-import Form from "../components/form/form";
-import Switch from "../components/switch/switch";
-import Select from "../components/select/select";
-import Button from "../components/button/button";
-import withAuthentication from "../utilties/withAuthentication";
-import TextField from "../components/textField/textField";
+import { AppContext } from "../_app";
+import toast from "../../utilties/toast";
+import extractErrorMessage from "../../utilties/extractErrorMessage";
+import Form from "../../components/form/form";
+import Switch from "../../components/switch/switch";
+import Select from "../../components/select/select";
+import Button from "../../components/button/button";
+import withAuthentication from "../../utilties/withAuthentication";
+import TextField from "../../components/textField/textField";
+import styles from "./index.module.css";
 
-export default function Account({ settings }) {
+export default function Index({ settings }) {
   const http = useHttp(false);
   const { dispatchMessage } = useContext(AppContext);
 
@@ -105,7 +106,7 @@ export default function Account({ settings }) {
     <Layout>
       <Meta title={"Account"} />
 
-      <div className={layoutStyles.grid}>
+      <div className={cn(layoutStyles.grid, styles.section)}>
         <h1 className={cn(layoutStyles.sideTitle, typography.alpha)}>
           Settings
         </h1>
@@ -122,12 +123,10 @@ export default function Account({ settings }) {
               ),
             }}
           />
-
-          <Button variant={"danger"}>Delete account</Button>
         </div>
       </div>
 
-      <div className={layoutStyles.grid}>
+      <div className={cn(layoutStyles.grid, styles.section)}>
         <h1 className={cn(layoutStyles.sideTitle, typography.alpha)}>
           Password
         </h1>
@@ -140,12 +139,18 @@ export default function Account({ settings }) {
           />
         </div>
       </div>
+
+      <div className={cn(styles.section, layoutStyles.grid)}>
+        <Button variant={"danger"} className={layoutStyles.full}>
+          Delete account
+        </Button>
+      </div>
     </Layout>
   );
 }
 
 export const getServerSideProps = (context) =>
-  withAuthentication(context, async (http) => {
+  withAuthentication(context, async (http, location) => {
     try {
       const { data } = await http.get(`/me`);
 
@@ -156,13 +161,5 @@ export const getServerSideProps = (context) =>
       };
     } catch (error) {
       throw error;
-      /*if (!user) {
-                                        return {
-                                          redirect: {
-                                            destination: "/login",
-                                            permanent: false,
-                                          },
-                                        };
-                                      }*/
     }
   });

@@ -3,7 +3,7 @@ import cn from "classnames";
 import { typography } from "../../styles/utilities";
 import capitalize from "../../utilties/capitalize";
 
-function Button({ children, variant, className, ...rest }) {
+function Button({ children, variant, className, as, ...rest }) {
   return (
     <button
       {...rest}

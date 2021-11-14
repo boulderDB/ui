@@ -2,6 +2,7 @@ import axios from "axios";
 
 async function withAuthentication(context, callable) {
   const token = context.req.cookies.BEARER;
+  const location = context?.params?.location;
 
   if (!token) {
     return {
@@ -19,7 +20,26 @@ async function withAuthentication(context, callable) {
     },
   };
 
-  return callable(axios.create(options));
+  try {
+    return {
+      props: await callable(axios.create(options), location),
+    };
+  } catch (error) {
+    if (error.response.status === 404) {
+      return {
+        notFound: true,
+      };
+    }
+
+    if (error.response.status === 401) {
+      return {
+        redirect: {
+          destination: "/login",
+          permanent: false,
+        },
+      };
+    }
+  }
 }
 
 export default withAuthentication;

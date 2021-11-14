@@ -1,5 +1,5 @@
 import "../styles/globals/index.css";
-import { createContext, useEffect, useState } from "react";
+import { createContext, useEffect, useMemo, useState } from "react";
 import Toaster from "../components/toaster/toaster";
 import Header from "../components/header/header";
 import { Footer } from "../components/footer/footer";
@@ -23,17 +23,29 @@ function MyApp({
     "lastLocation",
     null
   );
-  const [tokenExpiration, setTokenExpiration] = usePersistentState("exp", null);
+  const [tokenPayload, setTokenPayload] = usePersistentState(
+    "tokenPayload",
+    null
+  );
 
   const dispatchMessage = (newMessage) => {
     setMessage(newMessage);
   };
 
+  const reset = () => {
+    setTokenPayload(null);
+  };
+
   useEffect(() => {
+    if (!lastLocation) {
+      setLastLocation(tokenPayload?.lastVisitedLocation);
+      return;
+    }
+
     if (currentLocation !== undefined) {
       setLastLocation(currentLocation);
     }
-  }, [currentLocation]);
+  }, [currentLocation, tokenPayload]);
 
   useEffect(() => {
     setTimeout(() => setMessage(null), 3000);
@@ -47,11 +59,9 @@ function MyApp({
         lastLocation,
         isAuthenticated,
         isAdmin,
-        tokenExpiration,
-        setTokenExpiration,
-        user: {
-          public: true,
-        },
+        setTokenPayload,
+        tokenPayload,
+        reset,
       }}
     >
       <Header locations={locations} />
@@ -86,10 +96,9 @@ MyApp.getInitialProps = async (appContext) => {
   return {
     ...appProps,
     locations,
+    currentLocation,
     isAuthenticated,
     isAdmin,
-    currentLocation,
-    tokenPayload,
   };
 };
 

@@ -2,6 +2,7 @@
   padding: 16px 32px;
   text-transform: uppercase;
   width: 100%;
+  max-width: 375px;
 }
 
 .isDefault {

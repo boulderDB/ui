@@ -1,0 +1,13 @@
+.root {
+  height: 10px;
+  width: 100%;
+  border-radius: 2px;
+  background-color: #e8e8e8;
+  margin-right: 40px;
+  overflow: hidden;
+}
+
+.root > div {
+  height: 100%;
+  border-radius: 2px 0 0 2px;
+}

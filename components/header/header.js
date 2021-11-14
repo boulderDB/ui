@@ -32,15 +32,14 @@ export default function Header({ locations }) {
     currentLocation,
     isAuthenticated,
     lastLocation,
-    user,
+    tokenPayload,
     isAdmin,
+    reset,
   } = useContext(AppContext);
 
-  const reset = () => {
-    alert("alert");
-  };
-
   const menu = useMemo(() => {
+    console.log(lastLocation, isAuthenticated, currentLocation);
+
     const items = {
       primary: [
         () => {
@@ -56,6 +55,7 @@ export default function Header({ locations }) {
             label = `back to ${lastLocation?.name}`;
           }
 
+          console.log(href, label);
           return (
             <NavItem href={href} className={typography.delta700}>
               {label}
@@ -74,7 +74,7 @@ export default function Header({ locations }) {
       <NavItem href={`/${currentLocation?.url}/boulder`}>Boulder</NavItem>
     ));
 
-    if (user?.visible) {
+    if (tokenPayload?.user?.visible) {
       items.primary.push(() => (
         <NavItem href={`/${currentLocation?.url}/rankings/current`}>
           Ranking
@@ -83,7 +83,9 @@ export default function Header({ locations }) {
     }
 
     items.secondary.push(
-      () => <NavItem href={`/account`}>Account</NavItem>,
+      () => (
+        <NavItem href={`/account`}>[{tokenPayload?.user?.username}]</NavItem>
+      ),
       () => <NavItem onClick={reset}>Logout</NavItem>
     );
 
@@ -94,7 +96,7 @@ export default function Header({ locations }) {
     }
 
     return items;
-  }, [isAuthenticated, currentLocation, user]);
+  }, [isAuthenticated, currentLocation, tokenPayload]);
 
   return (
     <header className={styles.root}>

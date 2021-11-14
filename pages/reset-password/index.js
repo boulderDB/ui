@@ -1,9 +1,9 @@
-import Layout from "../components/layout/layout";
-import Meta from "../components/meta/meta";
-import { layoutStyles, typography } from "../styles/utilities";
+import Layout from "../../components/layout/layout";
+import Meta from "../../components/meta/meta";
+import { layoutStyles, typography } from "../../styles/utilities";
 import cn from "classnames";
 
-export default function ResetPassword() {
+export default function Index() {
   return (
     <Layout>
       <Meta title={"Reset password"} />

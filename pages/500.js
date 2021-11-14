@@ -3,17 +3,16 @@ import Meta from "../components/meta/meta";
 import { layoutStyles, typography } from "../styles/utilities";
 import cn from "classnames";
 
-export default function Index() {
+export default function InternalServerError() {
   return (
     <Layout>
-      <Meta title={"Account"} />
-
+      <Meta title={"Internal server error"} />
       <div className={layoutStyles.grid}>
-        <h1 className={cn(layoutStyles.sideTitle, typography.alpha700)}>
-          Dashboard
+        <h1 className={cn(typography.alpha700, layoutStyles.sideTitle)}>
+          Internal server error
         </h1>
 
-        <div className={layoutStyles.sideContent}>123</div>
+        <div></div>
       </div>
     </Layout>
   );

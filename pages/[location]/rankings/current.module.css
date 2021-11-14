@@ -1,0 +1,38 @@
+.tableRow,
+.tableHeader {
+  grid-template-columns: 60px minmax(70px, auto) 80px 100px 100px 110px 100px 100px 100px 100px;
+}
+
+@media (--l-to-s) {
+  .pointsCell,
+  .advanceCell,
+  .genderCell,
+  .lastActivityCell {
+    display: none;
+  }
+
+  .tableRow,
+  .tableHeader {
+    grid-template-columns: 60px 120px 100px 100px 100px 100px;
+  }
+}
+
+@media (--s) {
+  .pointsCell,
+  .advanceCell,
+  .bouldersCell,
+  .flashedCell,
+  .toppedCell,
+  .genderCell,
+  .lastActivityCell {
+    display: none;
+  }
+
+  .tableRow {
+    grid-template-columns: 10px minmax(70px, auto) 100px;
+  }
+
+  .tableHeader {
+    display: none;
+  }
+}

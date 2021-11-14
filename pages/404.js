@@ -3,17 +3,14 @@ import Meta from "../components/meta/meta";
 import { layoutStyles, typography } from "../styles/utilities";
 import cn from "classnames";
 
-export default function SignUp() {
+export default function NotFound() {
   return (
     <Layout>
-      <Meta title={"Create account"} />
-
+      <Meta title={"Page not found"} />
       <div className={layoutStyles.grid}>
-        <h1 className={cn(layoutStyles.sideTitle, typography.alpha700)}>
-          Sign up
+        <h1 className={cn(typography.alpha700, layoutStyles.sideTitle)}>
+          Page not found
         </h1>
-
-        <div className={layoutStyles.sideContent}>x</div>
       </div>
     </Layout>
   );

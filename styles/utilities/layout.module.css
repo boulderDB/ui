@@ -28,3 +28,7 @@
     grid-column: 1 / -1;
   }
 }
+
+.full {
+  grid-column: 1 / span 12;
+}

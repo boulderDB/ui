@@ -1,0 +1,9 @@
+.rankUsername {
+  margin-left: var(--spacing-unit);
+  display: block;
+}
+
+.rankBadge {
+  margin-left: 8px;
+  font-size: 1.5rem;
+}
