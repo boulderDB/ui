@@ -8,7 +8,6 @@ import Form from "../../../../../components/form/form";
 import Switch from "../../../../../components/switch/switch";
 import TextField from "../../../../../components/textField/textField";
 import EntitySelect from "../../../../../components/entitySelect/entitySelect";
-import Select from "../../../../../components/select/select";
 import React from "react";
 
 const components = {
@@ -48,7 +47,9 @@ export default function Index({ data, schema }) {
       <Meta title={`Admin ${data.name}`} />
 
       <div className={layoutStyles.grid}>
-        <h1 className={cn(layoutStyles.sideTitle, typography.alpha700)}></h1>
+        <h1 className={cn(layoutStyles.sideTitle, typography.alpha700)}>
+          {data.name}
+        </h1>
 
         <div className={layoutStyles.sideContent}>
           <Form
