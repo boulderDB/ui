@@ -1,5 +1,5 @@
 import "../styles/globals/index.css";
-import { createContext, useEffect, useMemo, useState } from "react";
+import { createContext, useEffect, useState } from "react";
 import Toaster from "../components/toaster/toaster";
 import Header from "../components/header/header";
 import { Footer } from "../components/footer/footer";
@@ -16,7 +16,7 @@ function MyApp({
   locations,
   currentLocation,
   isAuthenticated,
-  isAdmin,
+  roles,
 }) {
   const [message, setMessage] = useState(null);
   const [lastLocation, setLastLocation] = usePersistentState(
@@ -34,18 +34,14 @@ function MyApp({
 
   const reset = () => {
     setTokenPayload(null);
+    setLastLocation(null);
   };
 
   useEffect(() => {
     if (!lastLocation) {
       setLastLocation(tokenPayload?.lastVisitedLocation);
-      return;
     }
-
-    if (currentLocation !== undefined) {
-      setLastLocation(currentLocation);
-    }
-  }, [currentLocation, tokenPayload]);
+  }, [tokenPayload]);
 
   useEffect(() => {
     setTimeout(() => setMessage(null), 3000);
@@ -57,8 +53,9 @@ function MyApp({
         dispatchMessage,
         currentLocation,
         lastLocation,
+        locations,
         isAuthenticated,
-        isAdmin,
+        roles,
         setTokenPayload,
         tokenPayload,
         reset,
@@ -75,8 +72,9 @@ function MyApp({
 
 MyApp.getInitialProps = async (appContext) => {
   const appProps = await App.getInitialProps(appContext);
+  const { ctx } = appContext;
 
-  const token = appContext?.ctx?.req?.cookies?.BEARER;
+  const token = ctx?.req?.cookies?.BEARER;
   const locationParameter = appContext.router?.query?.location;
   const tokenPayload = token ? jwtDecode(token) : {};
 
@@ -89,16 +87,26 @@ MyApp.getInitialProps = async (appContext) => {
   );
 
   const isAuthenticated = new Date().getTime() / 1000 <= tokenPayload?.exp;
-  const isAdmin = tokenPayload?.roles?.includes(
-    `ROLE_ADMIN@${currentLocation?.url}`
-  );
+  const rolePostfix = `@${currentLocation?.id}`;
+
+  const roles = tokenPayload?.roles
+    ?.filter((role) => role.includes(rolePostfix))
+    .map((role) =>
+      role.replace("ROLE_", "").replace(rolePostfix, "").toLowerCase()
+    );
+
+  if (process.env.DEBUG) {
+    console.debug(`Location: ${JSON.stringify(currentLocation, null, 2)}`);
+    console.debug(`Authenticated: ${isAuthenticated}`);
+    console.debug(`Roles: ${roles}`);
+  }
 
   return {
     ...appProps,
     locations,
     currentLocation,
     isAuthenticated,
-    isAdmin,
+    roles,
   };
 };
 

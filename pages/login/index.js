@@ -1,4 +1,4 @@
-import { useHttp } from "../../hooks/useRequest";
+import { useHttp } from "../../hooks/useHttp";
 import { useContext, useMemo } from "react";
 import { AppContext } from "../_app";
 import { useRouter } from "next/router";
@@ -16,6 +16,8 @@ import TextField from "../../components/textField/textField";
 export default function Index() {
   const router = useRouter();
   const http = useHttp();
+
+  const { dispatchMessage, setTokenPayload } = useContext(AppContext);
 
   const formFields = useMemo(() => {
     return [
@@ -35,8 +37,6 @@ export default function Index() {
       },
     ];
   }, []);
-
-  const { dispatchMessage, setTokenPayload } = useContext(AppContext);
 
   const onSubmit = async (payload) => {
     try {

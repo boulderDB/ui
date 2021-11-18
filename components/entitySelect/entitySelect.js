@@ -1,23 +1,18 @@
-import { useRequest } from "../../hooks/useRequest";
-import React from "react";
 import sortItemsAlphabetically from "../../utilties/sortItemsAlphabetically";
 import Select from "../select/select";
 
-function EntitySelect({ value, resource, ...rest }) {
-  const { data } = useRequest(resource, true);
-
-  if (!data) {
-    return "…";
-  }
+function EntitySelect({ value, options, resource, ...rest }) {
+  let multiple = false;
 
   if (typeof value === "number") {
-    value = data.find((item) => item.id === value);
+    value = options.find((item) => item.id === value);
   }
 
   if (value instanceof Array) {
+    multiple = true;
     value = value
       .map((valueItem) => {
-        return data.find((dataItem) => {
+        return options.find((dataItem) => {
           return dataItem.id === valueItem.id;
         });
       })
@@ -27,8 +22,9 @@ function EntitySelect({ value, resource, ...rest }) {
   return (
     <Select
       {...rest}
+      multiple={multiple}
       value={value}
-      options={sortItemsAlphabetically(data, "name")}
+      options={sortItemsAlphabetically(options, "name")}
       renderOption={(option) => option.name}
       getOptionLabel={(option) => option.name}
     />

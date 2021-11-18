@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react";
-import { useHttp } from "../../hooks/useRequest";
+import { useHttp } from "../../hooks/useHttp";
 import styles from "./upload.module.css";
 import Loader from "../loader/loader";
 import toast from "../../utilties/toast";
@@ -23,7 +23,7 @@ function Upload({
   const { dispatchMessage } = useContext(AppContext);
   const [loading, setLoading] = useState(false);
 
-  const globalHttp = useHttp(false);
+  const http = useHttp();
 
   const handleUpload = async (file) => {
     setLoading(true);
@@ -32,7 +32,7 @@ function Upload({
     formData.append("file", file);
 
     try {
-      const { data } = await globalHttp.post("/upload", formData);
+      const { data } = await http.post("/upload", formData);
 
       onSuccess(data.file);
     } catch (error) {

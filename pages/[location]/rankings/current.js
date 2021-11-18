@@ -158,8 +158,10 @@ export async function getServerSideProps(context) {
     );
 
     return {
-      ranking,
-      boulderCount,
+      props: {
+        ranking,
+        boulderCount,
+      },
     };
   });
 }

@@ -21,17 +21,15 @@ async function withAuthentication(context, callable) {
   };
 
   try {
-    return {
-      props: await callable(axios.create(options), location),
-    };
+    return await callable(axios.create(options), location);
   } catch (error) {
-    if (error.response.status === 404) {
+    if (error.response?.status === 404) {
       return {
         notFound: true,
       };
     }
 
-    if (error.response.status === 401) {
+    if (error.response?.status === 401) {
       return {
         redirect: {
           destination: "/login",
@@ -39,6 +37,10 @@ async function withAuthentication(context, callable) {
         },
       };
     }
+
+    console.error(error.response);
+
+    throw error;
   }
 }
 

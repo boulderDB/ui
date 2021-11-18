@@ -27,19 +27,17 @@ function NavItem({ href, children, className, onClick, ...rest }) {
   );
 }
 
-export default function Header({ locations }) {
+export default function Header() {
   const {
     currentLocation,
     isAuthenticated,
     lastLocation,
     tokenPayload,
-    isAdmin,
     reset,
+    roles,
   } = useContext(AppContext);
 
-  const menu = useMemo(() => {
-    console.log(lastLocation, isAuthenticated, currentLocation);
-
+  const items = useMemo(() => {
     const items = {
       primary: [
         () => {
@@ -55,7 +53,6 @@ export default function Header({ locations }) {
             label = `back to ${lastLocation?.name}`;
           }
 
-          console.log(href, label);
           return (
             <NavItem href={href} className={typography.delta700}>
               {label}
@@ -82,54 +79,36 @@ export default function Header({ locations }) {
       ));
     }
 
-    items.secondary.push(
-      () => (
-        <NavItem href={`/account`}>[{tokenPayload?.user?.username}]</NavItem>
-      ),
-      () => <NavItem onClick={reset}>Logout</NavItem>
-    );
+    items.secondary.push(() => (
+      <NavItem href={`/account`}>[{tokenPayload?.user?.username}]</NavItem>
+    ));
 
-    if (isAdmin) {
+    if (roles.includes("admin")) {
       items.secondary.push(() => (
         <NavItem href={`/${currentLocation?.url}/admin`}>Admin</NavItem>
       ));
     }
 
+    items.secondary.push(() => <NavItem onClick={reset}>Logout</NavItem>);
+
     return items;
-  }, [isAuthenticated, currentLocation, tokenPayload]);
+  }, [isAuthenticated, roles, currentLocation]);
 
   return (
     <header className={styles.root}>
       <nav className={styles.nav}>
         <div className={styles.primary}>
-          {menu.primary.map((Item, index) => (
+          {items.primary.map((Item, index) => (
             <Item key={index} />
           ))}
         </div>
 
         <div className={styles.secondary}>
-          {menu.secondary.map((Item, index) => (
+          {items.secondary.map((Item, index) => (
             <Item key={index} />
           ))}
         </div>
       </nav>
     </header>
   );
-
-  function LocationSelect() {
-    return (
-      <select
-        className={cn(styles.locationSelect, typography.eta)}
-        onChange={(event) => switchLocation(event.target.value)}
-      >
-        <option value="">{location}</option>
-
-        {locations.map(({ name, url }) => (
-          <option value={url} key={name}>
-            @{name}
-          </option>
-        ))}
-      </select>
-    );
-  }
 }

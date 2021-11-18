@@ -1,0 +1,16 @@
+.table {
+  margin-top: 30px;
+}
+
+.row {
+  display: grid;
+  border-bottom: 1px solid var(--color-black);
+  padding: 8px 0;
+}
+
+.row:last-child {
+  border-bottom: none;
+}
+
+.cell {
+}

@@ -1,19 +1,78 @@
 import Layout from "../../components/layout/layout";
 import Meta from "../../components/meta/meta";
-import { layoutStyles, typography } from "../../styles/utilities";
+import { colors, layoutStyles, typography } from "../../styles/utilities";
 import cn from "classnames";
+import Form from "../../components/form/form";
+import styles from "../login/index.module.css";
+import Link from "next/link";
+import { useHttp } from "../../hooks/useHttp";
+import { useContext, useMemo } from "react";
+import TextField from "../../components/textField/textField";
+import toast from "../../utilties/toast";
+import extractErrorMessage from "../../utilties/extractErrorMessage";
+import { AppContext } from "../_app";
 
 export default function Index() {
+  const http = useHttp();
+
+  const { dispatchMessage } = useContext(AppContext);
+
+  const formFields = useMemo(() => {
+    return [
+      {
+        name: "email",
+        label: "E-Mail",
+        Component: TextField,
+        componentProps: {
+          type: "email",
+        },
+      },
+    ];
+  }, []);
+
+  const onSubmit = async (payload) => {
+    try {
+      await http.post("/password-reset", payload);
+
+      dispatchMessage(
+        toast(
+          "Reset request submitted successfully",
+          "You will receive instructions on how to reset your password via E-Mail.",
+          "success"
+        )
+      );
+    } catch (error) {
+      console.error(error);
+      dispatchMessage(toast("Error", extractErrorMessage(error), "error"));
+    }
+  };
+
   return (
     <Layout>
       <Meta title={"Reset password"} />
 
       <div className={layoutStyles.grid}>
         <h1 className={cn(typography.alpha700, layoutStyles.sideTitle)}>
-          Reset password
+          Request a password reset
         </h1>
 
-        <div className={layoutStyles.sideContent}>123</div>
+        <div className={cn(layoutStyles.sideContent)}>
+          <Form
+            submitLabel={"Request"}
+            onSubmit={onSubmit}
+            fields={formFields}
+          />
+
+          <div className={styles.links}>
+            <Link href={"/sign-up"}>
+              <a className={cn(typography.eta, colors.black)}>Sign up</a>
+            </Link>
+
+            <Link href={"/login"}>
+              <a className={cn(typography.eta, colors.black)}>Login</a>
+            </Link>
+          </div>
+        </div>
       </div>
     </Layout>
   );

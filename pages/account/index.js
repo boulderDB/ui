@@ -1,5 +1,5 @@
 import Layout from "../../components/layout/layout";
-import { useHttp } from "../../hooks/useRequest";
+import { useHttp } from "../../hooks/useHttp";
 import { layoutStyles, typography } from "../../styles/utilities";
 import cn from "classnames";
 import Meta from "../../components/meta/meta";
@@ -151,15 +151,11 @@ export default function Index({ settings }) {
 
 export const getServerSideProps = (context) =>
   withAuthentication(context, async (http, location) => {
-    try {
-      const { data } = await http.get(`/me`);
+    const { data } = await http.get(`/me`);
 
-      return {
-        props: {
-          settings: data,
-        },
-      };
-    } catch (error) {
-      throw error;
-    }
+    return {
+      props: {
+        settings: data,
+      },
+    };
   });
