@@ -2,7 +2,6 @@ import Layout from "../../../components/layout/layout";
 import Meta from "../../../components/meta/meta";
 import { layoutStyles, typography } from "../../../styles/utilities";
 import cn from "classnames";
-import withAuthentication from "../../../utilties/withAuthentication";
 import {
   RankingTable,
   UserRank,
@@ -15,10 +14,14 @@ import Link from "next/link";
 import { AppContext } from "../../_app";
 import calculatePercentage from "../../../utilties/calculatePercentage";
 import parseDate from "../../../utilties/parseDate";
+import { useCachedHttp } from "../../../hooks/useHttp";
 
-export default function Current({ ranking, boulderCount }) {
-  const { tokenPayload } = useContext(AppContext);
+export default function Current() {
+  const { tokenPayload, currentLocation } = useContext(AppContext);
   const user = tokenPayload?.user;
+
+  const ranking = useCachedHttp(`/${currentLocation?.url}/rankings/current`);
+  const boulderCount = useCachedHttp(`/${currentLocation?.url}/boulders/count`);
 
   const columns = useMemo(() => {
     return [
@@ -124,7 +127,7 @@ export default function Current({ ranking, boulderCount }) {
   }, [boulderCount, user]);
 
   return (
-    <Layout>
+    <Layout loading={!ranking || !boulderCount}>
       <Meta title={"Current ranking"} />
 
       <div className={layoutStyles.grid}>
@@ -134,7 +137,7 @@ export default function Current({ ranking, boulderCount }) {
 
         <div className={layoutStyles.sideContent}>
           <RankingTable
-            data={ranking.map((rank, index) => {
+            data={ranking?.map((rank, index) => {
               return {
                 ...rank,
                 rank: index + 1,
@@ -148,20 +151,4 @@ export default function Current({ ranking, boulderCount }) {
       </div>
     </Layout>
   );
-}
-
-export async function getServerSideProps(context) {
-  return withAuthentication(context, async (http, location) => {
-    const { data: ranking } = await http.get(`/${location}/rankings/current`);
-    const { data: boulderCount } = await http.get(
-      `/${location}/boulders/count`
-    );
-
-    return {
-      props: {
-        ranking,
-        boulderCount,
-      },
-    };
-  });
 }

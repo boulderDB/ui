@@ -1,32 +1,50 @@
 import "../styles/globals/index.css";
-import { createContext, useEffect, useState } from "react";
+import { createContext, useEffect, useMemo, useState } from "react";
 import Toaster from "../components/toaster/toaster";
 import Header from "../components/header/header";
 import { Footer } from "../components/footer/footer";
 import App from "next/app";
 import axios from "axios";
-import jwtDecode from "jwt-decode";
 import usePersistentState from "../hooks/usePersistentState";
+import { useRouter } from "next/router";
 
 export const AppContext = createContext(null);
 
-function MyApp({
-  Component,
-  pageProps,
-  locations,
-  currentLocation,
-  isAuthenticated,
-  roles,
-}) {
+function MyApp({ Component, pageProps, locations }) {
+  const router = useRouter();
+  const locationParameter = router?.query?.location;
+
   const [message, setMessage] = useState(null);
+
   const [lastLocation, setLastLocation] = usePersistentState(
     "lastLocation",
     null
   );
+
   const [tokenPayload, setTokenPayload] = usePersistentState(
     "tokenPayload",
     null
   );
+
+  const currentLocation = useMemo(
+    () => locations?.find((location) => location.url === locationParameter),
+    [locations, locationParameter]
+  );
+
+  const isAuthenticated = useMemo(
+    () => new Date().getTime() / 1000 <= tokenPayload?.expiration,
+    [tokenPayload]
+  );
+
+  const roles = useMemo(() => {
+    const rolePostfix = `@${currentLocation?.id}`;
+
+    return tokenPayload?.user.roles
+      ?.filter((role) => role.includes(rolePostfix))
+      .map((role) =>
+        role.replace("ROLE_", "").replace(rolePostfix, "").toLowerCase()
+      );
+  }, [currentLocation]);
 
   const dispatchMessage = (newMessage) => {
     setMessage(newMessage);
@@ -47,6 +65,8 @@ function MyApp({
     setTimeout(() => setMessage(null), 3000);
   }, [message]);
 
+  console.log(isAuthenticated);
+
   return (
     <AppContext.Provider
       value={{
@@ -56,8 +76,8 @@ function MyApp({
         locations,
         isAuthenticated,
         roles,
-        setTokenPayload,
         tokenPayload,
+        setTokenPayload,
         reset,
       }}
     >
@@ -72,41 +92,14 @@ function MyApp({
 
 MyApp.getInitialProps = async (appContext) => {
   const appProps = await App.getInitialProps(appContext);
-  const { ctx } = appContext;
-
-  const token = ctx?.req?.cookies?.BEARER;
-  const locationParameter = appContext.router?.query?.location;
-  const tokenPayload = token ? jwtDecode(token) : {};
 
   const { data: locations } = await axios.get(
     `${process.env.NEXT_PUBLIC_API_PROXY}/api/locations`
   );
 
-  const currentLocation = locations.find(
-    (location) => location.url === locationParameter
-  );
-
-  const isAuthenticated = new Date().getTime() / 1000 <= tokenPayload?.exp;
-  const rolePostfix = `@${currentLocation?.id}`;
-
-  const roles = tokenPayload?.roles
-    ?.filter((role) => role.includes(rolePostfix))
-    .map((role) =>
-      role.replace("ROLE_", "").replace(rolePostfix, "").toLowerCase()
-    );
-
-  if (process.env.DEBUG) {
-    console.debug(`Location: ${JSON.stringify(currentLocation, null, 2)}`);
-    console.debug(`Authenticated: ${isAuthenticated}`);
-    console.debug(`Roles: ${roles}`);
-  }
-
   return {
     ...appProps,
     locations,
-    currentLocation,
-    isAuthenticated,
-    roles,
   };
 };
 

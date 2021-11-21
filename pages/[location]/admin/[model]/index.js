@@ -1,13 +1,14 @@
 import Meta from "../../../../components/meta/meta";
 import Layout from "../../../../components/layout/layout";
-import withAuthentication from "../../../../utilties/withAuthentication";
 import { models } from "../index";
 import { layoutStyles, typography } from "../../../../styles/utilities";
 import cn from "classnames";
 import Link from "next/link";
 import styles from "./index.module.css";
-import { useContext } from "react";
+import { useContext, useMemo } from "react";
 import { AppContext } from "../../../_app";
+import { useRouter } from "next/router";
+import { useCachedHttp } from "../../../../hooks/useHttp";
 
 const renderers = {
   TextType: (value) => value,
@@ -15,49 +16,65 @@ const renderers = {
   CheckboxType: (value) => value.toString(),
 };
 
-export default function Index({
-  data,
-  schema,
-  title,
-  route,
-  indexFields: fields,
-}) {
+export default function Index() {
   const { currentLocation } = useContext(AppContext);
+  const { query } = useRouter();
+
+  const { model } = query;
+  const config = models.find((item) => item.route === model);
+
+  const data = useCachedHttp(`/${currentLocation?.url}${config.api}`);
+  const schema = useCachedHttp(`/schemas/${config.schema}`);
+
+  const columns = useMemo(() => {
+    if (!data || !schema) {
+      return [];
+    }
+
+    return config?.fields?.map((field) => {
+      const fieldSchema = schema?.find((item) => item.name === field.property);
+      const renderer = renderers[fieldSchema?.type];
+
+      return {
+        ...field,
+        renderer,
+      };
+    });
+  }, [schema, data]);
 
   return (
-    <Layout>
-      <Meta title={`Admin ${title}`} />
+    <Layout loading={!data || !schema}>
+      <Meta title={`Admin ${config.title}`} />
 
       <div className={layoutStyles.grid}>
         <h1 className={cn(layoutStyles.sideTitle, typography.alpha700)}>
-          {title}
+          {config.title}
         </h1>
 
         <div className={layoutStyles.sideContent}>
           <div className={styles.table}>
-            {data.map((item, index) => {
+            {data?.map((item, index) => {
               return (
                 <Link
-                  href={`/${currentLocation?.url}/admin/${route}/${item.id}`}
+                  key={index}
+                  href={`/${currentLocation?.url}/admin/${config.route}/${item.id}`}
                 >
                   <a
                     key={index}
                     className={styles.row}
                     style={{
-                      gridTemplateColumns: `repeat(${fields.length}, 1fr)`,
+                      gridTemplateColumns: `repeat(${config.fields?.length}, 1fr)`,
                     }}
                   >
-                    {fields?.map((field) => {
-                      const value = item[field.property];
-                      const fieldSchema = schema.find(
-                        (item) => item.name === field.property
-                      );
-
-                      const renderer = renderers[fieldSchema.type];
+                    {columns?.map((column, index) => {
+                      const value = item[column.property];
 
                       return (
-                        <div className={cn(styles.cell, typography.delta)}>
-                          {renderer(value)}
+                        <div
+                          className={cn(styles.cell, typography.delta)}
+                          key={index}
+                        >
+                          {column.renderer(value)}
                         </div>
                       );
                     })}
@@ -71,22 +88,3 @@ export default function Index({
     </Layout>
   );
 }
-
-export const getServerSideProps = (context) =>
-  withAuthentication(context, async (http, location) => {
-    const { model } = context.params;
-
-    const config = models.find((item) => item.route === model);
-
-    const { data } = await http.get(`/${location}${config.api}`);
-    const { data: schema } = await http.get(`/schemas/${config.schema}`);
-
-    return {
-      props: {
-        data,
-        ...config,
-        key: "Poop",
-        schema,
-      },
-    };
-  });

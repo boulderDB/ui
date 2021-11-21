@@ -1,5 +1,5 @@
 import Layout from "../../components/layout/layout";
-import { useHttp } from "../../hooks/useHttp";
+import { useCachedHttp, useHttp } from "../../hooks/useHttp";
 import { layoutStyles, typography } from "../../styles/utilities";
 import cn from "classnames";
 import Meta from "../../components/meta/meta";
@@ -12,12 +12,12 @@ import Form from "../../components/form/form";
 import Switch from "../../components/switch/switch";
 import Select from "../../components/select/select";
 import Button from "../../components/button/button";
-import withAuthentication from "../../utilties/withAuthentication";
 import TextField from "../../components/textField/textField";
 import styles from "./index.module.css";
 
-export default function Index({ settings }) {
-  const http = useHttp(false);
+export default function Index() {
+  const http = useHttp();
+  const data = useCachedHttp("/me");
   const { dispatchMessage } = useContext(AppContext);
 
   const settingsFormFields = [
@@ -45,7 +45,7 @@ export default function Index({ settings }) {
       Component: Select,
       componentProps: {
         multiple: true,
-        options: settings.notifications,
+        options: data?.notifications,
         renderOption: (option) => `${option.type}@${option.location.name}`,
         getOptionLabel: (option) => `${option.type}@${option.location.name}`,
       },
@@ -103,7 +103,7 @@ export default function Index({ settings }) {
   };
 
   return (
-    <Layout>
+    <Layout loading={!data}>
       <Meta title={"Account"} />
 
       <div className={cn(layoutStyles.grid, styles.section)}>
@@ -117,8 +117,8 @@ export default function Index({ settings }) {
             onSubmit={onSettingsFormSubmit}
             fields={settingsFormFields}
             defaults={{
-              ...settings,
-              notifications: settings.notifications.filter(
+              ...data,
+              notifications: data?.notifications.filter(
                 (notification) => notification.active === true
               ),
             }}
@@ -148,14 +148,3 @@ export default function Index({ settings }) {
     </Layout>
   );
 }
-
-export const getServerSideProps = (context) =>
-  withAuthentication(context, async (http, location) => {
-    const { data } = await http.get(`/me`);
-
-    return {
-      props: {
-        settings: data,
-      },
-    };
-  });

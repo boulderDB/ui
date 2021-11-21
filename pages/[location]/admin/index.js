@@ -13,7 +13,7 @@ export const models = [
     route: "areas",
     schema: "area",
     api: "/areas",
-    indexFields: [
+    fields: [
       {
         property: "name",
       },
@@ -27,6 +27,14 @@ export const models = [
     route: "walls",
     schema: "wall",
     api: "/walls",
+    fields: [
+      {
+        property: "name",
+      },
+      {
+        property: "active",
+      },
+    ],
   },
   {
     title: "Grades",
@@ -64,7 +72,7 @@ export default function Index() {
           <ul className={styles.links}>
             {models.map((model, index) => (
               <li key={index}>
-                <Link href={`/${currentLocation.url}/admin/${model.route}`}>
+                <Link href={`/${currentLocation?.url}/admin/${model.route}`}>
                   <a>{model.title}</a>
                 </Link>
               </li>

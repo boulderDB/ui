@@ -1,4 +1,27 @@
 import axios from "axios";
+import { useRouter } from "next/router";
+
+export async function blocking(fetch, render) {
+  const router = useRouter();
+
+  try {
+    const { data } = await fetch();
+
+    return render(data);
+  } catch (error) {
+    if (error.response?.status === 404) {
+      return await router.push("/404");
+    }
+
+    if (error.response?.status === 401) {
+      return await router.push("/login");
+    }
+
+    console.error(error.response);
+
+    throw error;
+  }
+}
 
 async function withAuthentication(context, callable) {
   const token = context.req.cookies.BEARER;
