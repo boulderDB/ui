@@ -1,0 +1,23 @@
+.root {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  appearance: none;
+  border: 0;
+}
+
+.isActive .icon {
+  transform: rotate(90deg);
+}
+
+.label {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-right: 12px;
+}
+
+.icon {
+  transform: rotate(0);
+  transition: transform 200ms ease-in-out;
+}

@@ -1,0 +1,13 @@
+.root {
+  padding-top: calc(2 * var(--spacing-unit));
+  padding-bottom: calc(2 * var(--spacing-unit));
+}
+
+.separator {
+  margin-top: calc(2 * var(--spacing-unit));
+  border-bottom: 1px solid var(--color-grey);
+}
+
+.title {
+  padding-bottom: calc(2 * var(--spacing-unit));
+}

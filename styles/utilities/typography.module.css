@@ -54,3 +54,8 @@
   font-size: 12px;
   line-height: 16px;
 }
+
+.eta700 {
+  @extend .eta;
+  font-weight: bold;
+}

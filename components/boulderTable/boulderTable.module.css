@@ -1,0 +1,60 @@
+.root {
+  padding-top: calc(4 * var(--spacing-unit));
+}
+
+.wallLink {
+  cursor: pointer;
+  text-decoration: underline;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.toggleDetails {
+  cursor: pointer;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+.toggleDetailsLabel {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-right: 12px;
+}
+
+.toggleDetails svg {
+  right: -8px;
+  position: absolute;
+  transform: rotate(0);
+  transition: transform 200ms ease-in-out;
+}
+
+.isActiveToggleDetails svg {
+  transform: rotate(90deg);
+}
+
+.ascents {
+  display: inline-flex;
+}
+
+.ascents *:nth-child(2) {
+  margin: 0 calc(2 * var(--spacing-unit));
+}
+
+.isDoubted {
+  position: relative;
+}
+
+.isDoubted > * {
+  opacity: 0.1;
+}
+
+.doubtedLabel {
+  position: absolute;
+  top: 12px;
+  left: 22px;
+  opacity: 1;
+}

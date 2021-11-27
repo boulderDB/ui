@@ -7,6 +7,7 @@ import App from "next/app";
 import axios from "axios";
 import usePersistentState from "../hooks/usePersistentState";
 import { useRouter } from "next/router";
+import { DrawerContext } from "../components/drawer/drawer";
 
 export const AppContext = createContext(null);
 
@@ -15,6 +16,7 @@ function MyApp({ Component, pageProps, locations }) {
   const locationParameter = router?.query?.location;
 
   const [message, setMessage] = useState(null);
+  const [isOpen, setOpen] = useState(false);
 
   const [lastLocation, setLastLocation] = usePersistentState(
     "lastLocation",
@@ -65,8 +67,6 @@ function MyApp({ Component, pageProps, locations }) {
     setTimeout(() => setMessage(null), 3000);
   }, [message]);
 
-  console.log(isAuthenticated);
-
   return (
     <AppContext.Provider
       value={{
@@ -82,7 +82,17 @@ function MyApp({ Component, pageProps, locations }) {
       }}
     >
       <Header locations={locations} />
-      <Component {...pageProps} />
+
+      <DrawerContext.Provider
+        value={{
+          isOpen,
+          setOpen,
+          toggle: () => setOpen(!isOpen),
+        }}
+      >
+        <Component {...pageProps} />
+      </DrawerContext.Provider>
+
       <Footer />
 
       <Toaster message={message} />
@@ -96,6 +106,10 @@ MyApp.getInitialProps = async (appContext) => {
   const { data: locations } = await axios.get(
     `${process.env.NEXT_PUBLIC_API_PROXY}/api/locations`
   );
+
+  try {
+    await axios.get(`${process.env.NEXT_PUBLIC_API_PROXY}/api/ping`);
+  } catch (error) {}
 
   return {
     ...appProps,

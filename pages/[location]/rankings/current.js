@@ -1,6 +1,6 @@
 import Layout from "../../../components/layout/layout";
 import Meta from "../../../components/meta/meta";
-import { layoutStyles, typography } from "../../../styles/utilities";
+import { colors, layoutStyles, typography } from "../../../styles/utilities";
 import cn from "classnames";
 import {
   RankingTable,
@@ -111,6 +111,7 @@ export default function Current() {
         id: "user.id",
         accessor: "user.id",
         gridTemplate: "100px",
+        className: styles.compareCell,
         Cell: ({ cell }) => {
           if (parseInt(cell.value) === parseInt(user?.id)) {
             return null;
@@ -118,7 +119,7 @@ export default function Current() {
 
           return (
             <Link href={`/compare/${user?.id}/to/${cell.value}/at/current`}>
-              Compare
+              <a className={cn(typography.delta700, colors.lila)}>Compare</a>
             </Link>
           );
         },
@@ -127,7 +128,7 @@ export default function Current() {
   }, [boulderCount, user]);
 
   return (
-    <Layout loading={!ranking || !boulderCount}>
+    <Layout>
       <Meta title={"Current ranking"} />
 
       <div className={layoutStyles.grid}>

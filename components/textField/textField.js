@@ -3,9 +3,25 @@ import styles from "./textField.module.css";
 import cn from "classnames";
 import { typography } from "../../styles/utilities";
 
-function TextField({ ...rest }) {
+function TextField({ className, area = false, value, placeholder, ...rest }) {
+  if (area) {
+    return (
+      <textarea
+        {...rest}
+        className={cn(typography.gamma, styles.isTextArea, className)}
+      >
+        {value || placeholder}
+      </textarea>
+    );
+  }
+
   return (
-    <MUITextField {...rest} className={cn(styles.root, typography.gamma)} />
+    <MUITextField
+      {...rest}
+      value={value}
+      placeholder={placeholder}
+      className={cn(styles.root, typography.gamma, className)}
+    />
   );
 }
 

@@ -1,9 +1,14 @@
 .tableRow,
 .tableHeader {
-  grid-template-columns: 60px minmax(70px, auto) 80px 100px 100px 110px 100px 100px 100px 100px;
+  grid-template-columns: 60px minmax(100px, auto) 80px 100px 100px 110px 100px 100px 100px auto;
 }
 
-@media (--l-to-s) {
+.compareCell {
+  display: flex;
+  justify-content: end;
+}
+
+@media (--m) {
   .pointsCell,
   .advanceCell,
   .genderCell,
@@ -13,7 +18,7 @@
 
   .tableRow,
   .tableHeader {
-    grid-template-columns: 60px 120px 100px 100px 100px 100px;
+    grid-template-columns: 60px 200px 200px 140px 140px auto;
   }
 }
 
@@ -29,7 +34,7 @@
   }
 
   .tableRow {
-    grid-template-columns: 10px minmax(70px, auto) 100px;
+    grid-template-columns: 10px minmax(70px, auto) auto;
   }
 
   .tableHeader {

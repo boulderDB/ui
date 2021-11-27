@@ -23,6 +23,7 @@
 
 .sideContent {
   grid-column: 5 / span 8;
+  margin-top: 30px;
 
   @media (--l-to-s) {
     grid-column: 1 / -1;

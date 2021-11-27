@@ -88,3 +88,76 @@ export function Female(props) {
     </svg>
   );
 }
+
+export function Top({ fill = true, ...rest }) {
+  return (
+    <svg width={24} height={24} viewBox="0 0 24 24" fill="none" {...rest}>
+      <path d="M0 0h24v24H0V0z" />
+      <path
+        d="M9.235 17.463l-.242.241L4 12.711l.707-.707 4.29 4.289L19.288 6l.707.707L9.238 17.466l-.003-.003z"
+        fill={fill ? "#02DEAF" : "#000000"}
+      />
+    </svg>
+  );
+}
+
+export function Flash({ fill = true, ...rest }) {
+  return (
+    <svg width={24} height={24} viewBox="0 0 24 24" fill="none" {...rest}>
+      <path d="M0 0h24v24H0V0z" />
+      <path
+        d="M12 5.293L7.646 9.646l.708.708L11.5 7.207V18h1V7.207l3.146 3.147.708-.708L12 5.293z"
+        fill={fill ? "#1687FF" : "#000000"}
+      />
+    </svg>
+  );
+}
+
+export function Resignation({ fill = true, ...rest }) {
+  return (
+    <svg width={24} height={24} viewBox="0 0 24 24" fill="none" {...rest}>
+      <path d="M0 0h24v24H0V0z" />
+      <path
+        d="M11.295 12.002L6 17.297l.707.707 5.295-5.295 5.295 5.295.707-.707-5.295-5.295 5.295-5.295L17.297 6l-5.295 5.295L6.707 6 6 6.707l5.295 5.295z"
+        fill={fill ? "#FF5D5F" : "#000000"}
+      />
+    </svg>
+  );
+}
+
+export function Todo({ fill, ...rest }) {
+  return (
+    <svg width={24} height={24} viewBox="0 0 24 24" fill="none" {...rest}>
+      <path d="M0 0h24v24H0V0z" />
+      <circle cx={12} cy={12} r={5.5} stroke={fill ? "#FFCB41" : "#000000"} />
+    </svg>
+  );
+}
+
+export function Backward(props) {
+  return (
+    <svg width={24} height={24} viewBox="0 0 24 24" fill="none" {...props}>
+      <path fill="#fff" fillOpacity={0.01} d="M0 0h24v24H0z" />
+      <path
+        d="M15 7l-6 5.102L15 17"
+        stroke="#333"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+export function Forward(props) {
+  return (
+    <svg width={24} height={24} viewBox="0 -1 24 24" fill="none" {...props}>
+      <path fill="#fff" fillOpacity={0.01} d="M0 0h24v24H0z" />
+      <path
+        d="M9 7l6 5.102L9 17"
+        stroke="#333"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}

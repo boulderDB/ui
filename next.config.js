@@ -12,4 +12,13 @@ module.exports = {
 
     return entries;
   },
+  async redirects() {
+    return [
+      {
+        source: "/",
+        destination: "/login",
+        permanent: false,
+      },
+    ];
+  },
 };

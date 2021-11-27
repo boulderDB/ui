@@ -1,0 +1,16 @@
+.root {
+  border: 1px solid var(--color-black);
+  height: 32px;
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  padding-left: var(--spacing-unit);
+  padding-right: calc(var(--spacing-unit) / 3);
+  margin-right: var(--spacing-unit);
+  border-radius: 4px;
+  white-space: nowrap;
+}
+
+.remove {
+  cursor: pointer;
+}

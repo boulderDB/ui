@@ -14,7 +14,6 @@ import { AppContext } from "../_app";
 
 export default function Index() {
   const http = useHttp();
-
   const { dispatchMessage } = useContext(AppContext);
 
   const formFields = useMemo(() => {

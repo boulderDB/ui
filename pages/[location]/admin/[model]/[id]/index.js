@@ -1,6 +1,5 @@
 import Layout from "../../../../../components/layout/layout";
 import Meta from "../../../../../components/meta/meta";
-import withAuthentication from "../../../../../utilties/withAuthentication";
 import { models } from "../../index";
 import { layoutStyles, typography } from "../../../../../styles/utilities";
 import cn from "classnames";
@@ -8,7 +7,7 @@ import Form from "../../../../../components/form/form";
 import Switch from "../../../../../components/switch/switch";
 import TextField from "../../../../../components/textField/textField";
 import EntitySelect from "../../../../../components/entitySelect/entitySelect";
-import React, { useContext, useEffect, useMemo } from "react";
+import React, { useContext, useMemo } from "react";
 import { AppContext } from "../../../../_app";
 import { useRouter } from "next/router";
 import { useCachedHttp, useHttp } from "../../../../../hooks/useHttp";
@@ -75,7 +74,7 @@ export default function Index() {
   const onSubmit = async () => {};
 
   return (
-    <Layout loading={true}>
+    <Layout>
       <Meta title={`Admin ${data.name}`} />
 
       <div className={layoutStyles.grid}>

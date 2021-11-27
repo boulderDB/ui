@@ -1,9 +1,10 @@
 import { useTable, useGlobalFilter, useSortBy } from "react-table";
 import { useMemo } from "react";
-import { TableHeader, TableRow } from "../table/table";
 import TextField from "../textField/textField";
 import Avatar from "../avatar/avatar";
 import styles from "./rankingTable.module.css";
+import TableHeader from "../table/tableHeader";
+import TableRow from "../table/tableRow";
 
 export function UserRank({ image, username, sentAllBoulders = false }) {
   return (
@@ -15,7 +16,13 @@ export function UserRank({ image, username, sentAllBoulders = false }) {
   );
 }
 
-export function RankingTable({ columns, data, rowClassName, headerClassName }) {
+export function RankingTable({
+  columns,
+  data,
+  rowClassName,
+  headerClassName,
+  className,
+}) {
   const {
     getTableProps,
     getTableBodyProps,
@@ -37,7 +44,7 @@ export function RankingTable({ columns, data, rowClassName, headerClassName }) {
   }, [columns]);
 
   return (
-    <>
+    <div className={className}>
       <div>
         <TextField
           onChange={(event) => setGlobalFilter(event.target.value)}
@@ -46,7 +53,7 @@ export function RankingTable({ columns, data, rowClassName, headerClassName }) {
         />
       </div>
 
-      <div {...getTableProps()}>
+      <div {...getTableProps()} className={styles.table}>
         <TableHeader
           className={headerClassName}
           headerGroups={headerGroups}
@@ -68,6 +75,6 @@ export function RankingTable({ columns, data, rowClassName, headerClassName }) {
           })}
         </div>
       </div>
-    </>
+    </div>
   );
 }

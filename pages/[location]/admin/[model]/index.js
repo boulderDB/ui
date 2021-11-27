@@ -43,7 +43,7 @@ export default function Index() {
   }, [schema, data]);
 
   return (
-    <Layout loading={!data || !schema}>
+    <Layout>
       <Meta title={`Admin ${config.title}`} />
 
       <div className={layoutStyles.grid}>

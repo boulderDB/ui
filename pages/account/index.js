@@ -93,9 +93,8 @@ export default function Index() {
   };
 
   const onPasswordFormSubmit = async (data) => {
-    await http.put("/password", data);
-
     try {
+      await http.put("/me/password", data);
       dispatchMessage(toast("Success", "Password updated!", "success"));
     } catch (error) {
       dispatchMessage(toast("Error", extractErrorMessage(error), "error"));
@@ -103,11 +102,11 @@ export default function Index() {
   };
 
   return (
-    <Layout loading={!data}>
+    <Layout>
       <Meta title={"Account"} />
 
       <div className={cn(layoutStyles.grid, styles.section)}>
-        <h1 className={cn(layoutStyles.sideTitle, typography.alpha)}>
+        <h1 className={cn(layoutStyles.sideTitle, typography.alpha700)}>
           Settings
         </h1>
 
