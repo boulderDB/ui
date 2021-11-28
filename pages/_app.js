@@ -57,11 +57,21 @@ function MyApp({ Component, pageProps, locations }) {
     setLastLocation(null);
   };
 
-  useEffect(() => {
+  useEffect(async () => {
     if (!lastLocation) {
       setLastLocation(tokenPayload?.lastVisitedLocation);
     }
-  }, [tokenPayload]);
+
+    if (currentLocation) {
+      try {
+        await axios.get(
+          `${process.env.NEXT_PUBLIC_API_PROXY}/api/${currentLocation?.url}/ping`
+        );
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  }, [tokenPayload, currentLocation]);
 
   useEffect(() => {
     setTimeout(() => setMessage(null), 3000);
@@ -106,10 +116,6 @@ MyApp.getInitialProps = async (appContext) => {
   const { data: locations } = await axios.get(
     `${process.env.NEXT_PUBLIC_API_PROXY}/api/locations`
   );
-
-  try {
-    await axios.get(`${process.env.NEXT_PUBLIC_API_PROXY}/api/ping`);
-  } catch (error) {}
 
   return {
     ...appProps,

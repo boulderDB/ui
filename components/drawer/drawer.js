@@ -1,6 +1,6 @@
-import { createContext, useContext, useEffect, useRef, useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { createContext, useContext, useEffect, useRef } from "react";
 import useClickOutside from "../../hooks/useClickOutside";
-import { AnimatePresence } from "framer-motion";
 import cn from "classnames";
 import styles from "./drawer.module.css";
 

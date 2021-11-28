@@ -48,7 +48,6 @@ export function RankingTable({
       <div>
         <TextField
           onChange={(event) => setGlobalFilter(event.target.value)}
-          onClear={() => setGlobalFilter("")}
           placeholder={"search"}
         />
       </div>

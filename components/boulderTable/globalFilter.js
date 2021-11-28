@@ -13,7 +13,6 @@ export default function GlobalFilter({
       className={styles.root}
       placeholder="Search"
       value={globalFilter}
-      onClear={() => setGlobalFilter("")}
       onChange={(event) => {
         setGlobalFilter(event.target.value);
       }}

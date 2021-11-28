@@ -1,0 +1,8 @@
+.root {
+  padding-left: 16px;
+  cursor: pointer;
+}
+
+.root:first-child {
+  padding-left: 0;
+}

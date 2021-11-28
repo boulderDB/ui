@@ -3,7 +3,6 @@ import { typography } from "../../styles/utilities";
 import cn from "classnames";
 import { motion, AnimatePresence } from "framer-motion";
 import capitalize from "../../utilties/capitalize";
-import { useEffect } from "react";
 
 function Toast({ type = "info", title, description }) {
   return (

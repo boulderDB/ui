@@ -14,7 +14,7 @@ export default function Ascents({ onRemove, onAdd, userAscent, boulderId }) {
         type="flash"
         disabled={userAscent && userAscent?.type !== "flash"}
         checked={userAscent?.type === "flash"}
-        asyncHandler={async () => {
+        onClick={async () => {
           userAscent
             ? await onRemove(userAscent)
             : await onAdd(boulderId, "flash");
@@ -29,7 +29,7 @@ export default function Ascents({ onRemove, onAdd, userAscent, boulderId }) {
         type="top"
         disabled={userAscent && userAscent?.type !== "top"}
         checked={userAscent?.type === "top"}
-        asyncHandler={async () => {
+        onClick={async () => {
           userAscent
             ? await onRemove(userAscent)
             : await onAdd(boulderId, "top");
@@ -44,7 +44,7 @@ export default function Ascents({ onRemove, onAdd, userAscent, boulderId }) {
         type="resignation"
         disabled={userAscent && userAscent?.type !== "resignation"}
         checked={userAscent?.type === "resignation"}
-        asyncHandler={async () => {
+        onClick={async () => {
           userAscent
             ? await onRemove(userAscent)
             : await onAdd(boulderId, "resignation");

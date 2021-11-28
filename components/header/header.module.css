@@ -13,12 +13,3 @@
   display: flex;
   justify-content: space-between;
 }
-
-.item {
-  padding-left: 16px;
-  cursor: pointer;
-}
-
-.item:first-child {
-  padding-left: 0;
-}

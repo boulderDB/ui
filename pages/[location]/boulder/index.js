@@ -123,7 +123,7 @@ export default function Index() {
             <DetailButton
               active={detailBoulder === boulderId}
               boulderId={boulderId}
-              toggleHandler={(id) => {
+              onClick={(id) => {
                 setDetailBoulder(id);
                 toggle(true);
               }}

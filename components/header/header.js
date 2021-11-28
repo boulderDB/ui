@@ -1,31 +1,9 @@
 import React, { useContext, useMemo } from "react";
 import styles from "./header.module.css";
-import cn from "classnames";
 import { AppContext } from "../../pages/_app";
 import { typography } from "../../styles/utilities";
-import Link from "next/link";
-
-function NavItem({ href, children, className, onClick, ...rest }) {
-  if (onClick) {
-    return (
-      <span
-        className={cn(styles.item, typography.delta, className)}
-        onClick={onClick}
-        {...rest}
-      >
-        {children}
-      </span>
-    );
-  }
-
-  return (
-    <Link href={href}>
-      <a className={cn(styles.item, typography.delta, className)} {...rest}>
-        {children}
-      </a>
-    </Link>
-  );
-}
+import NavItem from "./navItem";
+import LocationSelect from "./locationSelect";
 
 export default function Header() {
   const {
@@ -55,10 +33,11 @@ export default function Header() {
 
           return (
             <NavItem href={href} className={typography.delta700}>
-              {label}
+              {label}@
             </NavItem>
           );
         },
+        LocationSelect,
       ],
       secondary: [],
     };
