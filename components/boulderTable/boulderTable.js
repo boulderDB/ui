@@ -282,4 +282,9 @@ export const filters = {
     ),
     getOptionLabel: (option) => option.value,
   },
+  area: {
+    label: "Area",
+    renderOption: (option) => option.name,
+    getOptionLabel: (option) => option.name,
+  },
 };

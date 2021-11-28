@@ -15,6 +15,7 @@ import { AppContext } from "../../_app";
 import calculatePercentage from "../../../utilties/calculatePercentage";
 import parseDate from "../../../utilties/parseDate";
 import { useCachedHttp } from "../../../hooks/useHttp";
+import Loader from "../../../components/loader/loader";
 
 export default function Current() {
   const { tokenPayload, currentLocation } = useContext(AppContext);
@@ -126,6 +127,12 @@ export default function Current() {
       },
     ];
   }, [boulderCount, user]);
+
+  if (!ranking) {
+    return <Loader />;
+  }
+
+  console.log(ranking);
 
   return (
     <Layout>

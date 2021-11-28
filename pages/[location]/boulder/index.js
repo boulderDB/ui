@@ -43,6 +43,7 @@ export default function Index() {
   const isAdmin = roles?.includes("admin");
 
   const boulders = useCachedHttp(`/${currentLocation?.url}/boulders`);
+  const areas = useCachedHttp(`/${currentLocation?.url}/areas`);
 
   const [detailBoulder, setDetailBoulder] = useState(null);
   const [selected, setSelected] = useState([]);
@@ -242,6 +243,15 @@ export default function Index() {
 
         <div className={layoutStyles.sideContent}>
           <div className={styles.filters}>
+            <Select
+              {...boulderFilters.area}
+              options={areas}
+              onChange={(event, newValue) =>
+                applyFilter("area", newValue ? newValue.name : null)
+              }
+              items={areas}
+            />
+
             <Select
               {...boulderFilters.holdType}
               options={holdTypes}

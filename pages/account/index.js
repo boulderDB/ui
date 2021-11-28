@@ -14,6 +14,7 @@ import Select from "../../components/select/select";
 import Button from "../../components/button/button";
 import TextField from "../../components/textField/textField";
 import styles from "./index.module.css";
+import Loader from "../../components/loader/loader";
 
 export default function Index() {
   const http = useHttp();
@@ -100,6 +101,10 @@ export default function Index() {
       dispatchMessage(toast("Error", extractErrorMessage(error), "error"));
     }
   };
+
+  if (!data) {
+    return <Loader />;
+  }
 
   return (
     <Layout>
