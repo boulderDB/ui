@@ -16,7 +16,7 @@ module.exports = {
 		'--color-migrey': '#a2a2a2',
 		'--color-light': '#fff',
 		'--color-dark': '#333',
-		'--color-lightgrey': 'rgba(51, 51, 51, 0.25)',
+		'--color-lightgrey': '#f2f2f2',
 		'--color-error': '#ff0000',
 		'--color-grey': '#a2a2a2',
 		'--color-blue': '#5759fb',

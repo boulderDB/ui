@@ -1,0 +1,43 @@
+.header {
+  display: grid;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--color-black);
+
+  @media (--s) {
+    display: none;
+  }
+}
+
+.row {
+  display: grid;
+  border-bottom: 1px solid var(--color-black);
+  padding: 8px 0;
+
+  @media (--s) {
+    display: flex;
+    flex-direction: column;
+  }
+}
+
+.row:hover {
+  background: var(--color-lightgrey);
+}
+
+.row:last-child {
+  border-bottom: none;
+}
+
+.cell {
+  @media (--s) {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.cellLabel {
+  display: none;
+
+  @media (--s) {
+    display: block;
+  }
+}

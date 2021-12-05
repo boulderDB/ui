@@ -8,11 +8,14 @@ import axios from "axios";
 import usePersistentState from "../hooks/usePersistentState";
 import { useRouter } from "next/router";
 import { DrawerContext } from "../components/drawer/drawer";
+import { useHttp } from "../hooks/useHttp";
 
 export const AppContext = createContext(null);
 
 function MyApp({ Component, pageProps, locations }) {
   const router = useRouter();
+  const http = useHttp();
+
   const locationParameter = router?.query?.location;
 
   const [message, setMessage] = useState(null);
@@ -33,10 +36,13 @@ function MyApp({ Component, pageProps, locations }) {
     [locations, locationParameter]
   );
 
-  const isAuthenticated = useMemo(
-    () => new Date().getTime() / 1000 <= tokenPayload?.expiration,
-    [tokenPayload]
-  );
+  const isAuthenticated = useMemo(() => {
+    if (!tokenPayload) {
+      return false;
+    }
+
+    return new Date().getTime() / 1000 <= tokenPayload?.expiration;
+  }, [tokenPayload]);
 
   const roles = useMemo(() => {
     const rolePostfix = `@${currentLocation?.id}`;
@@ -62,20 +68,24 @@ function MyApp({ Component, pageProps, locations }) {
       setLastLocation(tokenPayload?.lastVisitedLocation);
     }
 
-    if (currentLocation) {
+    if (currentLocation && isAuthenticated) {
       try {
-        await axios.get(
-          `${process.env.NEXT_PUBLIC_API_PROXY}/api/${currentLocation?.url}/ping`
-        );
+        await http.get(`/${currentLocation?.url}/ping`);
       } catch (error) {
         console.error(error);
       }
     }
-  }, [tokenPayload, currentLocation]);
+  }, [tokenPayload, currentLocation, isAuthenticated]);
 
   useEffect(() => {
     setTimeout(() => setMessage(null), 3000);
   }, [message]);
+
+  useEffect(() => {
+    if (!isAuthenticated) {
+      return router.push(`/login`);
+    }
+  }, [isAuthenticated]);
 
   return (
     <AppContext.Provider

@@ -132,8 +132,6 @@ export default function Current() {
     return <Loader />;
   }
 
-  console.log(ranking);
-
   return (
     <Layout>
       <Meta title={"Current ranking"} />

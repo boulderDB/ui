@@ -7,19 +7,18 @@ import Form from "../../../../../components/form/form";
 import Switch from "../../../../../components/switch/switch";
 import TextField from "../../../../../components/textField/textField";
 import EntitySelect from "../../../../../components/entitySelect/entitySelect";
-import React, { useContext, useMemo } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { AppContext } from "../../../../_app";
 import { useRouter } from "next/router";
 import { useCachedHttp, useHttp } from "../../../../../hooks/useHttp";
+import Loader from "../../../../../components/loader/loader";
+import toast from "../../../../../utilties/toast";
+import extractErrorMessage from "../../../../../utilties/extractErrorMessage";
 
 const components = {
   TextType: TextField,
   CheckboxType: Switch,
   EntityType: EntitySelect,
-};
-
-const props = {
-  EntityType: {},
 };
 
 export default function Index() {
@@ -28,50 +27,64 @@ export default function Index() {
     query: { model, id },
   } = useRouter();
   const http = useHttp();
+  const { dispatchMessage } = useContext(AppContext);
 
   const config = models.find((item) => item.route === model);
 
   const schema = useCachedHttp(`/schemas/${config.schema}`);
   const data = useCachedHttp(`/${currentLocation?.url}/${model}/${id}`);
+  const [fields, setFields] = useState([]);
 
-  const items = useMemo(async () => {
-    return await Promise.all(
-      schema.map(async (item) => {
-        if (item.type !== "EntityType") {
-          return item;
-        }
-
-        const { data } = await http.get(
-          `/${currentLocation?.url}${item.schema.resource}`
-        );
-
-        item.options = data;
-
-        return item;
-      })
-    );
-  }, [schema, data, currentLocation]);
-
-  const fields = schema.map((field) => {
-    let config = {
-      name: field.name,
-      label: field.name,
-      Component: components[field.type],
-      componentProps: {},
-    };
-
-    if (config.Component === EntitySelect) {
-      config.componentProps = {
-        renderOption: (option) => option.name,
-        getOptionLabel: (option) => option.name,
-        options: field.options,
-      };
+  useEffect(async () => {
+    if (!schema) {
+      return [];
     }
 
-    return config;
-  });
+    setFields(
+      await Promise.all(
+        schema.map(async (field) => {
+          let config = {
+            name: field.name,
+            label: field.name,
+            Component: components[field.type],
+            componentProps: {},
+          };
 
-  const onSubmit = async () => {};
+          if (config.Component === EntitySelect) {
+            const { data } = await http.get(
+              `/${currentLocation?.url}${field.schema.resource}`
+            );
+
+            config.componentProps = {
+              renderOption: (option) => option.name,
+              getOptionLabel: (option) => option.name,
+              options: data,
+            };
+          }
+
+          return config;
+        })
+      )
+    );
+  }, [schema, currentLocation]);
+
+  const onSubmit = async (payload) => {
+    delete payload.id;
+
+    try {
+      await http.put(
+        `/${currentLocation?.url}/${config.api}/${id}`,
+        config?.beforeSubmit ? config?.beforeSubmit(payload) : payload
+      );
+      dispatchMessage(toast("Success", `Updated!`, "success"));
+    } catch (error) {
+      dispatchMessage(toast("Error", extractErrorMessage(error), "error"));
+    }
+  };
+
+  if (!data) {
+    return <Loader />;
+  }
 
   return (
     <Layout>

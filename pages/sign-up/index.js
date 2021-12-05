@@ -91,11 +91,11 @@ export default function Index() {
 
           <div className={styles.links}>
             <Link href={"/login"}>
-              <a className={cn(typography.eta, colors.black)}>Login</a>
+              <a className={cn(typography.epsilon, colors.black)}>Login</a>
             </Link>
 
             <Link href={"/reset-password"}>
-              <a className={cn(typography.eta, colors.midGrey)}>
+              <a className={cn(typography.epsilon, colors.midGrey)}>
                 Reset password
               </a>
             </Link>

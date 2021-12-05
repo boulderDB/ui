@@ -3,14 +3,21 @@ import cn from "classnames";
 import { typography } from "../../styles/utilities";
 import capitalize from "../../utilties/capitalize";
 
-function Button({ children, variant, className, as, ...rest }) {
+const typographySizeMapping = {
+  l: typography.delta,
+  s: typography.epsilon,
+};
+
+function Button({ children, variant, className, size, as, loading, ...rest }) {
   return (
     <button
       {...rest}
       className={cn(
         styles.root,
         styles[`is${capitalize(variant)}`],
-        typography.delta,
+        styles[`isSize${capitalize(size)}`],
+        loading ? styles[`isLoading`] : null,
+        typographySizeMapping[size],
         className
       )}
     >
@@ -21,6 +28,7 @@ function Button({ children, variant, className, as, ...rest }) {
 
 Button.defaultProps = {
   variant: "default",
+  size: "l",
 };
 
 export default Button;

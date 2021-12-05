@@ -64,11 +64,11 @@ export default function Index() {
 
           <div className={styles.links}>
             <Link href={"/sign-up"}>
-              <a className={cn(typography.eta, colors.black)}>Sign up</a>
+              <a className={cn(typography.epsilon, colors.black)}>Sign up</a>
             </Link>
 
             <Link href={"/login"}>
-              <a className={cn(typography.eta, colors.black)}>Login</a>
+              <a className={cn(typography.epsilon, colors.black)}>Login</a>
             </Link>
           </div>
         </div>

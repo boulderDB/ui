@@ -1,0 +1,10 @@
+.root {
+  display: inline-flex;
+  align-items: center;
+  margin-left: 2px;
+}
+
+.select {
+  appearance: none;
+  border: none;
+}

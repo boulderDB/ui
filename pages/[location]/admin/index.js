@@ -9,6 +9,10 @@ import Link from "next/link";
 
 export const models = [
   {
+    title: "Users",
+    route: "users",
+  },
+  {
     title: "Areas",
     route: "areas",
     schema: "area",
@@ -21,6 +25,12 @@ export const models = [
         property: "active",
       },
     ],
+    beforeSubmit: (payload) => {
+      return {
+        ...payload,
+        walls: payload.walls.map((wall) => wall.id),
+      };
+    },
   },
   {
     title: "Walls",
@@ -53,6 +63,20 @@ export const models = [
     route: "tags",
     schema: "tag",
     api: "/tags",
+  },
+  {
+    title: "Events",
+    route: "events",
+    schema: "event",
+    api: "/events",
+    fields: [
+      {
+        property: "name",
+      },
+      {
+        property: "active",
+      },
+    ],
   },
 ];
 

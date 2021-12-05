@@ -9,7 +9,7 @@ import AscentIcon from "../ascentIcon/ascentIcon";
 
 export default function CollapsedRow({ cells }) {
   const { currentLocation, roles } = useContext(AppContext);
-  const isAdmin = roles.includes("roles");
+  const isAdmin = roles?.includes("roles");
 
   const ascentCell = cells.find((cell) => cell.column.id === "ascent");
   const holdTypeCell = cells.find((cell) => cell.column.id === "holdType");

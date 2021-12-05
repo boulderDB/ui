@@ -1,5 +1,5 @@
 import { useHttp } from "../../hooks/useHttp";
-import { useContext, useMemo } from "react";
+import { useContext, useEffect, useMemo } from "react";
 import { AppContext } from "../_app";
 import { useRouter } from "next/router";
 import toast from "../../utilties/toast";
@@ -17,7 +17,12 @@ export default function Index() {
   const router = useRouter();
   const http = useHttp();
 
-  const { dispatchMessage, setTokenPayload } = useContext(AppContext);
+  const {
+    dispatchMessage,
+    setTokenPayload,
+    isAuthenticated,
+    lastLocation,
+  } = useContext(AppContext);
 
   const formFields = useMemo(() => {
     return [
@@ -37,6 +42,12 @@ export default function Index() {
       },
     ];
   }, []);
+
+  useEffect(async () => {
+    if (isAuthenticated) {
+      await router.push(`${lastLocation.url}`);
+    }
+  }, [isAuthenticated]);
 
   const onSubmit = async (payload) => {
     try {
@@ -70,11 +81,11 @@ export default function Index() {
 
           <div className={styles.links}>
             <Link href={"/sign-up"}>
-              <a className={cn(typography.eta, colors.black)}>Sign up</a>
+              <a className={cn(typography.epsilon, colors.black)}>Sign up</a>
             </Link>
 
             <Link href={"/reset-password"}>
-              <a className={cn(typography.eta, colors.midGrey)}>
+              <a className={cn(typography.epsilon, colors.midGrey)}>
                 Reset password
               </a>
             </Link>

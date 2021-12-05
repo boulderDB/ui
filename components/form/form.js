@@ -51,7 +51,12 @@ function Form({ defaults, fields, onSubmit, submitLabel }) {
         );
       })}
 
-      <Button type="submit" disabled={submitting} className={styles.button}>
+      <Button
+        type="submit"
+        disabled={submitting}
+        className={styles.button}
+        loading={submitting}
+      >
         {submitLabel}
       </Button>
     </form>

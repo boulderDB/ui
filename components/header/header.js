@@ -33,11 +33,13 @@ export default function Header() {
 
           return (
             <NavItem href={href} className={typography.delta700}>
-              {label}@
+              {label}
             </NavItem>
           );
         },
-        LocationSelect,
+        () => {
+          return isAuthenticated ? <LocationSelect /> : null;
+        },
       ],
       secondary: [],
     };
@@ -62,7 +64,7 @@ export default function Header() {
       <NavItem href={`/account`}>[{tokenPayload?.user?.username}]</NavItem>
     ));
 
-    if (roles.includes("admin")) {
+    if (roles?.includes("admin")) {
       items.secondary.push(() => (
         <NavItem href={`/${currentLocation?.url}/admin`}>Admin</NavItem>
       ));
