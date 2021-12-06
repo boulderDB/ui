@@ -14,12 +14,7 @@ import { useCachedHttp, useHttp } from "../../../../../hooks/useHttp";
 import Loader from "../../../../../components/loader/loader";
 import toast from "../../../../../utilties/toast";
 import extractErrorMessage from "../../../../../utilties/extractErrorMessage";
-
-const components = {
-  TextType: TextField,
-  CheckboxType: Switch,
-  EntityType: EntitySelect,
-};
+import useSchemaForm from "../../../../../hooks/useSchemaForm";
 
 export default function Index() {
   const { currentLocation } = useContext(AppContext);
@@ -31,49 +26,15 @@ export default function Index() {
 
   const config = models.find((item) => item.route === model);
 
-  const schema = useCachedHttp(`/schemas/${config.schema}`);
-  const data = useCachedHttp(`/${currentLocation?.url}/${model}/${id}`);
-  const [fields, setFields] = useState([]);
-
-  useEffect(async () => {
-    if (!schema) {
-      return [];
-    }
-
-    setFields(
-      await Promise.all(
-        schema.map(async (field) => {
-          let config = {
-            name: field.name,
-            label: field.name,
-            Component: components[field.type],
-            componentProps: {},
-          };
-
-          if (config.Component === EntitySelect) {
-            const { data } = await http.get(
-              `/${currentLocation?.url}${field.schema.resource}`
-            );
-
-            config.componentProps = {
-              renderOption: (option) => option.name,
-              getOptionLabel: (option) => option.name,
-              options: data,
-            };
-          }
-
-          return config;
-        })
-      )
-    );
-  }, [schema, currentLocation]);
+  const data = useCachedHttp(`/${currentLocation?.url}${config.api}/${id}`);
+  const fields = useSchemaForm(config.schema);
 
   const onSubmit = async (payload) => {
     delete payload.id;
 
     try {
       await http.put(
-        `/${currentLocation?.url}/${config.api}/${id}`,
+        `/${currentLocation?.url}${config.api}/${id}`,
         config?.beforeSubmit ? config?.beforeSubmit(payload) : payload
       );
       dispatchMessage(toast("Success", `Updated!`, "success"));

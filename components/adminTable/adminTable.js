@@ -16,43 +16,55 @@ export default function AdminTable({ data, columns, config }) {
           gridTemplateColumns: `repeat(${columns?.length}, 1fr)`,
         }}
       >
-        {columns.map((item, index) => {
-          return <div className={typography.delta700}>{item.property}</div>;
+        {columns?.map((item, index) => {
+          return (
+            <div className={typography.delta700} key={index}>
+              {item.property}
+            </div>
+          );
         })}
       </div>
 
-      {data?.map((item, index) => {
-        return (
-          <Link
-            key={index}
-            href={`/${currentLocation?.url}/admin/${config.route}/${item.id}`}
-          >
-            <a
+      {data?.length ? (
+        data.map((item, index) => {
+          return (
+            <Link
               key={index}
-              className={styles.row}
-              style={{
-                gridTemplateColumns: `repeat(${columns?.length}, 1fr)`,
-              }}
+              href={`/${currentLocation?.url}/admin/${config.route}/${item.id}`}
             >
-              {columns?.map((column, index) => {
-                const value = item[column.property];
+              <a
+                key={index}
+                className={styles.row}
+                style={{
+                  gridTemplateColumns: `repeat(${columns?.length}, 1fr)`,
+                }}
+              >
+                {columns?.map((column, index) => {
+                  const value = item[column.property];
 
-                return (
-                  <div
-                    className={cn(styles.cell, typography.delta)}
-                    key={index}
-                  >
-                    <div className={cn(typography.delta700, styles.cellLabel)}>
-                      {column.property}:
-                    </div>{" "}
-                    {column.renderer(value)}
-                  </div>
-                );
-              })}
-            </a>
-          </Link>
-        );
-      })}
+                  return (
+                    <div
+                      className={cn(styles.cell, typography.delta)}
+                      key={index}
+                    >
+                      <div
+                        className={cn(typography.delta700, styles.cellLabel)}
+                      >
+                        {column.property}:
+                      </div>{" "}
+                      {column.renderer(value)}
+                    </div>
+                  );
+                })}
+              </a>
+            </Link>
+          );
+        })
+      ) : (
+        <div className={styles.row}>
+          <p className={typography.delta}>No data</p>
+        </div>
+      )}
     </div>
   );
 }

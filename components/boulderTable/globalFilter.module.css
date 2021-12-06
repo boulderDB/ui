@@ -1,4 +1,6 @@
-.search {
+.root {
   margin-top: calc(4 * var(--spacing-unit));
   margin-bottom: calc(4 * var(--spacing-unit));
+  display: flex;
+  justify-content: end;
 }

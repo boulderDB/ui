@@ -10,6 +10,7 @@ export function useCachedHttp(resource) {
 
   if (error) {
     console.error(error);
+    throw error;
   }
 
   return data;

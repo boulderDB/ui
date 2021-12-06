@@ -17,10 +17,8 @@ import styles from "./index.module.css";
 import Select from "../../../components/select/select";
 import toast from "../../../utilties/toast";
 import AscentIcon from "../../../components/ascentIcon/ascentIcon";
-import IndeterminateCheckbox from "../../../components/table/IndeterminateCheckbox";
 import GlobalFilter from "../../../components/boulderTable/globalFilter";
 import Ascents from "../../../components/boulderTable/ascents";
-import { Link } from "@material-ui/core";
 import { mutate } from "swr";
 import extractErrorMessage from "../../../utilties/extractErrorMessage";
 import CollapsedRow from "../../../components/boulderTable/collapsedRow";
@@ -34,6 +32,8 @@ import useBoulderFilters from "../../../hooks/useBoulderFilters";
 import BoulderDetail from "../../../components/boulderDetail/boulderDetail";
 import { columns } from "../../../components/boulderTable/boulderTable";
 import Loader from "../../../components/loader/loader";
+import IndeterminateCheckbox from "../../../components/table/IndeterminateCheckbox";
+import Link from "next/link";
 
 export default function Index() {
   const http = useHttp();
@@ -163,29 +163,29 @@ export default function Index() {
       },
     ];
 
-    /*if (isAdmin) {
+    if (isAdmin) {
       defaultColumns.unshift({
         ...columns.selection,
         Cell: ({ row }) => (
           <div>
-            <IndeterminateCheckbox {...row.getToggleRowSelectedProps()} />
-
             <Link
               href={`/${currentLocation?.url}/admin/boulder/${row.original.id}`}
             >
-              Edit
+              ✏️
             </Link>
+
+            <IndeterminateCheckbox {...row.getToggleRowSelectedProps()} />
           </div>
         ),
       });
-    }*/
+    }
 
     return defaultColumns;
   }, [isAdmin, detailBoulder]);
 
   const addHandler = useCallback(async (boulder, type) => {
     try {
-      const { data } = await http.post("/ascents", {
+      const { data } = await http.post(`/${currentLocation?.url}/ascents`, {
         boulder,
         type,
       });
@@ -221,7 +221,7 @@ export default function Index() {
 
   const removeHandler = useCallback(async (id) => {
     try {
-      await http.delete(`/ascents/${id}`);
+      await http.delete(`/${currentLocation?.url}/ascents`);
       await mutate(contextualizedApiPath(currentLocation, "/ascents"));
     } catch (error) {
       dispatchMessage(toast("Error", extractErrorMessage(error), "error"));

@@ -116,9 +116,9 @@ export const columns = {
   selection: {
     id: "selection",
     Header: ({ getToggleAllRowsSelectedProps }) => (
-      <div>
+      <>
         <IndeterminateCheckbox {...getToggleAllRowsSelectedProps()} />
-      </div>
+      </>
     ),
   },
   holdType: {
@@ -221,6 +221,14 @@ export const columns = {
 
         return rowValue === filterValue;
       });
+    },
+  },
+  area: {
+    id: "area",
+    accessor: null,
+    Header: "Area",
+    filter: (rows, id, filterValue) => {
+      return rows.filter((row) => row.values[id].includes(filterValue));
     },
   },
 };

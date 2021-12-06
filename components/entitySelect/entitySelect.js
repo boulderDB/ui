@@ -1,8 +1,14 @@
 import sortItemsAlphabetically from "../../utilties/sortItemsAlphabetically";
 import Select from "../select/select";
 
-function EntitySelect({ value, options, resource, ...rest }) {
-  let multiple = false;
+function EntitySelect({ value, options, resource, multiple, ...rest }) {
+  if (!value && multiple) {
+    value = [];
+  }
+
+  if (!value) {
+    value = null;
+  }
 
   if (typeof value === "number") {
     value = options.find((item) => item.id === value);

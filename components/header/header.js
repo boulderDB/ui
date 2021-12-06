@@ -38,7 +38,7 @@ export default function Header() {
           );
         },
         () => {
-          return isAuthenticated ? <LocationSelect /> : null;
+          return isAuthenticated && currentLocation ? <LocationSelect /> : null;
         },
       ],
       secondary: [],

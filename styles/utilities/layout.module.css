@@ -2,7 +2,6 @@
   display: grid;
   grid-template-columns: repeat(12, 1fr);
   margin: 0 auto;
-  max-width: var(--content-max-width);
 
   @media (--m) {
     grid-template-columns: repeat(8, 1fr);

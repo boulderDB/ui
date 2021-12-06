@@ -22,7 +22,7 @@ function Form({ defaults, fields, onSubmit, submitLabel }) {
         handleSubmit(onSubmit);
       }}
     >
-      {fields.map(({ name, label, Component, componentProps }) => {
+      {fields.map(({ name, label, Component, componentProps }, index) => {
         const value = name in formData ? formData[name] : "";
 
         if (Component === EntitySelect || Component === Select) {
@@ -38,7 +38,7 @@ function Form({ defaults, fields, onSubmit, submitLabel }) {
         }
 
         return (
-          <div className={styles.row} key={name}>
+          <div className={styles.row} key={index}>
             <Component
               name={name}
               id={name}

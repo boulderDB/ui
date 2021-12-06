@@ -28,7 +28,7 @@ export const models = [
     beforeSubmit: (payload) => {
       return {
         ...payload,
-        walls: payload.walls.map((wall) => wall.id),
+        walls: payload.walls.map((item) => item.id),
       };
     },
   },
@@ -51,18 +51,45 @@ export const models = [
     route: "grades",
     schema: "grade",
     api: "/grades",
+    fields: [
+      {
+        property: "name",
+      },
+      {
+        property: "active",
+      },
+    ],
   },
   {
     title: "Hold types",
     route: "hold-types",
     schema: "holdType",
     api: "/holdtypes",
+    fields: [
+      {
+        property: "name",
+      },
+      {
+        property: "active",
+      },
+    ],
   },
   {
     title: "Tags",
     route: "tags",
-    schema: "tag",
-    api: "/tags",
+    schema: "boulderTag",
+    api: "/boulder-tags",
+    fields: [
+      {
+        property: "name",
+      },
+      {
+        property: "emoji",
+      },
+      {
+        property: "active",
+      },
+    ],
   },
   {
     title: "Events",
@@ -77,6 +104,12 @@ export const models = [
         property: "active",
       },
     ],
+    beforeSubmit: (payload) => {
+      return {
+        ...payload,
+        boulders: payload.boulders.map((item) => item.id),
+      };
+    },
   },
 ];
 
