@@ -45,7 +45,7 @@ export default function Index() {
 
   useEffect(async () => {
     if (isAuthenticated) {
-      await router.push(`${lastLocation.url}`);
+      await router.push(`${lastLocation?.url}`);
     }
   }, [isAuthenticated]);
 

@@ -315,7 +315,7 @@ export default function Index() {
             <Select
               {...boulderFilters.setter}
               options={setters}
-              value={filters.find((filter) => filter.id === "setter")}
+              value={filters.find((filter) => filter.id === "setter")?.id}
               onChange={(event, newValue) => {
                 applyFilter("setter", newValue ? newValue.username : null);
               }}

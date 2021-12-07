@@ -51,7 +51,7 @@ export default function BoulderTable({
     {
       columns,
       data,
-      initialState: { pageIndex: 0, pageSize: 20, filters },
+      initialState: { pageIndex: 0, pageSize: 50, filters },
       autoResetFilters: false,
       autoResetSortBy: false,
       autoResetPage: false,
