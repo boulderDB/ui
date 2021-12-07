@@ -1,6 +1,4 @@
 .root {
-  padding-top: calc(2 * var(--spacing-unit));
-  padding-bottom: calc(2 * var(--spacing-unit));
 }
 
 .separator {
@@ -9,5 +7,5 @@
 }
 
 .title {
-  padding-bottom: calc(2 * var(--spacing-unit));
+  padding: calc(2 * var(--spacing-unit));
 }

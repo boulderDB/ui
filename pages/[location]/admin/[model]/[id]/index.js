@@ -15,6 +15,7 @@ import Loader from "../../../../../components/loader/loader";
 import toast from "../../../../../utilties/toast";
 import extractErrorMessage from "../../../../../utilties/extractErrorMessage";
 import useSchemaForm from "../../../../../hooks/useSchemaForm";
+import { useSWRConfig } from "swr";
 
 export default function Index() {
   const { currentLocation } = useContext(AppContext);
@@ -23,10 +24,12 @@ export default function Index() {
   } = useRouter();
   const http = useHttp();
   const { dispatchMessage } = useContext(AppContext);
+  const { mutate } = useSWRConfig();
 
   const config = models.find((item) => item.route === model);
 
   const data = useCachedHttp(`/${currentLocation?.url}${config?.api}/${id}`);
+
   const { fields } = useSchemaForm(config?.schema);
 
   const onSubmit = async (payload) => {
@@ -35,6 +38,9 @@ export default function Index() {
         `/${currentLocation?.url}${config.api}/${id}`,
         config?.beforeSubmit ? config?.beforeSubmit(payload) : payload
       );
+
+      mutate(`/${currentLocation?.url}/boulders`);
+
       dispatchMessage(toast("Success", `Updated!`, "success"));
     } catch (error) {
       dispatchMessage(toast("Error", extractErrorMessage(error), "error"));

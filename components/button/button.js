@@ -13,6 +13,7 @@ function Button({
   children,
   variant,
   className,
+  inverted,
   size,
   as,
   loading,
@@ -30,6 +31,7 @@ function Button({
       styles.root,
       styles[`is${capitalize(variant)}`],
       styles[`isSize${capitalize(size)}`],
+      inverted ? styles.isInverted : null,
       loading ? styles[`isLoading`] : null,
       typographySizeMapping[size],
       className

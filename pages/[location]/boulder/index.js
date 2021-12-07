@@ -21,7 +21,6 @@ import GlobalFilter from "../../../components/boulderTable/globalFilter";
 import Ascents from "../../../components/boulderTable/ascents";
 import extractErrorMessage from "../../../utilties/extractErrorMessage";
 import CollapsedRow from "../../../components/boulderTable/collapsedRow";
-import contextualizedApiPath from "../../../utilties/contextualizedApiPath";
 import DetailButton from "../../../components/boulderTable/detailButton";
 import useDrawer from "../../../hooks/useDrawer";
 import RateButton from "../../../components/boulderTable/rateButton";
@@ -124,8 +123,8 @@ export default function Index() {
             <DetailButton
               active={detailBoulder === boulderId}
               boulderId={boulderId}
-              onClick={(id) => {
-                setDetailBoulder(id);
+              onClick={() => {
+                setDetailBoulder(boulderId);
                 toggle(true);
               }}
             >
@@ -168,14 +167,14 @@ export default function Index() {
       defaultColumns.unshift({
         ...columns.selection,
         Cell: ({ row }) => (
-          <div>
-            <Link
-              href={`/${currentLocation?.url}/admin/boulder/${row.original.id}`}
-            >
-              ✏️
-            </Link>
-
+          <div className={styles.editCell}>
             <IndeterminateCheckbox {...row.getToggleRowSelectedProps()} />
+
+            <Link
+              href={`/${currentLocation?.url}/admin/boulders/${row.original.id}`}
+            >
+              <a className={cn(typography.eta, styles.editLink)}>✏️</a>
+            </Link>
           </div>
         ),
       });
@@ -243,10 +242,11 @@ export default function Index() {
           Boulder
           {isAdmin && (
             <Button
-              size={"small"}
+              size={"s"}
+              inverted={true}
               href={`/${currentLocation?.url}/admin/boulders/create`}
             >
-              Add
+              Create
             </Button>
           )}
         </h1>

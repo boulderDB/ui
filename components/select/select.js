@@ -24,7 +24,7 @@ function Select({
     value = null;
   }
 
-  if (typeof value === "number") {
+  if (typeof value === "number" || typeof value === "string") {
     value = options.find((item) => item.id === value);
   }
 

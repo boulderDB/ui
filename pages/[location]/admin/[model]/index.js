@@ -31,9 +31,9 @@ export default function Index() {
   const { model } = query;
   const config = models.find((item) => item.route === model);
 
-  const data = useCachedHttp(
-    `/${currentLocation?.url}${config.api}?filter=all`
-  );
+  const data = useCachedHttp(`/${currentLocation?.url}${config.api}`, {
+    filter: "all",
+  });
 
   const schema = useCachedHttp(`/schemas/${config.schema}`);
 

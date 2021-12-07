@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { set } from "lodash";
 
 const dataResolvers = {
@@ -66,6 +66,10 @@ export default function useForm(defaults) {
   const resetForm = () => {
     setFormData(defaults);
   };
+
+  useEffect(() => {
+    setFormData(defaults);
+  }, [defaults]);
 
   return {
     formData,

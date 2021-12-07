@@ -11,6 +11,7 @@ export default function GlobalFilter({
   return (
     <div className={styles.root}>
       <TextField
+        className={styles.input}
         placeholder="Search"
         value={globalFilter}
         onChange={(event) => {

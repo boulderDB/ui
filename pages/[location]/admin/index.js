@@ -6,10 +6,13 @@ import styles from "./index.module.css";
 import { useContext } from "react";
 import { AppContext } from "../../_app";
 import Link from "next/link";
+import filterId from "../../../utilties/filterId";
 
 function deleteCommon(payload) {
   delete payload.id;
   delete payload.behaviours;
+  delete payload.createdAt;
+  delete payload.updatedAt;
 }
 
 export const models = [
@@ -18,11 +21,33 @@ export const models = [
     route: "boulders",
     schema: "boulder",
     api: "/boulders",
+    fields: [
+      {
+        property: "name",
+      },
+      {
+        property: "createdAt",
+      },
+    ],
     beforeSubmit: (payload) => {
       deleteCommon(payload);
 
+      delete payload.comments;
+      delete payload.readableIdentifier;
+      delete payload.userAscent;
+      delete payload.currentPoints;
+      delete payload.ascents;
+
       return {
         ...payload,
+        setters: filterId(payload.setters),
+        tags: filterId(payload.tags),
+        startWall: filterId(payload.startWall),
+        endWall: filterId(payload.endWall),
+        grade: filterId(payload.grade),
+        holdType: filterId(payload.holdType),
+        internalGrade: filterId(payload.internalGrade),
+        status: filterId(payload.status),
       };
     },
   },
@@ -48,7 +73,7 @@ export const models = [
 
       return {
         ...payload,
-        walls: payload.walls.map((item) => item.id),
+        walls: filterId(payload.walls),
       };
     },
   },
@@ -164,9 +189,11 @@ export const models = [
     beforeSubmit: (payload) => {
       deleteCommon(payload);
 
+      delete payload.participants; /* todo: remove */
+
       return {
         ...payload,
-        boulders: payload.boulders.map((item) => item.id),
+        boulders: filterId(payload.boulders),
       };
     },
   },

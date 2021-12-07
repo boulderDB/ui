@@ -14,6 +14,7 @@ const components = {
   DateTimeType: DatePicker,
   ChoiceType: Select,
   IntegerType: TextField,
+  NumberType: TextField,
 };
 
 export default function useSchemaForm(name) {
@@ -32,14 +33,16 @@ export default function useSchemaForm(name) {
     setFields(
       await Promise.all(
         schema.map(async (field) => {
+          const Component = components[field.type];
+
           let config = {
             name: field.name,
             label: field.name,
-            Component: components[field.type],
+            Component,
             componentProps: {},
           };
 
-          if (config.Component === EntitySelect) {
+          if (field.type === "EntityType") {
             const { data } = await http.get(
               `/${currentLocation?.url}${field.schema.resource}`
             );
@@ -49,24 +52,34 @@ export default function useSchemaForm(name) {
               : name;
 
             config.componentProps = {
-              renderOption: (option) =>
-                labelProperty ? option[labelProperty] : option.name,
-              getOptionLabel: (option) =>
-                labelProperty ? option[labelProperty] : option.name,
+              renderOption: (option) => {
+                return labelProperty ? option[labelProperty] : option.name;
+              },
+              getOptionLabel: (option) => {
+                return labelProperty ? option[labelProperty] : option.name;
+              },
               options: data,
               multiple: field.options.multiple,
+              labelProperty,
             };
           }
 
-          if (config.Component === Select) {
+          if (field.type === "ChoiceType") {
             config.componentProps = {
-              options: Object.keys(field?.choices)?.map((choice) => {
+              options: Object.keys(field?.options?.choices)?.map((choice) => {
                 return {
                   name: choice,
+                  id: choice,
                 };
               }),
               renderOption: (option) => option.name,
               getOptionLabel: (option) => option.name,
+            };
+          }
+
+          if (field.type === "IntegerType" || field.type === "NumberType") {
+            config.componentProps = {
+              type: "number",
             };
           }
 
@@ -78,7 +91,9 @@ export default function useSchemaForm(name) {
     let defaultValues = {};
 
     schema.forEach((field) => {
-      defaultValues[field.name] = field.schema?.default;
+      defaultValues[field.name] = field.schema?.default
+        ? field.schema?.default
+        : null;
     });
 
     setDefaults(defaultValues);

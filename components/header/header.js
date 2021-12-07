@@ -13,7 +13,10 @@ export default function Header() {
     tokenPayload,
     reset,
     roles,
+    events,
   } = useContext(AppContext);
+
+  console.log(events);
 
   const items = useMemo(() => {
     const items = {

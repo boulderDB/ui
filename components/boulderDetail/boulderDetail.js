@@ -17,10 +17,8 @@ import Comments from "./comments";
 export const BoulderDetailContext = createContext(null);
 
 export default function BoulderDetail({ id }) {
-  const { currentLocation, user } = useContext(AppContext);
-  const { data: boulder } = useCachedHttp(
-    `/${currentLocation?.url}/boulders/${id}`
-  );
+  const { currentLocation, tokenPayload } = useContext(AppContext);
+  const boulder = useCachedHttp(`/${currentLocation?.url}/boulders/${id}`);
   const [page, setPage] = useState("index");
 
   const [pageData, setPageData] = useState();
@@ -78,12 +76,16 @@ export default function BoulderDetail({ id }) {
               <Comments
                 boulderId={boulder.id}
                 comments={boulder.comments}
-                userId={user.id}
+                userId={tokenPayload?.user?.id}
               />
             </Section>
 
             <div className={styles.commentButton}>
-              <Button size={"small"} onClick={() => setPage("comment")}>
+              <Button
+                size={"s"}
+                inverted={true}
+                onClick={() => setPage("comment")}
+              >
                 Leave a comment
               </Button>
             </div>
@@ -96,7 +98,7 @@ export default function BoulderDetail({ id }) {
                 disabled={userRating && userRating.rating !== 10}
               />
 
-              <span>/</span>
+              <span className={styles.ratingSeparator}>|</span>
 
               <RateButton
                 boulderId={id}
@@ -107,7 +109,12 @@ export default function BoulderDetail({ id }) {
             </div>
 
             <div className={styles.errorButton}>
-              <Button onClick={() => setPage("error")} variant={"danger"}>
+              <Button
+                onClick={() => setPage("error")}
+                variant={"danger"}
+                inverted={true}
+                size={"s"}
+              >
                 Report error
               </Button>
             </div>

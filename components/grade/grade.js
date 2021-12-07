@@ -12,7 +12,7 @@ function Grade({
 }) {
   return (
     <div
-      className={cn(styles.root, typography.delta700, className)}
+      className={cn(styles.root, typography.epsilon700, className)}
       style={{ color: color }}
     >
       Grade {name}

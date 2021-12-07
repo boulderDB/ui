@@ -13,22 +13,13 @@
 }
 
 .sideTitle {
-  grid-column: 1 / span 4;
   display: flex;
   justify-content: space-between;
-
-  @media (--l-to-s) {
-    grid-column: 1 / -1;
-  }
+  grid-column: 1 / -1;
 }
 
 .sideContent {
-  grid-column: 5 / span 8;
-  margin-top: 30px;
-
-  @media (--l-to-s) {
-    grid-column: 1 / -1;
-  }
+  grid-column: 1 / -1;
 }
 
 .full {

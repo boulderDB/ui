@@ -35,7 +35,7 @@ export default function Comments({ boulderId, comments, userId }) {
   return (
     <ul className={styles.root}>
       {comments.length === 0 ? (
-        <li className={cn(typography.eta)}>Be the first!</li>
+        <li className={cn(typography.epsilon)}>Be the first!</li>
       ) : (
         comments.map(({ message, createdAt, author, id }) => (
           <li className={styles.item}>
@@ -50,7 +50,7 @@ export default function Comments({ boulderId, comments, userId }) {
             {author.id === userId && (
               <button
                 onClick={() => onDelete(id, boulderId)}
-                className={cn(typography.eta, styles.deleteComment)}
+                className={cn(typography.epsilon, styles.deleteComment)}
               >
                 delete
               </button>

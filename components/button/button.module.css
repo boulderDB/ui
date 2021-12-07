@@ -1,6 +1,5 @@
 .root {
   padding: 8px 32px;
-  text-transform: uppercase;
   display: inline-flex;
   align-self: flex-start;
 }
@@ -8,7 +7,13 @@
 .isSizeS {
   display: inline-flex;
   align-items: center;
-  padding: 4px 16px;
+  padding: 8px 16px;
+}
+
+.isSizeXs {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 8px;
 }
 
 .isDefault {
@@ -24,4 +29,31 @@
 .isLoading {
   opacity: 0.3;
   cursor: not-allowed;
+}
+
+.isInverted {
+  background: none;
+  border-radius: 4px;
+  font-weight: bold;
+  transition: all 140ms ease-in-out;
+}
+
+.isInverted.isDefault:hover {
+  background: var(--color-lila-400);
+  color: var(--color-lila);
+}
+
+.isInverted.isDefault {
+  border: 1px solid;
+  color: var(--color-lila);
+}
+
+.isInverted.isDanger:hover {
+  background: var(--color-red-400);
+  color: var(--color-red);
+}
+
+.isInverted.isDanger {
+  color: var(--color-red);
+  border: 1px solid;
 }

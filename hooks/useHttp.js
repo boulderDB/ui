@@ -2,11 +2,15 @@ import axios from "axios";
 import { useMemo } from "react";
 import useSWR from "swr";
 
-const fetcher = (url) =>
-  axios.get(`/api${url}`).then((response) => response.data);
+const fetcher = (url, params) =>
+  axios
+    .get(`/api${url}`, {
+      params,
+    })
+    .then((response) => response.data);
 
-export function useCachedHttp(resource) {
-  const { data, error } = useSWR(resource, fetcher);
+export function useCachedHttp(resource, params) {
+  const { data, error } = useSWR(resource, () => fetcher(resource, params));
 
   if (error) {
     console.error(error);

@@ -52,6 +52,11 @@
   line-height: 16px;
 }
 
+.epsilon700 {
+  @extend .epsilon;
+  font-weight: bold;
+}
+
 .eta {
   font-family: var(--font-family-sans);
   font-style: normal;

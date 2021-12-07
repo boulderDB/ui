@@ -1,6 +1,9 @@
 .root {
-  margin-top: calc(4 * var(--spacing-unit));
-  margin-bottom: calc(4 * var(--spacing-unit));
+  margin-top: calc(8 * var(--spacing-unit));
   display: flex;
-  justify-content: end;
+  width: 100%;
+}
+
+.input {
+  width: 100%;
 }

@@ -6,7 +6,7 @@ export default function Section({ title, separator = true, children }) {
   return (
     <>
       <section className={styles.root}>
-        <h3 className={cn(typography.epsilon, styles.title)}>{title}</h3>
+        <h3 className={cn(typography.epsilon700, styles.title)}>{title}</h3>
         {children}
 
         {separator && <div className={styles.separator} />}

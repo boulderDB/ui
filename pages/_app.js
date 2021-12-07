@@ -10,6 +10,7 @@ import { useRouter } from "next/router";
 import { DrawerContext } from "../components/drawer/drawer";
 import { useHttp } from "../hooks/useHttp";
 import { SWRConfig } from "swr";
+
 export const AppContext = createContext(null);
 
 function MyApp({ Component, pageProps, locations }) {
@@ -20,6 +21,7 @@ function MyApp({ Component, pageProps, locations }) {
 
   const [message, setMessage] = useState(null);
   const [isOpen, setOpen] = useState(false);
+  const [events, setEvents] = useState([]);
 
   const [lastLocation, setLastLocation] = usePersistentState(
     "lastLocation",
@@ -87,6 +89,16 @@ function MyApp({ Component, pageProps, locations }) {
     }
   }, [isAuthenticated]);
 
+  useEffect(async () => {
+    try {
+      const { data } = await http.get(`/${currentLocation?.url}/events`);
+
+      setEvents(data);
+    } catch (error) {
+      console.error(error);
+    }
+  }, [currentLocation]);
+
   return (
     <AppContext.Provider
       value={{
@@ -94,6 +106,7 @@ function MyApp({ Component, pageProps, locations }) {
         currentLocation,
         lastLocation,
         locations,
+        events,
         isAuthenticated,
         roles,
         tokenPayload,
@@ -101,7 +114,7 @@ function MyApp({ Component, pageProps, locations }) {
         reset,
       }}
     >
-      <Header locations={locations} />
+      <Header />
 
       <DrawerContext.Provider
         value={{
@@ -124,7 +137,6 @@ function MyApp({ Component, pageProps, locations }) {
 
 MyApp.getInitialProps = async (appContext) => {
   const appProps = await App.getInitialProps(appContext);
-
   const { data: locations } = await axios.get(
     `${process.env.NEXT_PUBLIC_API_PROXY}/api/locations`
   );

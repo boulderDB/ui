@@ -17,6 +17,8 @@ import TableRow from "../table/tableRow";
 import IndeterminateCheckbox from "../table/IndeterminateCheckbox";
 import Pagination from "../../components/pagination/pagination";
 import Grade from "../grade/grade";
+import cn from "classnames";
+import { typography } from "../../styles/utilities";
 
 export default function BoulderTable({
   columns,
@@ -77,7 +79,7 @@ export default function BoulderTable({
 
   return (
     <>
-      <div className={styles.root} {...getTableProps()}>
+      <div className={cn(styles.root, typography.epsilon)} {...getTableProps()}>
         <TableHeader className={headerClassName} headerGroups={headerGroups} />
 
         <div {...getTableBodyProps()}>

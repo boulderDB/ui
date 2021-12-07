@@ -9,7 +9,8 @@ import { BoulderDetailContext } from "./boulderDetail";
 
 export default function Ascents({ ascents: all }) {
   const limit = 10;
-  const [ascents, setAscents] = useState(all.slice(0, limit));
+
+  const [ascents, setAscents] = useState(all ? all?.slice(0, limit) : []);
   const { setPage, setPageData } = useContext(BoulderDetailContext);
 
   return (
@@ -32,7 +33,7 @@ export default function Ascents({ ascents: all }) {
           <li className={styles.listItem} key={ascent.id}>
             <span
               className={cn(
-                typography.eta,
+                typography.epsilon,
                 styles.ascent,
                 doubted ? styles.isDoubtedAscent : null
               )}
@@ -43,7 +44,8 @@ export default function Ascents({ ascents: all }) {
 
             {!doubted && ascent.type !== "resignation" && (
               <Button
-                size={"small"}
+                size={"s"}
+                inverted={true}
                 onClick={() => {
                   setPageData({ ascent });
                   setPage("doubt");
