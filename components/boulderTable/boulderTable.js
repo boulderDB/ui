@@ -230,9 +230,7 @@ export const columns = {
     accessor: ({ areas }) => areas.map((areas) => areas.name).join(", "),
     Header: "Area",
     filter: (rows, id, filterValue) => {
-      console.log(filterValue);
       return rows.filter((row) => {
-        console.log(row.values[id]);
         return row.values[id].includes(filterValue);
       });
     },

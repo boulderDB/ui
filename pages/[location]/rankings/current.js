@@ -118,6 +118,8 @@ export default function Current() {
             return null;
           }
 
+          return null;
+
           return (
             <Link href={`/compare/${user?.id}/to/${cell.value}/at/current`}>
               <a className={cn(typography.delta700, colors.lila)}>Compare</a>

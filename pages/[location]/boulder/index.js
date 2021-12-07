@@ -242,6 +242,8 @@ export default function Index() {
     return <Loader />;
   }
 
+  console.log(filters);
+
   return (
     <Layout>
       <Meta title={"boulder"} />
@@ -264,6 +266,7 @@ export default function Index() {
           <div className={styles.filters}>
             <Select
               {...boulderFilters.area}
+              value={filters.find((filter) => filter.id === "area")}
               options={areas}
               onChange={(event, newValue) =>
                 applyFilter("area", newValue ? newValue.name : null)

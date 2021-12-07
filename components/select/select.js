@@ -39,6 +39,10 @@ function Select({
       .filter((item) => item !== undefined);
   }
 
+  if (typeof value === "object") {
+    value = options.find((item) => item === value);
+  }
+
   return (
     <Autocomplete
       options={options}

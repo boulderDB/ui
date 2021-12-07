@@ -4,14 +4,22 @@ import cn from "classnames";
 import styles from "./ascents.module.css";
 import Button from "../button/button";
 import { typography } from "../../styles/utilities";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { BoulderDetailContext } from "./boulderDetail";
 
 export default function Ascents({ ascents: all }) {
   const limit = 10;
 
-  const [ascents, setAscents] = useState(all ? all?.slice(0, limit) : []);
+  const [ascents, setAscents] = useState([]);
   const { setPage, setPageData } = useContext(BoulderDetailContext);
+
+  useEffect(() => {
+    if (!all?.length > 0) {
+      return;
+    }
+
+    setAscents(all.slice(0, limit));
+  }, [all]);
 
   return (
     <ul>
