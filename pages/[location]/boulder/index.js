@@ -168,7 +168,7 @@ export default function Index() {
       },
       {
         ...columns.area,
-        hidden: true,
+        Cell: ({ value, row }) => null,
       },
     ];
 
