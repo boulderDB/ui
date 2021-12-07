@@ -43,7 +43,6 @@ export default function Index() {
   const isAdmin = roles?.includes("admin");
 
   const boulders = useCachedHttp(`/${currentLocation?.url}/boulders`);
-  const areas = useCachedHttp(`/${currentLocation?.url}/areas`);
 
   const [detailBoulder, setDetailBoulder] = useState(null);
   const [selected, setSelected] = useState([]);
@@ -83,6 +82,12 @@ export default function Index() {
         filterPresentOptions(boulders, "setters"),
         "username"
       ),
+    [boulders]
+  );
+
+  const areas = useMemo(
+    () =>
+      sortItemsAlphabetically(filterPresentOptions(boulders, "areas"), "name"),
     [boulders]
   );
 
@@ -160,6 +165,10 @@ export default function Index() {
             userAscent={value}
           />
         ),
+      },
+      {
+        ...columns.area,
+        hidden: true,
       },
     ];
 

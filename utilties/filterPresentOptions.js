@@ -8,6 +8,8 @@ function filterPresentOptions(boulders, column, uniqueProperty = "id") {
   boulders.forEach((boulder) => {
     if (column === "setters") {
       boulder[column].map((item) => map.set(item.id, item));
+    } else if (column === "areas") {
+      boulder.startWall.areas?.map((item) => map.set(item.id, item));
     } else {
       map.set(boulder[column][uniqueProperty], boulder[column]);
     }

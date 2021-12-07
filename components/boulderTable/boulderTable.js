@@ -227,10 +227,12 @@ export const columns = {
   },
   area: {
     id: "area",
-    accessor: null,
-    Header: "Area",
+    accessor: "startWall.areas",
     filter: (rows, id, filterValue) => {
-      return rows.filter((row) => row.values[id].includes(filterValue));
+      return rows.filter((row) => {
+        console.log(id);
+        return true;
+      });
     },
   },
 };

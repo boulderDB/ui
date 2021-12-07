@@ -1,7 +1,7 @@
 import React, { useContext, useMemo } from "react";
 import styles from "./header.module.css";
 import { AppContext } from "../../pages/_app";
-import { typography } from "../../styles/utilities";
+import { colors, typography } from "../../styles/utilities";
 import NavItem from "./navItem";
 import LocationSelect from "./locationSelect";
 
@@ -15,8 +15,6 @@ export default function Header() {
     roles,
     events,
   } = useContext(AppContext);
-
-  console.log(events);
 
   const items = useMemo(() => {
     const items = {
@@ -63,6 +61,17 @@ export default function Header() {
       ));
     }
 
+    events.forEach((event) => {
+      items.primary.push(() => (
+        <NavItem
+          href={`/${currentLocation?.url}/events/${event.id}/boulder`}
+          className={colors.lila}
+        >
+          {event.name}
+        </NavItem>
+      ));
+    });
+
     items.secondary.push(() => (
       <NavItem href={`/account`}>[{tokenPayload?.user?.username}]</NavItem>
     ));
@@ -76,7 +85,7 @@ export default function Header() {
     items.secondary.push(() => <NavItem onClick={reset}>Logout</NavItem>);
 
     return items;
-  }, [isAuthenticated, roles, currentLocation]);
+  }, [isAuthenticated, roles, currentLocation, events]);
 
   return (
     <header className={styles.root}>
