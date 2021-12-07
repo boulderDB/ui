@@ -23,7 +23,11 @@ function Form({ defaults, fields, onSubmit, submitLabel }) {
       }}
     >
       {fields.map(({ name, label, Component, componentProps }, index) => {
-        const value = name in formData ? formData[name] : "";
+        let value = null;
+
+        if (formData) {
+          value = name in formData ? formData[name] : "";
+        }
 
         if (Component === EntitySelect || Component === Select) {
           componentProps.onChange = (event, value) => setKeyValue(name, value);

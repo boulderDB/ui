@@ -84,12 +84,16 @@ function MyApp({ Component, pageProps, locations }) {
   }, [message]);
 
   useEffect(() => {
-    if (!isAuthenticated) {
+    if (!isAuthenticated && router.pathname !== "/login") {
       return router.push(`/login`);
     }
   }, [isAuthenticated]);
 
   useEffect(async () => {
+    if (!currentLocation || !isAuthenticated) {
+      return;
+    }
+
     try {
       const { data } = await http.get(`/${currentLocation?.url}/events`);
 
