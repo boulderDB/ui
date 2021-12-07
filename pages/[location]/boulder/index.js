@@ -357,34 +357,16 @@ export default function Index() {
           </Drawer>
 
           <Bar visible={selected.length > 0}>
-            <span>Selected ({selected.length})</span>
+            <span className={typography.gamma}>
+              Selected ({selected.length})
+            </span>
 
             <span className={styles.barButtons}>
               <Button
-                size={"small"}
                 variant={"danger"}
                 onClick={async () => {
                   try {
-                    await http.put("/boulders/mass", {
-                      items: selected,
-                      operation: "prune-ascents",
-                    });
-
-                    mutate(`/${currentLocation?.url}/boulders`);
-                  } catch (error) {
-                    dispatchMessage(toast(error));
-                  }
-                }}
-              >
-                Prune Ascents
-              </Button>
-
-              <Button
-                size={"small"}
-                variant={"error"}
-                onClick={async () => {
-                  try {
-                    await http.put("/boulders/mass", {
+                    await http.put(`/${currentLocation?.url}/boulders/mass`, {
                       items: selected,
                       operation: "deactivate",
                     });

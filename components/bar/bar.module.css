@@ -10,6 +10,7 @@
   transition: bottom 200ms ease-in-out;
   display: flex;
   justify-content: space-between;
+  align-items: center;
 }
 
 .isVisible {
