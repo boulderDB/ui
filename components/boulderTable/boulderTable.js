@@ -162,7 +162,7 @@ export const columns = {
   },
   points: {
     id: "points",
-    accessor: "points",
+    accessor: "currentPoints",
     Header: "Points",
     sortType: (a, b) => {
       return a.values.points > b.values.points ? -1 : 1;

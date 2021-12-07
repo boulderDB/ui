@@ -242,8 +242,6 @@ export default function Index() {
     return <Loader />;
   }
 
-  console.log(filters);
-
   return (
     <Layout>
       <Meta title={"boulder"} />

@@ -17,7 +17,7 @@ import Comments from "./comments";
 export const BoulderDetailContext = createContext(null);
 
 export default function BoulderDetail({ id }) {
-  const { currentLocation, tokenPayload } = useContext(AppContext);
+  const { currentLocation } = useContext(AppContext);
   const boulder = useCachedHttp(`/${currentLocation?.url}/boulders/${id}`);
   const [page, setPage] = useState("index");
 
@@ -73,11 +73,7 @@ export default function BoulderDetail({ id }) {
             </Section>
 
             <Section title={"Comments"}>
-              <Comments
-                boulderId={boulder.id}
-                comments={boulder.comments}
-                userId={tokenPayload?.user?.id}
-              />
+              <Comments boulderId={boulder.id} comments={boulder.comments} />
             </Section>
 
             <div className={styles.commentButton}>

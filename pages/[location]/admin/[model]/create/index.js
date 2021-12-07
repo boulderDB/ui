@@ -52,6 +52,7 @@ export default function Index() {
 
         <div className={layoutStyles.sideContent}>
           <Form
+            reset={true}
             submitLabel={"Create"}
             onSubmit={onSubmit}
             fields={fields}

@@ -47,7 +47,6 @@ export const models = [
         grade: filterId(payload.grade),
         holdType: filterId(payload.holdType),
         internalGrade: filterId(payload.internalGrade),
-        status: filterId(payload.status),
       };
     },
   },

@@ -10,9 +10,13 @@ import { mutate } from "swr";
 import parseDate from "../../utilties/parseDate";
 import styles from "./comment.module.css";
 
-export default function Comments({ boulderId, comments, userId }) {
+export default function Comments({ boulderId, comments }) {
   const http = useHttp();
-  const { dispatchMessage, currentLocation } = useContext(AppContext);
+  const { dispatchMessage, currentLocation, tokenPayload } = useContext(
+    AppContext
+  );
+
+  const userId = tokenPayload?.user?.id;
 
   const onDelete = useCallback(async (id, boulderId) => {
     const confirmed = window.confirm("Are you sure?");
@@ -31,7 +35,7 @@ export default function Comments({ boulderId, comments, userId }) {
       );
     }
   }, []);
-
+  console.log(comments, userId);
   return (
     <ul className={styles.root}>
       {comments.length === 0 ? (
@@ -42,7 +46,7 @@ export default function Comments({ boulderId, comments, userId }) {
             <div>{message}</div>
 
             <div className={styles.itemAuthor}>
-              {author.id === userId ? author : "You"}
+              {author.id === userId ? "You" : author.username}
             </div>
 
             <div className={styles.itemDate}>{parseDate(createdAt).string}</div>

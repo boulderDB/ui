@@ -26,7 +26,7 @@ function Select({
 
   if (typeof value === "number" || typeof value === "string") {
     value = options.find((item) => item.id === value);
-  } else if (value instanceof Array) {
+  } else if (value && value instanceof Array) {
     multiple = true;
     value = value
       .map((valueItem) => {
@@ -35,8 +35,8 @@ function Select({
         });
       })
       .filter((item) => item !== undefined);
-  } else if (typeof value === "object") {
-    value = options.find((item) => item === value);
+  } else if (value && typeof value === "object") {
+    value = options.find((item) => item.id === value.id);
   }
 
   return (

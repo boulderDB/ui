@@ -4,10 +4,7 @@ import { models } from "../../index";
 import { layoutStyles, typography } from "../../../../../styles/utilities";
 import cn from "classnames";
 import Form from "../../../../../components/form/form";
-import Switch from "../../../../../components/switch/switch";
-import TextField from "../../../../../components/textField/textField";
-import EntitySelect from "../../../../../components/entitySelect/entitySelect";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext } from "react";
 import { AppContext } from "../../../../_app";
 import { useRouter } from "next/router";
 import { useCachedHttp, useHttp } from "../../../../../hooks/useHttp";
@@ -39,7 +36,10 @@ export default function Index() {
         config?.beforeSubmit ? config?.beforeSubmit(payload) : payload
       );
 
-      mutate(`/${currentLocation?.url}/boulders`);
+      console.log(`/${currentLocation?.url}${config.api}`);
+
+      mutate(`/${currentLocation?.url}${config.api}`);
+      mutate(`/${currentLocation?.url}${config.api}/${id}`);
 
       dispatchMessage(toast("Success", `Updated!`, "success"));
     } catch (error) {
