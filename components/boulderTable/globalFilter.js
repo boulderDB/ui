@@ -24,7 +24,7 @@ export default function GlobalFilter({
           }
         }}
       >
-        {filters.map((filter, index) => (
+        {filters?.map((filter, index) => (
           <FilterTag
             key={index}
             id={filter.id}

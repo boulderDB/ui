@@ -34,7 +34,7 @@ import IndeterminateCheckbox from "../../../components/table/IndeterminateCheckb
 import Link from "next/link";
 import { useSWRConfig } from "swr";
 
-export function Boulders({ boulders, initialFilters }) {
+export function Boulders({ boulders, event, initialFilters = [] }) {
   const http = useHttp();
   const { toggle } = useDrawer();
   const { mutate } = useSWRConfig();
@@ -201,6 +201,10 @@ export function Boulders({ boulders, initialFilters }) {
 
       mutate(`/${currentLocation?.url}/boulders`);
 
+      if (event) {
+        mutate(`/${currentLocation?.url}/events/${event.id}`);
+      }
+
       dispatchMessage(
         toast(
           "Ascent added",
@@ -233,12 +237,20 @@ export function Boulders({ boulders, initialFilters }) {
       await http.delete(`/${currentLocation?.url}/ascents/${id}`);
 
       mutate(`/${currentLocation?.url}/boulders`);
+
+      if (event) {
+        mutate(`/${currentLocation?.url}/events/${event.id}`);
+      }
     } catch (error) {
       dispatchMessage(toast("Error", extractErrorMessage(error), "error"));
     }
   }, []);
 
   const resolveFilterValue = (id, options, property = "name") => {
+    if (!filters) {
+      return null;
+    }
+
     const filter = filters.find((filter) => filter.id === id);
 
     if (!filter) {
@@ -318,7 +330,7 @@ export function Boulders({ boulders, initialFilters }) {
 
         <Select
           {...boulderFilters.ascent}
-          value={filters.find((filter) => filter.id === "ascent")?.value}
+          value={filters?.find((filter) => filter.id === "ascent")?.value}
           onChange={(event, newValue) => {
             applyFilter("ascent", newValue ? newValue.id : null);
           }}

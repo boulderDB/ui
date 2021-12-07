@@ -30,7 +30,7 @@ export default function Index() {
         </h1>
 
         <div className={layoutStyles.sideContent}>
-          <Boulders boulders={event.boulders} />
+          <Boulders boulders={event.boulders} event={event} />
         </div>
       </div>
     </Layout>
