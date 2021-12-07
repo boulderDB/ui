@@ -20,6 +20,25 @@ import Grade from "../grade/grade";
 import cn from "classnames";
 import { typography } from "../../styles/utilities";
 
+export const ascentTypes = [
+  {
+    id: "todo",
+    name: "Todo",
+  },
+  {
+    id: "flash",
+    name: "Flash",
+  },
+  {
+    id: "top",
+    name: "Top",
+  },
+  {
+    id: "resignation",
+    name: "Resignation",
+  },
+];
+
 export default function BoulderTable({
   columns,
   data,
@@ -218,6 +237,7 @@ export const columns = {
       return a.values.ascent.type > b.values.ascent.type ? -1 : 1;
     },
     filter: (rows, id, filterValue) => {
+      console.log(filterValue);
       return rows.filter((row) => {
         const rowValue = row.values[id]?.type ? row.values[id].type : "todo";
 
@@ -269,30 +289,13 @@ export const filters = {
   },
   ascent: {
     label: "Ascent",
-    options: [
-      {
-        value: "todo",
-        label: "Todo",
-      },
-      {
-        value: "flash",
-        label: "Flash",
-      },
-      {
-        value: "top",
-        label: "Top",
-      },
-      {
-        value: "resignation",
-        label: "Resignation",
-      },
-    ],
+    options: ascentTypes,
     renderOption: (option) => (
       <div className={filterStyles.hasIconOption}>
-        <AscentIcon type={option.label} fill={true} /> {option.label}
+        <AscentIcon type={option.name} fill={true} /> {option.name}
       </div>
     ),
-    getOptionLabel: (option) => option.value,
+    getOptionLabel: (option) => option.name,
   },
   area: {
     label: "Area",

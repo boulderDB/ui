@@ -35,7 +35,7 @@ export default function Comments({ boulderId, comments }) {
       );
     }
   }, []);
-  console.log(comments, userId);
+
   return (
     <ul className={styles.root}>
       {comments.length === 0 ? (

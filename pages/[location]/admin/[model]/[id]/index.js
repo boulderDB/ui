@@ -36,8 +36,6 @@ export default function Index() {
         config?.beforeSubmit ? config?.beforeSubmit(payload) : payload
       );
 
-      console.log(`/${currentLocation?.url}${config.api}`);
-
       mutate(`/${currentLocation?.url}${config.api}`);
       mutate(`/${currentLocation?.url}${config.api}/${id}`);
 

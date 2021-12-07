@@ -34,7 +34,7 @@ import IndeterminateCheckbox from "../../../components/table/IndeterminateCheckb
 import Link from "next/link";
 import { useSWRConfig } from "swr";
 
-export default function Index() {
+export function Boulders({ boulders, initialFilters }) {
   const http = useHttp();
   const { toggle } = useDrawer();
   const { mutate } = useSWRConfig();
@@ -42,13 +42,13 @@ export default function Index() {
   const { currentLocation, dispatchMessage, roles } = useContext(AppContext);
   const isAdmin = roles?.includes("admin");
 
-  const boulders = useCachedHttp(`/${currentLocation?.url}/boulders`);
-
   const [detailBoulder, setDetailBoulder] = useState(null);
   const [selected, setSelected] = useState([]);
   const [globalFilter, setGlobalFilter] = useState("");
 
-  const { filters, setFilters, applyFilter } = useBoulderFilters();
+  const { filters, setFilters, applyFilter } = useBoulderFilters(
+    initialFilters
+  );
 
   const grades = useMemo(
     () =>
@@ -238,13 +238,157 @@ export default function Index() {
     }
   }, []);
 
+  const resolveFilterValue = (id, options, property = "name") => {
+    const filter = filters.find((filter) => filter.id === id);
+
+    if (!filter) {
+      return null;
+    }
+
+    return options.find((option) => option[property] === filter.value);
+  };
+
+  if (!boulders) {
+    return <Loader />;
+  }
+
+  return (
+    <>
+      <div className={styles.filters}>
+        <Select
+          {...boulderFilters.area}
+          value={resolveFilterValue("area", areas)}
+          options={areas}
+          onChange={(event, newValue) => {
+            applyFilter("area", newValue ? newValue.name : null);
+          }}
+          items={areas}
+        />
+
+        <Select
+          {...boulderFilters.holdType}
+          value={resolveFilterValue("holdType", holdTypes)}
+          options={holdTypes}
+          onChange={(event, newValue) =>
+            applyFilter("holdType", newValue ? newValue.name : null)
+          }
+          items={holdTypes}
+        />
+
+        <Select
+          {...boulderFilters.grade}
+          value={resolveFilterValue("grade", grades)}
+          options={grades}
+          onChange={(event, newValue) =>
+            applyFilter("grade", newValue ? newValue.name : null)
+          }
+          items={grades}
+        />
+
+        <Select
+          {...boulderFilters.wall}
+          value={resolveFilterValue("start", walls)}
+          options={walls}
+          label={"Start"}
+          onChange={(event, newValue) =>
+            applyFilter("start", newValue ? newValue.name : null)
+          }
+          items={walls}
+        />
+
+        <Select
+          {...boulderFilters.wall}
+          label={"End"}
+          value={resolveFilterValue("end", walls)}
+          options={walls}
+          onChange={(event, newValue) =>
+            applyFilter("end", newValue ? newValue.name : null)
+          }
+          items={walls}
+        />
+
+        <Select
+          {...boulderFilters.setter}
+          value={resolveFilterValue("setter", setters, "username")}
+          options={setters}
+          onChange={(event, newValue) => {
+            applyFilter("setter", newValue ? newValue.username : null);
+          }}
+        />
+
+        <Select
+          {...boulderFilters.ascent}
+          value={filters.find((filter) => filter.id === "ascent")?.value}
+          onChange={(event, newValue) => {
+            applyFilter("ascent", newValue ? newValue.id : null);
+          }}
+        />
+      </div>
+
+      <GlobalFilter
+        filters={filters}
+        setFilters={setFilters}
+        setGlobalFilter={setGlobalFilter}
+        globalFilter={globalFilter}
+      />
+
+      <BoulderTable
+        columns={tableColumns}
+        data={boulders}
+        filters={filters}
+        globalFilter={globalFilter}
+        onSelectRows={(ids) => setSelected(ids)}
+        isAdmin={isAdmin}
+        headerClassName={cn(
+          styles.tableHeader,
+          isAdmin ? styles.isAdminTableHeader : null
+        )}
+        rowClassName={isAdmin ? styles.isAdminTableRow : styles.tableRow}
+        collapsedRowRenderer={(cells) => <CollapsedRow cells={cells} />}
+      />
+
+      <Drawer onClose={() => setDetailBoulder(null)}>
+        {detailBoulder && <BoulderDetail id={detailBoulder} />}
+      </Drawer>
+
+      <Bar visible={selected.length > 0}>
+        <span className={typography.gamma}>Selected ({selected.length})</span>
+
+        <span className={styles.barButtons}>
+          <Button
+            variant={"danger"}
+            onClick={async () => {
+              try {
+                await http.put(`/${currentLocation?.url}/boulders/mass`, {
+                  items: selected,
+                  operation: "deactivate",
+                });
+
+                mutate(`/${currentLocation?.url}/boulders`);
+              } catch (error) {
+                dispatchMessage(toast(error));
+              }
+            }}
+          >
+            Deactivate
+          </Button>
+        </span>
+      </Bar>
+    </>
+  );
+}
+
+export default function Index() {
+  const { currentLocation, isAdmin } = useContext(AppContext);
+  const boulders = useCachedHttp(`/${currentLocation?.url}/boulders`);
+
   if (!boulders) {
     return <Loader />;
   }
 
   return (
     <Layout>
-      <Meta title={"boulder"} />
+      <Meta title={"Boulders"} />
 
       <div className={layoutStyles.grid}>
         <h1 className={cn(layoutStyles.sideTitle, typography.alpha700)}>
@@ -261,124 +405,15 @@ export default function Index() {
         </h1>
 
         <div className={layoutStyles.sideContent}>
-          <div className={styles.filters}>
-            <Select
-              {...boulderFilters.area}
-              value={filters.find((filter) => filter.id === "area")}
-              options={areas}
-              onChange={(event, newValue) =>
-                applyFilter("area", newValue ? newValue.name : null)
-              }
-              items={areas}
-            />
-
-            <Select
-              {...boulderFilters.holdType}
-              options={holdTypes}
-              onChange={(event, newValue) =>
-                applyFilter("holdType", newValue ? newValue.name : null)
-              }
-              items={holdTypes}
-            />
-
-            <Select
-              {...boulderFilters.grade}
-              options={grades}
-              onChange={(event, newValue) =>
-                applyFilter("grade", newValue ? newValue.name : null)
-              }
-              items={grades}
-            />
-
-            <Select
-              {...boulderFilters.wall}
-              label={"Start"}
-              options={walls}
-              onChange={(event, newValue) =>
-                applyFilter("start", newValue ? newValue.name : null)
-              }
-              items={walls}
-            />
-
-            <Select
-              {...boulderFilters.wall}
-              label={"End"}
-              options={walls}
-              onChange={(event, newValue) =>
-                applyFilter("end", newValue ? newValue.name : null)
-              }
-              items={walls}
-            />
-
-            <Select
-              {...boulderFilters.setter}
-              options={setters}
-              value={filters.find((filter) => filter.id === "setter")?.id}
-              onChange={(event, newValue) => {
-                applyFilter("setter", newValue ? newValue.username : null);
-              }}
-            />
-
-            <Select
-              {...boulderFilters.ascent}
-              value={filters.find((filter) => filter.id === "ascent")}
-              onChange={(event, newValue) => {
-                applyFilter("ascent", newValue ? newValue.value : null);
-              }}
-            />
-          </div>
-
-          <GlobalFilter
-            filters={filters}
-            setFilters={setFilters}
-            setGlobalFilter={setGlobalFilter}
-            globalFilter={globalFilter}
+          <Boulders
+            boulders={boulders}
+            initialFilters={[
+              {
+                id: "ascent",
+                value: "todo",
+              },
+            ]}
           />
-
-          <BoulderTable
-            columns={tableColumns}
-            data={boulders}
-            filters={filters}
-            globalFilter={globalFilter}
-            onSelectRows={(ids) => setSelected(ids)}
-            isAdmin={isAdmin}
-            headerClassName={cn(
-              styles.tableHeader,
-              isAdmin ? styles.isAdminTableHeader : null
-            )}
-            rowClassName={isAdmin ? styles.isAdminTableRow : styles.tableRow}
-            collapsedRowRenderer={(cells) => <CollapsedRow cells={cells} />}
-          />
-
-          <Drawer onClose={() => setDetailBoulder(null)}>
-            {detailBoulder && <BoulderDetail id={detailBoulder} />}
-          </Drawer>
-
-          <Bar visible={selected.length > 0}>
-            <span className={typography.gamma}>
-              Selected ({selected.length})
-            </span>
-
-            <span className={styles.barButtons}>
-              <Button
-                variant={"danger"}
-                onClick={async () => {
-                  try {
-                    await http.put(`/${currentLocation?.url}/boulders/mass`, {
-                      items: selected,
-                      operation: "deactivate",
-                    });
-
-                    mutate(`/${currentLocation?.url}/boulders`);
-                  } catch (error) {
-                    dispatchMessage(toast(error));
-                  }
-                }}
-              >
-                Deactivate
-              </Button>
-            </span>
-          </Bar>
         </div>
       </div>
     </Layout>
