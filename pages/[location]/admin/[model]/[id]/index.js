@@ -26,12 +26,10 @@ export default function Index() {
 
   const config = models.find((item) => item.route === model);
 
-  const data = useCachedHttp(`/${currentLocation?.url}${config.api}/${id}`);
-  const fields = useSchemaForm(config.schema);
+  const data = useCachedHttp(`/${currentLocation?.url}${config?.api}/${id}`);
+  const { fields } = useSchemaForm(config?.schema);
 
   const onSubmit = async (payload) => {
-    delete payload.id;
-
     try {
       await http.put(
         `/${currentLocation?.url}${config.api}/${id}`,
@@ -43,7 +41,7 @@ export default function Index() {
     }
   };
 
-  if (!data) {
+  if (!data || !fields) {
     return <Loader />;
   }
 

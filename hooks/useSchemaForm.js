@@ -5,12 +5,15 @@ import { AppContext } from "../pages/_app";
 import TextField from "../components/textField/textField";
 import Switch from "../components/switch/switch";
 import DatePicker from "../components/datePicker/datePicker";
+import Select from "../components/select/select";
 
 const components = {
   TextType: TextField,
   CheckboxType: Switch,
   EntityType: EntitySelect,
   DateTimeType: DatePicker,
+  ChoiceType: Select,
+  IntegerType: TextField,
 };
 
 export default function useSchemaForm(name) {
@@ -19,10 +22,11 @@ export default function useSchemaForm(name) {
   const http = useHttp();
 
   const [fields, setFields] = useState([]);
+  const [defaults, setDefaults] = useState({});
 
   useEffect(async () => {
     if (!schema) {
-      return [];
+      return {};
     }
 
     setFields(
@@ -40,11 +44,29 @@ export default function useSchemaForm(name) {
               `/${currentLocation?.url}${field.schema.resource}`
             );
 
+            const labelProperty = field.schema.labelProperty
+              ? field.schema.labelProperty
+              : name;
+
             config.componentProps = {
-              renderOption: (option) => option.name,
-              getOptionLabel: (option) => option.name,
+              renderOption: (option) =>
+                labelProperty ? option[labelProperty] : option.name,
+              getOptionLabel: (option) =>
+                labelProperty ? option[labelProperty] : option.name,
               options: data,
               multiple: field.options.multiple,
+            };
+          }
+
+          if (config.Component === Select) {
+            config.componentProps = {
+              options: Object.keys(field?.choices)?.map((choice) => {
+                return {
+                  name: choice,
+                };
+              }),
+              renderOption: (option) => option.name,
+              getOptionLabel: (option) => option.name,
             };
           }
 
@@ -52,7 +74,18 @@ export default function useSchemaForm(name) {
         })
       )
     );
+
+    let defaultValues = {};
+
+    schema.forEach((field) => {
+      defaultValues[field.name] = field.schema?.default;
+    });
+
+    setDefaults(defaultValues);
   }, [schema, currentLocation]);
 
-  return fields;
+  return {
+    fields,
+    defaults,
+  };
 }

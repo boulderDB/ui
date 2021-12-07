@@ -7,7 +7,25 @@ import { useContext } from "react";
 import { AppContext } from "../../_app";
 import Link from "next/link";
 
+function deleteCommon(payload) {
+  delete payload.id;
+  delete payload.behaviours;
+}
+
 export const models = [
+  {
+    title: "Boulders",
+    route: "boulders",
+    schema: "boulder",
+    api: "/boulders",
+    beforeSubmit: (payload) => {
+      deleteCommon(payload);
+
+      return {
+        ...payload,
+      };
+    },
+  },
   {
     title: "Users",
     route: "users",
@@ -26,6 +44,8 @@ export const models = [
       },
     ],
     beforeSubmit: (payload) => {
+      deleteCommon(payload);
+
       return {
         ...payload,
         walls: payload.walls.map((item) => item.id),
@@ -45,6 +65,13 @@ export const models = [
         property: "active",
       },
     ],
+    beforeSubmit: (payload) => {
+      deleteCommon(payload);
+
+      return {
+        ...payload,
+      };
+    },
   },
   {
     title: "Grades",
@@ -59,6 +86,13 @@ export const models = [
         property: "active",
       },
     ],
+    beforeSubmit: (payload) => {
+      deleteCommon(payload);
+
+      return {
+        ...payload,
+      };
+    },
   },
   {
     title: "Hold types",
@@ -73,6 +107,13 @@ export const models = [
         property: "active",
       },
     ],
+    beforeSubmit: (payload) => {
+      deleteCommon(payload);
+
+      return {
+        ...payload,
+      };
+    },
   },
   {
     title: "Tags",
@@ -90,6 +131,13 @@ export const models = [
         property: "active",
       },
     ],
+    beforeSubmit: (payload) => {
+      deleteCommon(payload);
+
+      return {
+        ...payload,
+      };
+    },
   },
   {
     title: "Events",
@@ -101,10 +149,21 @@ export const models = [
         property: "name",
       },
       {
-        property: "active",
+        property: "visible",
+      },
+      {
+        property: "public",
+      },
+      {
+        property: "startDate",
+      },
+      {
+        property: "endDate",
       },
     ],
     beforeSubmit: (payload) => {
+      deleteCommon(payload);
+
       return {
         ...payload,
         boulders: payload.boulders.map((item) => item.id),

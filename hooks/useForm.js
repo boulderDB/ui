@@ -30,7 +30,7 @@ const dataResolvers = {
 };
 
 export default function useForm(defaults) {
-  const [formData, setFormData] = useState(defaults ? defaults : []);
+  const [formData, setFormData] = useState(defaults ? defaults : {});
   const [submitting, setSubmitting] = useState(false);
 
   const handleSubmit = async (callback) => {

@@ -15,7 +15,13 @@ export const renderers = {
   TextType: (value) => value,
   EntityType: (value) => value,
   CheckboxType: (value) => value.toString(),
-  DateTimeType: (value) => value.toString(),
+  DateTimeType: (value) => {
+    if (!value) {
+      return "-";
+    }
+
+    return value.toString();
+  },
 };
 
 export default function Index() {
@@ -28,6 +34,7 @@ export default function Index() {
   const data = useCachedHttp(
     `/${currentLocation?.url}${config.api}?filter=all`
   );
+
   const schema = useCachedHttp(`/schemas/${config.schema}`);
 
   const columns = useMemo(() => {

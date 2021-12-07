@@ -18,7 +18,10 @@ export default function LocationSelect() {
         onChange={({ target }) => {
           router.push({
             pathname: router.pathname,
-            query: { location: target.value },
+            query: {
+              ...router.query,
+              location: target.value,
+            },
           });
         }}
       >

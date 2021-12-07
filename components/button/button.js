@@ -45,7 +45,7 @@ function Button({
     );
   }
 
-  return <button {...props} onClick={onClick} />;
+  return <button onClick={onClick} {...props} />;
 }
 
 Button.defaultProps = {

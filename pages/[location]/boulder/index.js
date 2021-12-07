@@ -185,19 +185,19 @@ export default function Index() {
 
   const addHandler = useCallback(async (boulder, type) => {
     try {
-      const { data } = await http.post(`/${currentLocation?.url}/ascents`, {
+      await http.post(`/${currentLocation?.url}/ascents`, {
         boulder,
         type,
       });
-
-      await mutate(contextualizedApiPath(currentLocation, "/ascents"));
+      console.log(contextualizedApiPath(currentLocation, "/boulders"));
+      mutate(contextualizedApiPath(currentLocation, "/boulders"));
 
       dispatchMessage(
         toast(
           "Ascent added",
           <>
             <span>
-              <AscentIcon type={data.me.type} fill={true} />+{data.points}
+              <AscentIcon type={type} fill={true} />+{"points"}
             </span>
 
             <div className={styles.rating}>
@@ -239,6 +239,14 @@ export default function Index() {
       <div className={layoutStyles.grid}>
         <h1 className={cn(layoutStyles.sideTitle, typography.alpha700)}>
           Boulder
+          {isAdmin && (
+            <Button
+              size={"small"}
+              href={`/${currentLocation?.url}/admin/boulders/create`}
+            >
+              Add
+            </Button>
+          )}
         </h1>
 
         <div className={layoutStyles.sideContent}>

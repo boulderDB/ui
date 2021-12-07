@@ -12,6 +12,7 @@ import extractErrorMessage from "../../../../../utilties/extractErrorMessage";
 import { AppContext } from "../../../../_app";
 import { useHttp } from "../../../../../hooks/useHttp";
 import capitalize from "../../../../../utilties/capitalize";
+import Loader from "../../../../../components/loader/loader";
 
 export default function Index() {
   const { query } = useRouter();
@@ -20,7 +21,7 @@ export default function Index() {
   const { model } = query;
 
   const config = models.find((item) => item.route === model);
-  const fields = useSchemaForm(config.schema);
+  const { fields, defaults } = useSchemaForm(config.schema);
 
   const onSubmit = async (payload) => {
     delete payload.id;
@@ -36,6 +37,10 @@ export default function Index() {
     }
   };
 
+  if (!fields || !defaults) {
+    return <Loader />;
+  }
+
   return (
     <Layout>
       <Meta title={`Admin / ${config.schema}`} />
@@ -46,7 +51,12 @@ export default function Index() {
         </h1>
 
         <div className={layoutStyles.sideContent}>
-          <Form submitLabel={"Create"} onSubmit={onSubmit} fields={fields} />
+          <Form
+            submitLabel={"Create"}
+            onSubmit={onSubmit}
+            fields={fields}
+            defaults={defaults}
+          />
         </div>
       </div>
     </Layout>
