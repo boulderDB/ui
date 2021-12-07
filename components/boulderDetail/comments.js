@@ -23,9 +23,7 @@ export default function Comments({ boulderId, comments, userId }) {
 
     try {
       await http.delete(`/comment/${id}`);
-      await mutate(
-        contextualizedApiPath(currentLocation, `/boulders/${boulderId}`)
-      );
+      mutate(`/${currentLocation?.url}/boulders/${boulderId}`);
     } catch (error) {
       console.error(error.response);
       dispatchMessage(

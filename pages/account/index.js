@@ -85,7 +85,7 @@ export default function Index() {
         ),
       });
 
-      await mutate("/api/me");
+      await mutate("/me");
 
       dispatchMessage(toast("Success", "Account updated!", "success"));
     } catch (error) {

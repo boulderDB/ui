@@ -19,7 +19,6 @@ import toast from "../../../utilties/toast";
 import AscentIcon from "../../../components/ascentIcon/ascentIcon";
 import GlobalFilter from "../../../components/boulderTable/globalFilter";
 import Ascents from "../../../components/boulderTable/ascents";
-import { mutate } from "swr";
 import extractErrorMessage from "../../../utilties/extractErrorMessage";
 import CollapsedRow from "../../../components/boulderTable/collapsedRow";
 import contextualizedApiPath from "../../../utilties/contextualizedApiPath";
@@ -34,10 +33,12 @@ import { columns } from "../../../components/boulderTable/boulderTable";
 import Loader from "../../../components/loader/loader";
 import IndeterminateCheckbox from "../../../components/table/IndeterminateCheckbox";
 import Link from "next/link";
+import { useSWRConfig } from "swr";
 
 export default function Index() {
   const http = useHttp();
   const { toggle } = useDrawer();
+  const { mutate } = useSWRConfig();
 
   const { currentLocation, dispatchMessage, roles } = useContext(AppContext);
   const isAdmin = roles?.includes("admin");
@@ -189,8 +190,8 @@ export default function Index() {
         boulder,
         type,
       });
-      console.log(contextualizedApiPath(currentLocation, "/boulders"));
-      mutate(contextualizedApiPath(currentLocation, "/boulders"));
+
+      mutate(`/${currentLocation?.url}/boulders`);
 
       dispatchMessage(
         toast(
@@ -219,10 +220,11 @@ export default function Index() {
     }
   }, []);
 
-  const removeHandler = useCallback(async (id) => {
+  const removeHandler = useCallback(async ({ id }) => {
     try {
-      await http.delete(`/${currentLocation?.url}/ascents`);
-      await mutate(contextualizedApiPath(currentLocation, "/ascents"));
+      await http.delete(`/${currentLocation?.url}/ascents/${id}`);
+
+      mutate(`/${currentLocation?.url}/boulders`);
     } catch (error) {
       dispatchMessage(toast("Error", extractErrorMessage(error), "error"));
     }
@@ -356,12 +358,7 @@ export default function Index() {
                       operation: "prune-ascents",
                     });
 
-                    await mutate(
-                      contextualizedApiPath(currentLocation, "/ascent")
-                    );
-                    await mutate(
-                      contextualizedApiPath(currentLocation, "/boulder")
-                    );
+                    mutate(`/${currentLocation?.url}/boulders`);
                   } catch (error) {
                     dispatchMessage(toast(error));
                   }
@@ -380,12 +377,7 @@ export default function Index() {
                       operation: "deactivate",
                     });
 
-                    await mutate(
-                      contextualizedApiPath(currentLocation, "/ascent")
-                    );
-                    await mutate(
-                      contextualizedApiPath(currentLocation, "/boulder")
-                    );
+                    mutate(`/${currentLocation?.url}/boulders`);
                   } catch (error) {
                     dispatchMessage(toast(error));
                   }

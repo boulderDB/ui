@@ -9,7 +9,7 @@ import usePersistentState from "../hooks/usePersistentState";
 import { useRouter } from "next/router";
 import { DrawerContext } from "../components/drawer/drawer";
 import { useHttp } from "../hooks/useHttp";
-
+import { SWRConfig } from "swr";
 export const AppContext = createContext(null);
 
 function MyApp({ Component, pageProps, locations }) {
@@ -110,7 +110,9 @@ function MyApp({ Component, pageProps, locations }) {
           toggle: () => setOpen(!isOpen),
         }}
       >
-        <Component {...pageProps} />
+        <SWRConfig>
+          <Component {...pageProps} />
+        </SWRConfig>
       </DrawerContext.Provider>
 
       <Footer />
