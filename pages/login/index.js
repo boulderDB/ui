@@ -44,7 +44,7 @@ export default function Index() {
   }, []);
 
   useEffect(async () => {
-    if (isAuthenticated) {
+    if (isAuthenticated && lastVisitedLocation) {
       await router.push(`${lastVisitedLocation?.url}`);
     }
   }, [isAuthenticated]);
@@ -54,6 +54,7 @@ export default function Index() {
       const { data } = await http.post("/login", payload);
 
       setTokenPayload(data);
+      console.log(data);
 
       if (!data?.lastVisitedLocation) {
         await router.push(`/salon`);
