@@ -37,6 +37,7 @@ export const models = [
       delete payload.userAscent;
       delete payload.currentPoints;
       delete payload.ascents;
+      delete payload.areas;
 
       return {
         ...payload,

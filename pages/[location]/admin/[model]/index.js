@@ -64,8 +64,8 @@ export default function Index() {
       <Meta title={`Admin / ${config.title}`} />
 
       <div className={layoutStyles.grid}>
-        <div className={cn(layoutStyles.sideTitle, typography.alpha700)}>
-          <h2>{config.title}</h2>
+        <div className={cn(layoutStyles.sideTitle)}>
+          <h2 className={typography.alpha700}>{config.title}</h2>
 
           <Button
             size={"s"}

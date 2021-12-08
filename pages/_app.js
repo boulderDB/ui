@@ -11,6 +11,7 @@ import { DrawerContext } from "../components/drawer/drawer";
 import { useHttp } from "../hooks/useHttp";
 import { SWRConfig } from "swr";
 import useDocumentScrollLock from "../hooks/useDocumentScrollLock";
+import extractRoleName from "../utilties/extractRoleName";
 
 export const AppContext = createContext(null);
 
@@ -65,9 +66,7 @@ function MyApp({ Component, pageProps, locations }) {
 
     return tokenPayload?.user.roles
       ?.filter((role) => role.includes(rolePostfix))
-      .map((role) =>
-        role.replace("ROLE_", "").replace(rolePostfix, "").toLowerCase()
-      );
+      .map((role) => extractRoleName(currentLocation?.id, role));
   }, [currentLocation]);
 
   const dispatchMessage = (newMessage) => {
