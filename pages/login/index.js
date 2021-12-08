@@ -52,14 +52,13 @@ export default function Index() {
   const onSubmit = async (payload) => {
     try {
       const { data } = await http.post("/login", payload);
-      const { lastVisitedLocation } = data;
 
       setTokenPayload(data);
 
-      if (!lastVisitedLocation) {
+      if (!data?.lastVisitedLocation) {
         await router.push(`/salon`);
       } else {
-        await router.push(`/${lastVisitedLocation.url}`);
+        await router.push(`/${data.lastVisitedLocation.url}`);
       }
     } catch (error) {
       console.error(error);
