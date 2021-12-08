@@ -66,14 +66,9 @@ export default function useSchemaForm(name) {
 
           if (field.type === "ChoiceType") {
             config.componentProps = {
-              options: Object.keys(field?.options?.choices)?.map((choice) => {
-                return {
-                  name: choice,
-                  id: choice,
-                };
-              }),
-              renderOption: (option) => option.name,
-              getOptionLabel: (option) => option.name,
+              options: Object.keys(field?.options?.choices)?.map(
+                (choice) => choice
+              ),
             };
           }
 

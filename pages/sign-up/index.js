@@ -13,6 +13,7 @@ import Select from "../../components/select/select";
 import Form from "../../components/form/form";
 import styles from "../login/index.module.css";
 import Link from "next/link";
+import extractRoleName from "../../utilties/extractRoleName";
 
 export default function Index() {
   const router = useRouter();
@@ -41,7 +42,7 @@ export default function Index() {
         label: "Gender",
         Component: Select,
         componentProps: {
-          options: [{}],
+          options: ["male", "female", "neutral"],
         },
       },
       {

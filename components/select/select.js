@@ -24,28 +24,6 @@ function Select({
     value = null;
   }
 
-  if (typeof value === "number" || typeof value === "string") {
-    value = options.find((item) => item.id === value);
-  } else if (value && value instanceof Array) {
-    multiple = true;
-
-    value = value
-      .map((valueItem) => {
-        if (typeof valueItem === "object") {
-          return options.find((dataItem) => {
-            return dataItem.id === valueItem.id;
-          });
-        }
-
-        return options.find((dataItem) => {
-          return dataItem === valueItem;
-        });
-      })
-      .filter((item) => item !== undefined);
-  } else if (value && typeof value === "object") {
-    value = options.find((item) => item.id === value.id);
-  }
-
   return (
     <Autocomplete
       options={options}
