@@ -391,12 +391,14 @@ export function Boulders({ boulders, event, initialFilters = [] }) {
 }
 
 export default function Index() {
-  const { currentLocation, isAdmin } = useContext(AppContext);
+  const { currentLocation, roles } = useContext(AppContext);
   const boulders = useCachedHttp(`/${currentLocation?.url}/boulders`);
 
   if (!boulders) {
     return <Loader />;
   }
+
+  const isAdmin = roles?.includes("admin");
 
   return (
     <Layout>

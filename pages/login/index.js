@@ -54,7 +54,6 @@ export default function Index() {
       const { data } = await http.post("/login", payload);
 
       setTokenPayload(data);
-      console.log(data);
 
       if (!data?.lastVisitedLocation) {
         await router.push(`/salon`);

@@ -9,7 +9,7 @@ import AscentIcon from "../ascentIcon/ascentIcon";
 
 export default function CollapsedRow({ cells }) {
   const { currentLocation, roles } = useContext(AppContext);
-  const isAdmin = roles?.includes("roles");
+  const isAdmin = roles?.includes("admin");
 
   const ascentCell = cells.find((cell) => cell.column.id === "ascent");
   const holdTypeCell = cells.find((cell) => cell.column.id === "holdType");
@@ -36,7 +36,7 @@ export default function CollapsedRow({ cells }) {
               <Link
                 href={`/${currentLocation?.url}/admin/boulders/${boulderId}`}
               >
-                <a className={styles.editLink}>✎</a>
+                <a className={styles.editLink}>✏️</a>
               </Link>
             )}
 
