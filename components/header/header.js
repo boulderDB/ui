@@ -13,7 +13,7 @@ export default function Header() {
   const {
     currentLocation,
     isAuthenticated,
-    lastLocation,
+    lastVisitedLocation,
     tokenPayload,
     reset,
     roles,
@@ -48,9 +48,9 @@ export default function Header() {
       href = `/${currentLocation?.url}`;
     }
 
-    if (!currentLocation && lastLocation && isAuthenticated) {
-      href = `/${lastLocation?.url}`;
-      label = `back to ${lastLocation?.name}`;
+    if (!currentLocation && lastVisitedLocation && isAuthenticated) {
+      href = `/${lastVisitedLocation?.url}`;
+      label = `back to ${lastVisitedLocation?.name}`;
     }
 
     return (

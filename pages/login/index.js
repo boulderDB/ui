@@ -21,7 +21,7 @@ export default function Index() {
     dispatchMessage,
     setTokenPayload,
     isAuthenticated,
-    lastLocation,
+    lastVisitedLocation,
   } = useContext(AppContext);
 
   const formFields = useMemo(() => {
@@ -45,7 +45,7 @@ export default function Index() {
 
   useEffect(async () => {
     if (isAuthenticated) {
-      await router.push(`${lastLocation?.url}`);
+      await router.push(`${lastVisitedLocation?.url}`);
     }
   }, [isAuthenticated]);
 
@@ -55,7 +55,6 @@ export default function Index() {
       const { lastVisitedLocation } = data;
 
       setTokenPayload(data);
-      console.log(data);
 
       if (!lastVisitedLocation) {
         await router.push(`/salon`);

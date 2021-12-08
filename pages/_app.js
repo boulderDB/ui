@@ -14,6 +14,15 @@ import useDocumentScrollLock from "../hooks/useDocumentScrollLock";
 
 export const AppContext = createContext(null);
 
+const loginRedirectExclusions = [
+  "/login",
+  "/sign-up",
+  "/reset-password",
+  "/reset-password/[token]",
+  "/404",
+  "/500",
+];
+
 function MyApp({ Component, pageProps, locations }) {
   const router = useRouter();
   const http = useHttp();
@@ -28,8 +37,8 @@ function MyApp({ Component, pageProps, locations }) {
   const [isOpen, setOpen] = useState(false);
   const [events, setEvents] = useState([]);
 
-  const [lastLocation, setLastLocation] = usePersistentState(
-    "lastLocation",
+  const [lastVisitedLocation, setLastVisitedLocation] = usePersistentState(
+    "lastVisitedLocation",
     null
   );
 
@@ -67,12 +76,12 @@ function MyApp({ Component, pageProps, locations }) {
 
   const reset = () => {
     setTokenPayload(null);
-    setLastLocation(null);
+    setLastVisitedLocation(null);
   };
 
   useEffect(async () => {
-    if (!lastLocation) {
-      setLastLocation(tokenPayload?.lastVisitedLocation);
+    if (!lastVisitedLocation) {
+      setLastVisitedLocation(tokenPayload?.lastVisitedLocation);
     }
 
     if (currentLocation && isAuthenticated) {
@@ -89,7 +98,10 @@ function MyApp({ Component, pageProps, locations }) {
   }, [message]);
 
   useEffect(() => {
-    if (!isAuthenticated && router.pathname !== "/login") {
+    if (
+      !isAuthenticated &&
+      !loginRedirectExclusions.includes(router.pathname)
+    ) {
       return router.push(`/login`);
     }
   }, [isAuthenticated]);
@@ -121,7 +133,7 @@ function MyApp({ Component, pageProps, locations }) {
       value={{
         dispatchMessage,
         currentLocation,
-        lastLocation,
+        lastVisitedLocation,
         locations,
         events,
         isAuthenticated,
