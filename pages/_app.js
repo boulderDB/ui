@@ -10,6 +10,7 @@ import { useRouter } from "next/router";
 import { DrawerContext } from "../components/drawer/drawer";
 import { useHttp } from "../hooks/useHttp";
 import { SWRConfig } from "swr";
+import useDocumentScrollLock from "../hooks/useDocumentScrollLock";
 
 export const AppContext = createContext(null);
 
@@ -18,6 +19,10 @@ function MyApp({ Component, pageProps, locations }) {
   const http = useHttp();
 
   const locationParameter = router?.query?.location;
+
+  const [disableScroll, enableScroll] = useDocumentScrollLock({
+    disableOnMount: false,
+  });
 
   const [message, setMessage] = useState(null);
   const [isOpen, setOpen] = useState(false);
@@ -102,6 +107,14 @@ function MyApp({ Component, pageProps, locations }) {
       console.error(error);
     }
   }, [currentLocation]);
+
+  useEffect(() => {
+    if (isOpen) {
+      disableScroll();
+    } else {
+      enableScroll();
+    }
+  }, [isOpen]);
 
   return (
     <AppContext.Provider

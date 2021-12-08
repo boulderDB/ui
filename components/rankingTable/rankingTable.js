@@ -1,5 +1,4 @@
 import { useTable, useGlobalFilter, useSortBy } from "react-table";
-import { useMemo } from "react";
 import TextField from "../textField/textField";
 import Avatar from "../avatar/avatar";
 import styles from "./rankingTable.module.css";
@@ -39,10 +38,6 @@ export function RankingTable({
     useSortBy
   );
 
-  const gridTemplateColumns = useMemo(() => {
-    return columns.map((column) => column.gridTemplate).join(" ");
-  }, [columns]);
-
   return (
     <div className={className}>
       <div>
@@ -53,11 +48,7 @@ export function RankingTable({
       </div>
 
       <div {...getTableProps()} className={styles.table}>
-        <TableHeader
-          className={headerClassName}
-          headerGroups={headerGroups}
-          gridTemplateColumns={gridTemplateColumns}
-        />
+        <TableHeader className={headerClassName} headerGroups={headerGroups} />
 
         <div {...getTableBodyProps()}>
           {rows.map((row, index) => {
@@ -66,7 +57,6 @@ export function RankingTable({
             return (
               <TableRow
                 className={rowClassName}
-                gridTemplateColumns={gridTemplateColumns}
                 cells={row.cells}
                 key={`row-${index}`}
               />

@@ -191,7 +191,6 @@ export const columns = {
     id: "name",
     accessor: "name",
     Header: "Name",
-    gridTemplate: "auto",
   },
   startWall: {
     id: "start",
@@ -237,7 +236,6 @@ export const columns = {
       return a.values.ascent.type > b.values.ascent.type ? -1 : 1;
     },
     filter: (rows, id, filterValue) => {
-      console.log(filterValue);
       return rows.filter((row) => {
         const rowValue = row.values[id]?.type ? row.values[id].type : "todo";
 

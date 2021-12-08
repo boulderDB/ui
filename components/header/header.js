@@ -1,9 +1,13 @@
-import React, { useContext, useMemo } from "react";
+import React, { useContext, useEffect, useMemo, useState } from "react";
 import styles from "./header.module.css";
 import { AppContext } from "../../pages/_app";
 import { colors, typography } from "../../styles/utilities";
 import NavItem from "./navItem";
 import LocationSelect from "./locationSelect";
+import { Burger, Close } from "../icon/icon";
+import cn from "classnames";
+import { useRouter } from "next/router";
+import useDocumentScrollLock from "../../hooks/useDocumentScrollLock";
 
 export default function Header() {
   const {
@@ -14,30 +18,52 @@ export default function Header() {
     reset,
     roles,
     events,
+    locations,
   } = useContext(AppContext);
+  const { pathname, query } = useRouter();
+
+  const [mobileNavOverlayVisible, setMobileNavOverlayVisible] = useState(false);
+
+  const [disableScroll, enableScroll] = useDocumentScrollLock({
+    disableOnMount: false,
+  });
+
+  useEffect(() => {
+    setMobileNavOverlayVisible(false);
+  }, [pathname, query]);
+
+  useEffect(() => {
+    if (mobileNavOverlayVisible) {
+      disableScroll();
+    } else {
+      enableScroll();
+    }
+  }, [mobileNavOverlayVisible]);
+
+  const Logo = () => {
+    let href = "/login";
+    let label = "BoulderDB";
+
+    if (currentLocation && isAuthenticated) {
+      href = `/${currentLocation?.url}`;
+    }
+
+    if (!currentLocation && lastLocation && isAuthenticated) {
+      href = `/${lastLocation?.url}`;
+      label = `back to ${lastLocation?.name}`;
+    }
+
+    return (
+      <NavItem href={href} className={typography.delta700}>
+        {label}
+      </NavItem>
+    );
+  };
 
   const items = useMemo(() => {
     const items = {
       primary: [
-        () => {
-          let href = "/login";
-          let label = "BoulderDB";
-
-          if (currentLocation && isAuthenticated) {
-            href = `/${currentLocation?.url}`;
-          }
-
-          if (!currentLocation && lastLocation && isAuthenticated) {
-            href = `/${lastLocation?.url}`;
-            label = `back to ${lastLocation?.name}`;
-          }
-
-          return (
-            <NavItem href={href} className={typography.delta700}>
-              {label}
-            </NavItem>
-          );
-        },
+        () => <Logo />,
         () => {
           return isAuthenticated && currentLocation ? <LocationSelect /> : null;
         },
@@ -102,6 +128,53 @@ export default function Header() {
           ))}
         </div>
       </nav>
+
+      <nav className={styles.mobileNav}>
+        <Logo />
+        {mobileNavOverlayVisible ? (
+          <Close
+            className={styles.mobileNavIcon}
+            onClick={() => setMobileNavOverlayVisible(false)}
+          />
+        ) : (
+          <Burger
+            className={styles.mobileNavIcon}
+            onClick={() => setMobileNavOverlayVisible(true)}
+          />
+        )}
+      </nav>
+
+      <div
+        className={cn(
+          styles.mobileNavOverlay,
+          mobileNavOverlayVisible ? styles.isVisibleMobileNavOverlay : null
+        )}
+      >
+        <ul>
+          {items.primary.slice(2).map((Item, index) => (
+            <li className={styles.mobileNavItem} key={index}>
+              <Item />
+            </li>
+          ))}
+        </ul>
+
+        <ul>
+          {items.secondary.map((Item, index) => (
+            <li className={styles.mobileNavItem} key={index}>
+              <Item />
+            </li>
+          ))}
+        </ul>
+
+        <span className={typography.delta700}>Locations:</span>
+        <ul>
+          {locations.map((location, index) => (
+            <li className={styles.mobileNavItem} key={index}>
+              <NavItem href={`/${location.url}`}>{location.name}</NavItem>
+            </li>
+          ))}
+        </ul>
+      </div>
     </header>
   );
 }

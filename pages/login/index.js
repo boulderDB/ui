@@ -55,11 +55,12 @@ export default function Index() {
       const { lastVisitedLocation } = data;
 
       setTokenPayload(data);
+      console.log(data);
 
       if (!lastVisitedLocation) {
-        await router.push(`/setup`);
+        await router.push(`/salon`);
       } else {
-        await router.push(`${lastVisitedLocation.url}`);
+        await router.push(`/${lastVisitedLocation.url}`);
       }
     } catch (error) {
       console.error(error);

@@ -145,9 +145,11 @@ export default function Index() {
       </div>
 
       <div className={cn(styles.section, layoutStyles.grid)}>
-        <Button variant={"danger"} className={layoutStyles.full}>
-          Delete account
-        </Button>
+        <div>
+          <Button variant={"danger"} className={layoutStyles.full}>
+            Delete account
+          </Button>
+        </div>
       </div>
     </Layout>
   );

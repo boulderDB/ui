@@ -29,7 +29,6 @@ export default function Current() {
       {
         Header: "Rank",
         accessor: "rank",
-        gridTemplate: "60px",
         Cell: ({ value }) => {
           return <strong>{value}</strong>;
         },
@@ -37,7 +36,6 @@ export default function Current() {
       {
         Header: "User",
         accessor: "user.username",
-        gridTemplate: "minmax(70px, auto)",
         Cell: ({ cell, row }) => (
           <UserRank
             username={cell.value}
@@ -49,7 +47,6 @@ export default function Current() {
       {
         Header: "Gender",
         accessor: "user.gender",
-        gridTemplate: "80px",
         className: styles.genderCell,
         Cell: ({ cell }) => {
           if (cell.value === "male") {
@@ -66,19 +63,16 @@ export default function Current() {
       {
         Header: "Points",
         accessor: "points",
-        gridTemplate: "100px",
         className: styles.pointsCell,
       },
       {
         Header: "Advance",
         accessor: "advance",
-        gridTemplate: "100px",
         className: styles.advanceCell,
       },
       {
         Header: "Boulders",
         accessor: "total.count",
-        gridTemplate: "110px",
         className: styles.bouldersCell,
         Cell: ({ cell }) => {
           return <Progress percentage={(cell.value / boulderCount) * 100} />;
@@ -87,7 +81,6 @@ export default function Current() {
       {
         Header: "Flashed",
         accessor: "flash.count",
-        gridTemplate: "100px",
         className: styles.flashedCell,
         Cell: ({ cell }) => calculatePercentage(cell.value, boulderCount),
       },
@@ -101,7 +94,6 @@ export default function Current() {
       {
         Header: "Last activity",
         accessor: "user.lastActivity",
-        gridTemplate: "100px",
         className: styles.lastActivityCell,
         Cell: ({ cell }) => {
           return <span>{parseDate(cell.value).string}</span>;
@@ -111,7 +103,6 @@ export default function Current() {
         Header: "",
         id: "user.id",
         accessor: "user.id",
-        gridTemplate: "100px",
         className: styles.compareCell,
         Cell: ({ cell }) => {
           if (parseInt(cell.value) === parseInt(user?.id)) {
