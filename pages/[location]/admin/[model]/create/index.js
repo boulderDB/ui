@@ -13,6 +13,7 @@ import { AppContext } from "../../../../_app";
 import { useHttp } from "../../../../../hooks/useHttp";
 import capitalize from "../../../../../utilties/capitalize";
 import Loader from "../../../../../components/loader/loader";
+import Breadcrumbs from "../../../../../components/breadcrumbs/breadcrumbs";
 
 export default function Index() {
   const { query } = useRouter();
@@ -47,7 +48,22 @@ export default function Index() {
 
       <div className={layoutStyles.grid}>
         <h1 className={cn(layoutStyles.sideTitle, typography.alpha700)}>
-          Create {capitalize(config.schema)}
+          <Breadcrumbs
+            items={[
+              {
+                title: "Admin",
+                href: `/${currentLocation?.url}/admin`,
+              },
+              {
+                title: config.title,
+                href: `/${currentLocation?.url}/admin${config.api}`,
+              },
+              {
+                title: "Create",
+                href: `/${currentLocation?.url}/admin${config.api}/create`,
+              },
+            ]}
+          />
         </h1>
 
         <div className={layoutStyles.sideContent}>

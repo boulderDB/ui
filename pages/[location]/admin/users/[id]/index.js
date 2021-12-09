@@ -13,6 +13,7 @@ import extractRoleName from "../../../../../utilties/extractRoleName";
 import { mutate } from "swr";
 import toast from "../../../../../utilties/toast";
 import extractErrorMessage from "../../../../../utilties/extractErrorMessage";
+import Breadcrumbs from "../../../../../components/breadcrumbs/breadcrumbs";
 
 const roles = ["ADMIN", "SETTER"];
 
@@ -62,7 +63,22 @@ export default function Index() {
 
       <div className={layoutStyles.grid}>
         <h1 className={cn(layoutStyles.sideTitle, typography.alpha700)}>
-          Edit {data.username}'s roles
+          <Breadcrumbs
+            items={[
+              {
+                title: "Admin",
+                href: `/${currentLocation?.url}/admin`,
+              },
+              {
+                title: "Users",
+                href: `/${currentLocation?.url}/admin/users`,
+              },
+              {
+                title: data.username,
+                href: `/${currentLocation?.url}/admin/users/${query.id}`,
+              },
+            ]}
+          />
         </h1>
 
         <div className={layoutStyles.sideContent}>

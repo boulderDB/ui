@@ -10,6 +10,7 @@ import { useCachedHttp } from "../../../../hooks/useHttp";
 import AdminTable from "../../../../components/adminTable/adminTable";
 import Button from "../../../../components/button/button";
 import Loader from "../../../../components/loader/loader";
+import Breadcrumbs from "../../../../components/breadcrumbs/breadcrumbs";
 
 export const renderers = {
   TextType: (value) => value,
@@ -65,7 +66,20 @@ export default function Index() {
 
       <div className={layoutStyles.grid}>
         <div className={cn(layoutStyles.sideTitle)}>
-          <h2 className={typography.alpha700}>{config.title}</h2>
+          <h2 className={typography.alpha700}>
+            <Breadcrumbs
+              items={[
+                {
+                  title: "Admin",
+                  href: `/${currentLocation?.url}/admin`,
+                },
+                {
+                  title: config.title,
+                  href: `/${currentLocation?.url}/admin${config.api}`,
+                },
+              ]}
+            />
+          </h2>
 
           <Button
             size={"s"}

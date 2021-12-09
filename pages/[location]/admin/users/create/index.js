@@ -15,6 +15,7 @@ import { useHttp } from "../../../../../hooks/useHttp";
 import { AppContext } from "../../../../_app";
 import styles from "./index.module.css";
 import Link from "next/link";
+import Breadcrumbs from "../../../../../components/breadcrumbs/breadcrumbs";
 
 export default function Index() {
   const http = useHttp();
@@ -41,7 +42,22 @@ export default function Index() {
 
       <div className={layoutStyles.grid}>
         <h1 className={cn(layoutStyles.sideTitle, typography.alpha700)}>
-          Create User
+          <Breadcrumbs
+            items={[
+              {
+                title: "Admin",
+                href: `/${currentLocation?.url}/admin`,
+              },
+              {
+                title: "Users",
+                href: `/${currentLocation?.url}/admin/users`,
+              },
+              {
+                title: "Create",
+                href: `/${currentLocation?.url}/admin/users/create`,
+              },
+            ]}
+          />
         </h1>
 
         <div className={layoutStyles.sideContent}>

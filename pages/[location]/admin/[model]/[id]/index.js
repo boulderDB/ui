@@ -13,6 +13,7 @@ import toast from "../../../../../utilties/toast";
 import extractErrorMessage from "../../../../../utilties/extractErrorMessage";
 import useSchemaForm from "../../../../../hooks/useSchemaForm";
 import { useSWRConfig } from "swr";
+import Breadcrumbs from "../../../../../components/breadcrumbs/breadcrumbs";
 
 export default function Index() {
   const { currentLocation } = useContext(AppContext);
@@ -51,11 +52,26 @@ export default function Index() {
 
   return (
     <Layout>
-      <Meta title={`Admin ${data.name}`} />
+      <Meta title={`Admin / ${config.title} / ${data.name}`} />
 
       <div className={layoutStyles.grid}>
         <h1 className={cn(layoutStyles.sideTitle, typography.alpha700)}>
-          {data.name}
+          <Breadcrumbs
+            items={[
+              {
+                title: "Admin",
+                href: `/${currentLocation?.url}/admin`,
+              },
+              {
+                title: config.title,
+                href: `/${currentLocation?.url}/admin${config.api}`,
+              },
+              {
+                title: data.name,
+                href: `/${currentLocation?.url}/admin${config.api}/${id}`,
+              },
+            ]}
+          />
         </h1>
 
         <div className={layoutStyles.sideContent}>

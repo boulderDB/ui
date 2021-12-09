@@ -4,26 +4,15 @@
   font-size: 32px;
   line-height: 36px;
 
-  @media (--m) {
-  }
-
   @media (--s) {
+    font-size: 22px;
+    line-height: 24px;
   }
 }
 
 .alpha700 {
   @extend .alpha;
   font-weight: bold;
-}
-
-.beta {
-  font-family: var(--font-family-sans);
-  font-style: normal;
-
-  @media (--xl-to-l) {
-    font-size: 48px;
-    line-height: 56px;
-  }
 }
 
 .gamma {

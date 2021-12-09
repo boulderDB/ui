@@ -244,6 +244,7 @@ export const columns = {
     },
   },
   area: {
+    hidden: true,
     id: "area",
     accessor: ({ areas }) => areas.map((areas) => areas.name).join(", "),
     Header: "Area",

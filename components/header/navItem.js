@@ -3,6 +3,7 @@ import styles from "./navItem.module.css";
 import { typography } from "../../styles/utilities";
 import Link from "next/link";
 import React from "react";
+import { useRouter } from "next/router";
 
 export default function NavItem({
   href,
@@ -11,6 +12,8 @@ export default function NavItem({
   onClick,
   ...rest
 }) {
+  const { asPath } = useRouter();
+
   if (onClick) {
     return (
       <span
@@ -25,7 +28,15 @@ export default function NavItem({
 
   return (
     <Link href={href}>
-      <a className={cn(styles.root, typography.delta, className)} {...rest}>
+      <a
+        className={cn(
+          styles.root,
+          typography.delta,
+          asPath === href ? typography.delta700 : null,
+          className
+        )}
+        {...rest}
+      >
         {children}
       </a>
     </Link>

@@ -193,8 +193,6 @@ export function Boulders({ boulders, event, initialFilters = [] }) {
     return defaultColumns;
   }, [isAdmin, detailBoulder]);
 
-  console.log(detailBoulder);
-
   const addHandler = useCallback(async (boulder, type) => {
     try {
       await http.post(`/${currentLocation?.url}/ascents`, {
