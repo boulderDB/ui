@@ -2,7 +2,6 @@ import Layout from "../../../components/layout/layout";
 import Meta from "../../../components/meta/meta";
 import { layoutStyles, typography } from "../../../styles/utilities";
 import cn from "classnames";
-import styles from "./index.module.css";
 import { useContext } from "react";
 import { AppContext } from "../../_app";
 import Link from "next/link";
