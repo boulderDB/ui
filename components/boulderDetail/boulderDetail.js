@@ -119,39 +119,57 @@ export default function BoulderDetail({ id }) {
       },
       doubt: ({ ascent }) => (
         <>
-          <Header backlink={"index"} title={`Doubt ${ascent.username}`} />
+          <Header
+            backlink={"index"}
+            title={`Doubt ${ascent.user.username}`}
+            onBack={() => setPage("index")}
+          />
 
           <div className={styles.content}>
             <MessageForm
               name={`Doubt`}
-              boulderId={boulder?.id}
-              api={"/doubt"}
+              payload={{
+                ascent: ascent?.id,
+              }}
+              api={"/ascent-doubts"}
             />
           </div>
         </>
       ),
       error: () => (
         <>
-          <Header backlink={"index"} title={`Report error`} />
+          <Header
+            backlink={"index"}
+            title={`Report error`}
+            onBack={() => setPage("index")}
+          />
 
           <div className={styles.content}>
             <MessageForm
               name={`Message`}
-              boulderId={boulder?.id}
-              api={"/message"}
+              payload={{
+                boulder: boulder?.id,
+              }}
+              api={"/boulder-errors "}
             />
           </div>
         </>
       ),
       comment: () => (
         <>
-          <Header backlink={"index"} title={`Leave a comment`} />
+          <Header
+            backlink={"index"}
+            title={`Leave a comment`}
+            onBack={() => setPage("index")}
+          />
 
           <div className={styles.content}>
             <MessageForm
               name={`Comment`}
-              boulderId={boulder?.id}
-              api={"/comment"}
+              payload={{
+                boulder: boulder?.id,
+              }}
+              api={"/boulder-comments"}
             />
           </div>
         </>

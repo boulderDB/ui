@@ -10,8 +10,8 @@ import useDrawer from "../../hooks/useDrawer";
 
 const fields = [
   {
-    name: "Message",
-    label: "message",
+    name: "message",
+    label: "Message",
     Component: TextField,
     componentProps: {
       area: true,
@@ -20,28 +20,25 @@ const fields = [
   },
 ];
 
-export default function MessageForm({ boulderId, api, name }) {
+export default function MessageForm({ api, name, payload }) {
   const http = useHttp();
   const { currentLocation, dispatchMessage } = useContext(AppContext);
   const { toggle } = useDrawer();
 
-  const onSubmit = useCallback(
-    async (data) => {
-      try {
-        await http.post(contextualizedApiPath(currentLocation, api), {
-          ...data,
-          boulder: boulderId,
-        });
+  const onSubmit = useCallback(async (data) => {
+    try {
+      await http.post(`${currentLocation?.url}${api}`, {
+        ...data,
+        ...payload,
+      });
 
-        dispatchMessage(toast(`${name} submitted`, null, "success"));
-        toggle();
-      } catch (error) {
-        console.error(error.response);
-        dispatchMessage(toast("Error", extractErrorMessage(error), "error"));
-      }
-    },
-    [boulderId, currentLocation]
-  );
+      dispatchMessage(toast(`${name} submitted`, null, "success"));
+      toggle();
+    } catch (error) {
+      console.error(error.response);
+      dispatchMessage(toast("Error", extractErrorMessage(error), "error"));
+    }
+  }, []);
 
   return <Form submitLabel={"Send"} onSubmit={onSubmit} fields={fields} />;
 }

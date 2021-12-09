@@ -11,6 +11,7 @@ import { useCachedHttp, useHttp } from "../../../hooks/useHttp";
 import { AppContext } from "../../_app";
 import Drawer from "../../../components/drawer/drawer";
 import BoulderTable, {
+  ascentTypes,
   filters as boulderFilters,
 } from "../../../components/boulderTable/boulderTable";
 import styles from "./index.module.css";
@@ -192,6 +193,8 @@ export function Boulders({ boulders, event, initialFilters = [] }) {
     return defaultColumns;
   }, [isAdmin, detailBoulder]);
 
+  console.log(detailBoulder);
+
   const addHandler = useCallback(async (boulder, type) => {
     try {
       await http.post(`/${currentLocation?.url}/ascents`, {
@@ -330,7 +333,7 @@ export function Boulders({ boulders, event, initialFilters = [] }) {
 
         <Select
           {...boulderFilters.ascent}
-          value={filters?.find((filter) => filter.id === "ascent")?.value}
+          value={resolveFilterValue("ascent", ascentTypes, "id")}
           onChange={(event, newValue) => {
             applyFilter("ascent", newValue ? newValue.id : null);
           }}

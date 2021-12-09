@@ -26,7 +26,7 @@ export default function Comments({ boulderId, comments }) {
     }
 
     try {
-      await http.delete(`/comment/${id}`);
+      await http.delete(`/${currentLocation?.url}/boulder-comments/${id}`);
       mutate(`/${currentLocation?.url}/boulders/${boulderId}`);
     } catch (error) {
       console.error(error.response);

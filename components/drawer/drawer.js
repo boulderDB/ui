@@ -12,10 +12,6 @@ export default function Drawer({ children, onClose }) {
 
   useClickOutside(drawerRef, () => {
     toggle(false);
-
-    if (onClose) {
-      onClose();
-    }
   });
 
   useEffect(() => {
@@ -24,6 +20,10 @@ export default function Drawer({ children, onClose }) {
     }
 
     document.body.style.overflow = isOpen ? "hidden" : "scroll";
+
+    if (!isOpen && onClose) {
+      onClose();
+    }
   }, [isOpen]);
 
   return (
