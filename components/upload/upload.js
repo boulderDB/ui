@@ -17,6 +17,7 @@ function defaultValueRenderer(value) {
 function Upload({
   name,
   value,
+  label,
   renderValue = defaultValueRenderer,
   onSuccess,
 }) {
@@ -47,10 +48,7 @@ function Upload({
       {loading ? <Loader /> : renderValue(value)}
 
       <div>
-        <label
-          htmlFor={"image"}
-          className="button button--primary button--small file-input__button"
-        >
+        <label htmlFor={name} className={styles.label}>
           Upload
         </label>
 

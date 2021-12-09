@@ -15,6 +15,7 @@ import Button from "../../components/button/button";
 import TextField from "../../components/textField/textField";
 import styles from "./index.module.css";
 import Loader from "../../components/loader/loader";
+import { Upload } from "../../components/upload/upload";
 
 export default function Index() {
   const http = useHttp();
@@ -22,6 +23,12 @@ export default function Index() {
   const { dispatchMessage } = useContext(AppContext);
 
   const settingsFormFields = [
+    {
+      name: "image",
+      label: "Image",
+      Component: Upload,
+      componentProps: {},
+    },
     {
       name: "visible",
       label: "Visible",

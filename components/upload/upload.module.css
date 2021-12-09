@@ -8,9 +8,18 @@
 }
 
 .preview {
-  width: 40px;
-  height: 40px;
-  background-size: 100%;
+  width: 80px;
+  height: 80px;
+  background-size: cover;
   background-repeat: no-repeat;
-  border: 1px solid var(--color-lila);
+}
+
+.label {
+  background-color: var(--color-lila);
+  color: var(--color-white);
+  display: inline-flex;
+  align-items: center;
+  padding: 8px 16px;
+  margin-left: 16px;
+  cursor: pointer;
 }

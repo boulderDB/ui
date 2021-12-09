@@ -6,6 +6,7 @@ import TextField from "../components/textField/textField";
 import Switch from "../components/switch/switch";
 import DatePicker from "../components/datePicker/datePicker";
 import Select from "../components/select/select";
+import { Upload } from "../components/upload/upload";
 
 const components = {
   TextType: TextField,
@@ -76,6 +77,10 @@ export default function useSchemaForm(name) {
             config.componentProps = {
               type: "number",
             };
+          }
+
+          if (field?.schema?.type === "upload") {
+            config.Component = Upload;
           }
 
           return config;
