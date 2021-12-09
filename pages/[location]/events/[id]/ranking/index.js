@@ -2,42 +2,40 @@ import { useContext } from "react";
 import { AppContext } from "../../../../_app";
 import { useCachedHttp } from "../../../../../hooks/useHttp";
 import Loader from "../../../../../components/loader/loader";
-import { useRouter } from "next/router";
 import Layout from "../../../../../components/layout/layout";
 import Meta from "../../../../../components/meta/meta";
 import { layoutStyles, typography } from "../../../../../styles/utilities";
 import cn from "classnames";
-import BoulderView from "../../../../../components/boulderView/boulderView";
-import Button from "../../../../../components/button/button";
+import RankingView from "../../../../../components/rankingView/rankingView";
+import { useRouter } from "next/router";
 
 export default function Index() {
   const { currentLocation } = useContext(AppContext);
   const {
     query: { id },
   } = useRouter();
+
+  const ranking = useCachedHttp(
+    `/${currentLocation?.url}/rankings/event/${id}`
+  );
+
   const event = useCachedHttp(`/${currentLocation?.url}/events/${id}`);
 
-  if (!event) {
+  if (!ranking || !event) {
     return <Loader />;
   }
 
   return (
     <Layout>
-      <Meta title={"Boulders"} />
+      <Meta title={`${event.name} Ranking`} />
 
       <div className={layoutStyles.grid}>
         <h1 className={cn(layoutStyles.sideTitle, typography.alpha700)}>
-          {event.name} Boulder ({event.boulders.length})
-          <Button
-            size={"s"}
-            href={`/${currentLocation?.url}/events/${id}/ranking`}
-          >
-            Ranking
-          </Button>
+          {event.name} Ranking
         </h1>
 
         <div className={layoutStyles.sideContent}>
-          <BoulderView boulders={event.boulders} event={event} />
+          <RankingView ranking={ranking} boulderCount={event.boulders.length} />
         </div>
       </div>
     </Layout>

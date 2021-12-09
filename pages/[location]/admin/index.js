@@ -212,7 +212,7 @@ export default function Index() {
         </h1>
 
         <div className={layoutStyles.sideContent}>
-          <ul className={styles.links}>
+          <ul>
             {models.map((model, index) => (
               <li key={index}>
                 <Link href={`/${currentLocation?.url}/admin/${model.route}`}>

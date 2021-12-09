@@ -10,7 +10,6 @@ import toast from "../../utilties/toast";
 import extractErrorMessage from "../../utilties/extractErrorMessage";
 import Form from "../../components/form/form";
 import Switch from "../../components/switch/switch";
-import Select from "../../components/select/select";
 import Button from "../../components/button/button";
 import TextField from "../../components/textField/textField";
 import styles from "./index.module.css";
@@ -47,7 +46,7 @@ export default function Index() {
       Component: TextField,
       componentProps: {},
     },
-    {
+    /*{
       name: "notifications",
       label: "Notifications",
       Component: Select,
@@ -57,7 +56,7 @@ export default function Index() {
         renderOption: (option) => `${option.type}@${option.location.name}`,
         getOptionLabel: (option) => `${option.type}@${option.location.name}`,
       },
-    },
+    },*/
   ];
 
   const passwordFormFields = [
