@@ -56,7 +56,7 @@ export default function Index() {
     ];
   }, []);
 
-  const onSubmit = async (payload) => {
+  const onSubmit = async (payload, reset) => {
     try {
       await http.post("/register", payload);
       await router.push(`/login`);
@@ -68,6 +68,8 @@ export default function Index() {
           "success"
         )
       );
+
+      reset();
     } catch (error) {
       console.error(error);
       dispatchMessage(toast("Error", extractErrorMessage(error), "error"));
