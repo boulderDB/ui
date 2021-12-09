@@ -3,5 +3,5 @@ export default function filterId(value) {
     return value.map((item) => item.id);
   }
 
-  return value.id;
+  return value?.id;
 }

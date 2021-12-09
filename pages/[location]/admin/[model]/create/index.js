@@ -11,7 +11,6 @@ import toast from "../../../../../utilties/toast";
 import extractErrorMessage from "../../../../../utilties/extractErrorMessage";
 import { AppContext } from "../../../../_app";
 import { useHttp } from "../../../../../hooks/useHttp";
-import capitalize from "../../../../../utilties/capitalize";
 import Loader from "../../../../../components/loader/loader";
 import Breadcrumbs from "../../../../../components/breadcrumbs/breadcrumbs";
 
@@ -34,6 +33,7 @@ export default function Index() {
       );
       dispatchMessage(toast("Success", `Created!`, "success"));
     } catch (error) {
+      console.error(error);
       dispatchMessage(toast("Error", extractErrorMessage(error), "error"));
     }
   };
