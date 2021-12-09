@@ -6,14 +6,13 @@ import Switch from "../switch/switch";
 import { Upload } from "../upload/upload";
 import Select from "../select/select";
 
-function Form({ defaults, fields, onSubmit, submitLabel, reset = false }) {
+function Form({ defaults, fields, onSubmit, submitLabel }) {
   const {
     handleSubmit,
     submitting,
     formData,
     observeField,
     setKeyValue,
-    resetForm,
   } = useForm(defaults);
 
   return (
@@ -21,10 +20,6 @@ function Form({ defaults, fields, onSubmit, submitLabel, reset = false }) {
       onSubmit={(event) => {
         event.preventDefault();
         handleSubmit(onSubmit);
-
-        if (reset) {
-          resetForm();
-        }
       }}
     >
       {fields.map(({ name, label, Component, componentProps }, index) => {

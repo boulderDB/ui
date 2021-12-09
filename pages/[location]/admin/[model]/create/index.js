@@ -23,7 +23,7 @@ export default function Index() {
   const config = models.find((item) => item.route === model);
   const { fields, defaults } = useSchemaForm(config.schema);
 
-  const onSubmit = async (payload) => {
+  const onSubmit = async (payload, reset) => {
     delete payload.id;
 
     try {
@@ -32,6 +32,7 @@ export default function Index() {
         config?.beforeSubmit ? config?.beforeSubmit(payload) : payload
       );
       dispatchMessage(toast("Success", `Created!`, "success"));
+      reset();
     } catch (error) {
       console.error(error);
       dispatchMessage(toast("Error", extractErrorMessage(error), "error"));
@@ -68,7 +69,6 @@ export default function Index() {
 
         <div className={layoutStyles.sideContent}>
           <Form
-            reset={true}
             submitLabel={"Create"}
             onSubmit={onSubmit}
             fields={fields}

@@ -33,10 +33,14 @@ export default function useForm(defaults) {
   const [formData, setFormData] = useState(defaults ? defaults : {});
   const [submitting, setSubmitting] = useState(false);
 
+  const resetForm = () => {
+    setFormData(defaults);
+  };
+
   const handleSubmit = async (callback) => {
     setSubmitting(true);
 
-    await callback(formData);
+    await callback(formData, resetForm);
 
     setSubmitting(false);
 
@@ -61,10 +65,6 @@ export default function useForm(defaults) {
     }
 
     setFormData({ ...current });
-  };
-
-  const resetForm = () => {
-    setFormData(defaults);
   };
 
   useEffect(() => {
