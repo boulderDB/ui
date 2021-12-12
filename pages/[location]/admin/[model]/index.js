@@ -117,8 +117,6 @@ export default function Index() {
           {config.archive && <Pagination {...paginationProps} />}
         </div>
       </div>
-
-      <Link href={`/flashh/admin/boulders?page=2`}>page2</Link>
     </Layout>
   );
 }
