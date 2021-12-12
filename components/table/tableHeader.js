@@ -2,9 +2,9 @@ import cn from "classnames";
 import { Downward, Upward } from "../icon/icon";
 import styles from "./tableHeader.module.css";
 
-export default function TableHeader({ headerGroups, className }) {
+export default function TableHeader({ headerGroups, className, style }) {
   return (
-    <div className={cn(styles.root, className)}>
+    <div className={cn(styles.root, className)} style={style}>
       {headerGroups.map((headerGroup, groupIndex) => {
         return headerGroup.headers
           .filter((column) => !column.hidden)

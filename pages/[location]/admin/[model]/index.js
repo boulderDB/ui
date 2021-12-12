@@ -3,7 +3,7 @@ import Layout from "../../../../components/layout/layout";
 import { models } from "../index";
 import { layoutStyles, typography } from "../../../../styles/utilities";
 import cn from "classnames";
-import { useContext, useMemo } from "react";
+import { useContext } from "react";
 import { AppContext } from "../../../_app";
 import { useRouter } from "next/router";
 import { useCachedHttp } from "../../../../hooks/useHttp";
@@ -11,54 +11,76 @@ import AdminTable from "../../../../components/adminTable/adminTable";
 import Button from "../../../../components/button/button";
 import Loader from "../../../../components/loader/loader";
 import Breadcrumbs from "../../../../components/breadcrumbs/breadcrumbs";
-
-export const renderers = {
-  TextType: (value) => value,
-  EntityType: (value) => value,
-  CheckboxType: (value) => value.toString(),
-  DateTimeType: (value) => {
-    if (!value) {
-      return "-";
-    }
-
-    return value.toString();
-  },
-};
+import Pagination from "../../../../components/pagination/pagination";
+import Link from "next/link";
 
 export default function Index() {
   const { currentLocation } = useContext(AppContext);
-  const { query } = useRouter();
+  const router = useRouter();
+  let { model, page } = router.query;
 
-  const { model } = query;
+  page = page ? parseInt(page) : 0;
+
   const config = models.find((item) => item.route === model);
 
-  const data = useCachedHttp(`/${currentLocation?.url}${config.api}`, {
+  let api = `/${currentLocation?.url}${config.api}`;
+  let parameters = {
     filter: "all",
-  });
+  };
 
-  const schema = useCachedHttp(`/schemas/${config.schema}`);
+  if (config.archive) {
+    api += `/archive`;
 
-  const columns = useMemo(() => {
-    if (!schema) {
-      return [];
-    }
+    parameters = {
+      page,
+    };
+  }
 
-    return config?.fields?.map((field) => {
-      const fieldSchema = schema?.find((item) => item.name === field.property);
-      const renderer = fieldSchema?.type
-        ? renderers[fieldSchema.type]
-        : renderers.TextType;
-
-      return {
-        ...field,
-        renderer,
-      };
-    });
-  }, [schema]);
+  let data = useCachedHttp(api, parameters);
 
   if (!data) {
     return <Loader />;
   }
+
+  let paginationProps = {};
+
+  if (config.archive) {
+    paginationProps = {
+      pageIndex: page,
+      pages: data.pages,
+      pageSize: data.size,
+      pageCount: data.pages,
+      canPreviousPage: data.hasPreviousPage,
+      canNextPage: data.hasNextPage,
+      nextPage: () => {
+        router.push({
+          pathname: router.pathname,
+          query: {
+            ...router.query,
+            page: page + 1,
+          },
+        });
+      },
+      previousPage: () => {
+        router.push({
+          pathname: router.pathname,
+          query: {
+            ...router.query,
+            page: page - 1,
+          },
+        });
+      },
+    };
+
+    data = data.items;
+  }
+
+  data = data.map((data) => {
+    return {
+      ...data,
+      href: `/${currentLocation.url}/admin${config.api}`,
+    };
+  });
 
   return (
     <Layout>
@@ -90,9 +112,13 @@ export default function Index() {
         </div>
 
         <div className={layoutStyles.sideContent}>
-          <AdminTable columns={columns} data={data} config={config} />
+          <AdminTable columns={config.columns} data={data} />
+
+          {config.archive && <Pagination {...paginationProps} />}
         </div>
       </div>
+
+      <Link href={`/flashh/admin/boulders?page=2`}>page2</Link>
     </Layout>
   );
 }

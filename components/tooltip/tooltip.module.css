@@ -1,0 +1,31 @@
+.root {
+  position: relative;
+  cursor: pointer;
+}
+
+.title {
+  padding: 4px 6px;
+  color: var(--color-white);
+  background: var(--color-black);
+  filter: drop-shadow(2px 2px 4px var(--color-black));
+  border-radius: 2px;
+  position: absolute;
+  z-index: 200;
+  transition: opacity ease-in-out 200ms, 200ms;
+}
+
+.title:before {
+  position: absolute;
+  content: "";
+  width: 10px;
+  height: 10px;
+  background: var(--color-black);
+  z-index: 100;
+  top: -5px;
+  left: calc(50% - 5px);
+  transform: rotate(45deg);
+}
+
+.content {
+  display: inline-flex;
+}

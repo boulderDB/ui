@@ -6,6 +6,11 @@ import { useContext } from "react";
 import { AppContext } from "../../_app";
 import Link from "next/link";
 import filterId from "../../../utilties/filterId";
+import HoldType from "../../../components/holdType/holdType";
+import Button from "../../../components/button/button";
+import styles from "./index.module.css";
+import Grade from "../../../components/grade/grade";
+import { columns } from "../../../components/boulderTable/boulderTable";
 
 function deleteCommon(payload) {
   delete payload.id;
@@ -14,18 +19,48 @@ function deleteCommon(payload) {
   delete payload.updatedAt;
 }
 
+const DetailLinkColumn = ({ row, value }) => (
+  <Button href={`${value}/${row.original.id}`} inverted={true} size={"s"}>
+    Detail
+  </Button>
+);
+
 export const models = [
   {
     title: "Boulders",
     route: "boulders",
     schema: "boulder",
     api: "/boulders",
-    fields: [
+    columns: [
+      columns.name,
       {
-        property: "name",
+        ...columns.holdType,
+        Cell: ({ value }) => <HoldType image={value.image} />,
       },
       {
-        property: "createdAt",
+        ...columns.grade,
+        Cell: ({ value }) => (
+          <Grade
+            name={value.name}
+            color={value.color}
+            internalName={value.internal?.name}
+            internalColor={value.internal?.color}
+          />
+        ),
+      },
+      {
+        id: "status",
+        accessor: "status",
+        Header: "Status",
+      },
+      {
+        ...columns.date,
+      },
+      {
+        id: "href",
+        accessor: "href",
+        className: styles.link,
+        Cell: DetailLinkColumn,
       },
     ],
     beforeSubmit: (payload) => {
@@ -49,6 +84,7 @@ export const models = [
         internalGrade: filterId(payload.internalGrade),
       };
     },
+    archive: true,
   },
   {
     title: "Users",
@@ -59,12 +95,20 @@ export const models = [
     route: "areas",
     schema: "area",
     api: "/areas",
-    fields: [
+    columns: [
       {
-        property: "name",
+        Header: "Name",
+        accessor: "name",
       },
       {
-        property: "active",
+        Header: "Active",
+        accessor: ({ active }) => active.toString(),
+      },
+      {
+        id: "href",
+        accessor: "href",
+        className: styles.link,
+        Cell: DetailLinkColumn,
       },
     ],
     beforeSubmit: (payload) => {
@@ -81,12 +125,20 @@ export const models = [
     route: "walls",
     schema: "wall",
     api: "/walls",
-    fields: [
+    columns: [
       {
-        property: "name",
+        Header: "Name",
+        accessor: "name",
       },
       {
-        property: "active",
+        Header: "Active",
+        accessor: ({ active }) => active.toString(),
+      },
+      {
+        id: "href",
+        accessor: "href",
+        className: styles.link,
+        Cell: DetailLinkColumn,
       },
     ],
     beforeSubmit: (payload) => {
@@ -102,12 +154,23 @@ export const models = [
     route: "grades",
     schema: "grade",
     api: "/grades",
-    fields: [
+    columns: [
       {
-        property: "name",
+        Header: "Name",
+        accessor: "name",
+        Cell: ({ value, row }) => (
+          <Grade name={value} color={row.original.color} />
+        ),
       },
       {
-        property: "active",
+        Header: "Active",
+        accessor: ({ active }) => active.toString(),
+      },
+      {
+        id: "href",
+        accessor: "href",
+        className: styles.link,
+        Cell: DetailLinkColumn,
       },
     ],
     beforeSubmit: (payload) => {
@@ -120,15 +183,28 @@ export const models = [
   },
   {
     title: "Hold types",
-    route: "hold-types",
+    route: "holdtypes",
     schema: "holdType",
     api: "/holdtypes",
-    fields: [
+    columns: [
       {
-        property: "name",
+        Header: "Image",
+        accessor: "image",
+        Cell: ({ value }) => <HoldType image={value} />,
       },
       {
-        property: "active",
+        Header: "Name",
+        accessor: "name",
+      },
+      {
+        Header: "Active",
+        accessor: ({ active }) => active.toString(),
+      },
+      {
+        id: "href",
+        accessor: "href",
+        className: styles.link,
+        Cell: DetailLinkColumn,
       },
     ],
     beforeSubmit: (payload) => {
@@ -141,18 +217,28 @@ export const models = [
   },
   {
     title: "Tags",
-    route: "tags",
+    route: "boulder-tags",
     schema: "boulderTag",
     api: "/boulder-tags",
-    fields: [
+    columns: [
       {
-        property: "name",
+        Header: "Name",
+        accessor: "name",
+        Cell: ({ value, row }) => (
+          <div>
+            {row.original.emoji} {value}
+          </div>
+        ),
       },
       {
-        property: "emoji",
+        Header: "Active",
+        accessor: ({ active }) => active.toString(),
       },
       {
-        property: "active",
+        id: "href",
+        accessor: "href",
+        className: styles.link,
+        Cell: DetailLinkColumn,
       },
     ],
     beforeSubmit: (payload) => {
@@ -168,21 +254,32 @@ export const models = [
     route: "events",
     schema: "event",
     api: "/events",
-    fields: [
+    columns: [
       {
-        property: "name",
+        Header: "Name",
+        accessor: "name",
       },
       {
-        property: "visible",
+        Header: "Start date",
+        accessor: "startData",
       },
       {
-        property: "public",
+        Header: "End date",
+        accessor: "endDate",
       },
       {
-        property: "startDate",
+        Header: "Visible",
+        accessor: (row) => row.visible.toString(),
       },
       {
-        property: "endDate",
+        Header: "Public",
+        accessor: (row) => row.public.toString(),
+      },
+      {
+        id: "href",
+        accessor: "href",
+        className: styles.link,
+        Cell: DetailLinkColumn,
       },
     ],
     beforeSubmit: (payload) => {

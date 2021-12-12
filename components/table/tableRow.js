@@ -1,17 +1,28 @@
 import styles from "./tableRow.module.css";
 import cn from "classnames";
+import { typography } from "../../styles/utilities";
 
-export default function TableRow({ cells, className }) {
+export default function TableRow({ cells, className, showMobileLabel, style }) {
   return (
-    <div className={cn(styles.root, className)}>
+    <div className={cn(styles.root, className)} style={style}>
       {cells.map((cell, cellIndex) => {
         return (
           <div
-            className={cn(styles.cell, cell.column.className)}
+            className={cn(
+              styles.cell,
+              showMobileLabel ? styles.cellWithLabel : null,
+              cell.column.className
+            )}
             key={`cell-${cellIndex}`}
             {...cell.getCellProps()}
           >
-            {cell.render("Cell")}
+            {showMobileLabel && (
+              <div className={cn(typography.delta700, styles.label)}>
+                {cell.column.Header}
+              </div>
+            )}
+
+            <div className={typography.delta}>{cell.render("Cell")}</div>
           </div>
         );
       })}

@@ -32,6 +32,7 @@ import Drawer from "../drawer/drawer";
 import BoulderDetail from "../boulderDetail/boulderDetail";
 import Bar from "../bar/bar";
 import Button from "../button/button";
+import Tooltip from "../tooltip/tooltip";
 
 export default function BoulderView({ boulders, event, initialFilters = [] }) {
   const http = useHttp();
@@ -94,7 +95,11 @@ export default function BoulderView({ boulders, event, initialFilters = [] }) {
     const defaultColumns = [
       {
         ...columns.holdType,
-        Cell: ({ value }) => <HoldType image={value.image} />,
+        Cell: ({ value, row }) => (
+          <Tooltip title={row.original.holdType.name}>
+            <HoldType image={value.image} />
+          </Tooltip>
+        ),
       },
       {
         ...columns.grade,

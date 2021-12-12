@@ -9,12 +9,37 @@
   display: flex;
   align-items: center;
   white-space: nowrap;
+  overflow: hidden;
+}
+
+.cellWithLabel {
+  justify-content: space-between;
 }
 
 .cell:first-child {
   margin-left: 8px;
+
+  @media (--s) {
+    margin-left: 0;
+  }
 }
 
 .cell:last-child {
   margin-right: 8px;
+
+  @media (--s) {
+    margin-right: 0;
+  }
+}
+
+.rowLink:hover {
+  background: var(--color-migrey);
+}
+
+.label {
+  display: none;
+
+  @media (--s) {
+    display: block;
+  }
 }

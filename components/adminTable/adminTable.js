@@ -1,70 +1,62 @@
-import Link from "next/link";
-import cn from "classnames";
-import { typography } from "../../styles/utilities";
-import { useContext } from "react";
-import { AppContext } from "../../pages/_app";
+import { useGlobalFilter, useSortBy, useTable } from "react-table";
+import TextField from "../textField/textField";
+import TableHeader from "../table/tableHeader";
+import TableRow from "../table/tableRow";
 import styles from "./adminTable.module.css";
 
-export default function AdminTable({ data, columns, config }) {
-  const { currentLocation } = useContext(AppContext);
+export default function AdminTable({ data, columns }) {
+  const {
+    getTableProps,
+    getTableBodyProps,
+    rows,
+    prepareRow,
+    headerGroups,
+    setGlobalFilter,
+  } = useTable(
+    {
+      columns,
+      data,
+    },
+    useGlobalFilter,
+    useSortBy
+  );
 
   return (
-    <div className={styles.root}>
-      <div
-        className={styles.header}
-        style={{
-          gridTemplateColumns: `repeat(${columns?.length}, 1fr)`,
-        }}
-      >
-        {columns?.map((item, index) => {
-          return (
-            <div className={typography.delta700} key={index}>
-              {item.property}
-            </div>
-          );
-        })}
+    <div>
+      <div>
+        <TextField
+          onChange={(event) => setGlobalFilter(event.target.value)}
+          placeholder={"search"}
+        />
       </div>
 
-      {data?.length ? (
-        data.map((item, index) => {
-          return (
-            <Link
-              key={index}
-              href={`/${currentLocation?.url}/admin/${config.route}/${item.id}`}
-            >
-              <a
-                key={index}
-                className={styles.row}
-                style={{
-                  gridTemplateColumns: `repeat(${columns?.length}, 1fr)`,
-                }}
-              >
-                {columns?.map((column, index) => {
-                  const value = item[column.property];
+      <div {...getTableProps()} className={styles.table}>
+        <TableHeader
+          className={styles.header}
+          headerGroups={headerGroups}
+          style={{
+            gridTemplateColumns: `repeat(${columns.length}, 1fr)`,
+          }}
+        />
 
-                  return (
-                    <div
-                      className={cn(styles.cell, typography.delta)}
-                      key={index}
-                    >
-                      <div
-                        className={cn(typography.delta700, styles.cellLabel)}
-                      >
-                        {column.property}:
-                      </div>{" "}
-                      {column.renderer(value)}
-                    </div>
-                  );
-                })}
-              </a>
-            </Link>
-          );
-        })
-      ) : (
-        <div className={styles.row}>
-          <p className={typography.delta}>No data</p>
+        <div {...getTableBodyProps()}>
+          {rows.map((row, index) => {
+            prepareRow(row);
+
+            return (
+              <TableRow
+                showMobileLabel={true}
+                className={styles.row}
+                cells={row.cells}
+                key={`row-${index}`}
+                style={{
+                  gridTemplateColumns: `repeat(${columns.length}, 1fr)`,
+                }}
+              />
+            );
+          })}
         </div>
-      )}
+      </div>
     </div>
   );
 }
