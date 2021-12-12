@@ -1,3 +1,7 @@
 .link {
   margin-left: auto;
 }
+
+.nameCell {
+  overflow-x: hidden;
+}

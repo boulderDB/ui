@@ -32,7 +32,10 @@ export const models = [
     schema: "boulder",
     api: "/boulders",
     columns: [
-      columns.name,
+      {
+        ...columns.name,
+        className: styles.nameCell,
+      },
       {
         ...columns.holdType,
         Cell: ({ value }) => <HoldType image={value.image} />,

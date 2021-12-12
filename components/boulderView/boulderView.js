@@ -1,7 +1,7 @@
 import { useHttp } from "../../hooks/useHttp";
 import useDrawer from "../../hooks/useDrawer";
 import { useSWRConfig } from "swr";
-import { useCallback, useContext, useMemo, useState } from "react";
+import { useCallback, useContext, useEffect, useMemo, useState } from "react";
 import { AppContext } from "../../pages/_app";
 import useBoulderFilters from "../../hooks/useBoulderFilters";
 import filterPresentOptions from "../../utilties/filterPresentOptions";
@@ -33,18 +33,28 @@ import BoulderDetail from "../boulderDetail/boulderDetail";
 import Bar from "../bar/bar";
 import Button from "../button/button";
 import Tooltip from "../tooltip/tooltip";
+import WallDetail from "../wallDetail/wallDetail";
 
 export default function BoulderView({ boulders, event, initialFilters = [] }) {
   const http = useHttp();
-  const { toggle } = useDrawer();
+  const { setOpen } = useDrawer();
   const { mutate } = useSWRConfig();
 
   const { currentLocation, dispatchMessage, roles } = useContext(AppContext);
   const isAdmin = roles?.includes("admin");
 
+  const [detailWall, setDetailWall] = useState(null);
   const [detailBoulder, setDetailBoulder] = useState(null);
   const [selected, setSelected] = useState([]);
   const [globalFilter, setGlobalFilter] = useState("");
+
+  useEffect(() => {
+    if (detailWall || detailBoulder) {
+      setOpen(true);
+    } else {
+      setOpen(false);
+    }
+  }, [detailWall, detailBoulder]);
 
   const { filters, setFilters, applyFilter } = useBoulderFilters(
     initialFilters
@@ -134,7 +144,6 @@ export default function BoulderView({ boulders, event, initialFilters = [] }) {
               boulderId={boulderId}
               onClick={() => {
                 setDetailBoulder(boulderId);
-                toggle(true);
               }}
             >
               {value}
@@ -144,12 +153,30 @@ export default function BoulderView({ boulders, event, initialFilters = [] }) {
       },
       {
         ...columns.startWall,
-        Cell: ({ value }) => <span>{value.name}</span>,
+        Cell: ({ value, row }) => (
+          <span
+            className={styles.wallLink}
+            onClick={() => {
+              setDetailWall(row.original.startWall.id);
+            }}
+          >
+            {value.name}
+          </span>
+        ),
       },
       {
         ...columns.endWall,
         className: styles.endWallCell,
-        Cell: ({ value }) => <span>{value.name}</span>,
+        Cell: ({ value, row }) => (
+          <span
+            className={styles.wallLink}
+            onClick={() => {
+              setDetailWall(row.original.endWall?.id);
+            }}
+          >
+            {value.name}
+          </span>
+        ),
       },
       {
         ...columns.setters,
@@ -363,8 +390,14 @@ export default function BoulderView({ boulders, event, initialFilters = [] }) {
         collapsedRowRenderer={(cells) => <CollapsedRow cells={cells} />}
       />
 
-      <Drawer onClose={() => setDetailBoulder(null)}>
+      <Drawer
+        onClose={() => {
+          setDetailBoulder(null);
+          setDetailWall(null);
+        }}
+      >
         {detailBoulder && <BoulderDetail id={detailBoulder} />}
+        {detailWall && <WallDetail id={detailWall} />}
       </Drawer>
 
       <Bar visible={selected.length > 0}>

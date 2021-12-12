@@ -4,6 +4,7 @@
   align-items: center;
   appearance: none;
   border: 0;
+  text-decoration: underline;
 }
 
 .isActive .icon {
@@ -18,6 +19,7 @@
 }
 
 .icon {
+  margin-left: auto;
   transform: rotate(0);
   transition: transform 200ms ease-in-out;
 }
