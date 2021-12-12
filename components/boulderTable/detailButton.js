@@ -9,7 +9,7 @@ export default function DetailButton({ active, children, ...rest }) {
       {...rest}
       className={cn(styles.root, active ? styles.isActive : null)}
     >
-      <span className={cn(styles.label, typography.epsilon)}>{children}</span>
+      <span className={cn(styles.label, typography.delta)}>{children}</span>
       <Forward className={styles.icon} />
     </button>
   );
