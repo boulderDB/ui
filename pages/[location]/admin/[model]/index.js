@@ -177,7 +177,7 @@ export default function Index() {
                   items: selected,
                   operation: "reactivate",
                 });
-                mutate(api);
+                mutate(api + new URLSearchParams(parameters).toString());
               } catch (error) {
                 dispatchMessage(toast(error));
               }
