@@ -1,6 +1,6 @@
 {
   "name": "boulder-ui-next",
-  "version": "2.2.1",
+  "version": "2.2.2",
   "private": true,
   "scripts": {
     "pre-build": "npm run css-exports",

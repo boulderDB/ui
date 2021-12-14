@@ -104,7 +104,7 @@ export default function Index() {
     }
 
     return items;
-  }, [config]);
+  }, []);
 
   const tableData = useMemo(() => {
     if (!data) {
