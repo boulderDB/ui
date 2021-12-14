@@ -144,6 +144,7 @@ export default function BoulderView({ boulders, event, initialFilters = [] }) {
               boulderId={boulderId}
               onClick={() => {
                 setDetailBoulder(boulderId);
+                console.log(boulderId);
               }}
             >
               {value}

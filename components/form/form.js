@@ -5,6 +5,7 @@ import EntitySelect from "../entitySelect/entitySelect";
 import Switch from "../switch/switch";
 import { Upload } from "../upload/upload";
 import Select from "../select/select";
+import TextField from "../textField/textField";
 
 function Form({ defaults, fields, onSubmit, submitLabel }) {
   const {
@@ -27,6 +28,10 @@ function Form({ defaults, fields, onSubmit, submitLabel }) {
 
         if (formData) {
           value = name in formData ? formData[name] : "";
+        }
+
+        if (!value && Component === TextField) {
+          value = "";
         }
 
         if (Component === EntitySelect || Component === Select) {

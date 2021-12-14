@@ -33,15 +33,30 @@ export default function useSchemaForm(name) {
 
     setFields(
       await Promise.all(
-        schema.map(async (field) => {
+        schema.map(async (field, index) => {
           const Component = components[field.type];
 
           let config = {
             name: field.name,
             label: field.name,
             Component,
-            componentProps: {},
+            componentProps: {
+              ...Object.assign(
+                {},
+                ...field.options?.constraints?.map((constraint) => {
+                  if (constraint.name === "NotBlank") {
+                    return {
+                      required: true,
+                    };
+                  }
+                })
+              ),
+            },
           };
+
+          if (index === 0) {
+            config.componentProps.autoFocus = "autoFocus";
+          }
 
           if (field.type === "EntityType") {
             const { data } = await http.get(
@@ -53,6 +68,7 @@ export default function useSchemaForm(name) {
               : name;
 
             config.componentProps = {
+              ...config.componentProps,
               renderOption: (option) => {
                 return labelProperty ? option[labelProperty] : option.name;
               },
@@ -66,17 +82,13 @@ export default function useSchemaForm(name) {
           }
 
           if (field.type === "ChoiceType") {
-            config.componentProps = {
-              options: Object.keys(field?.options?.choices)?.map(
-                (choice) => choice
-              ),
-            };
+            config.componentProps.options = Object.keys(
+              field?.options?.choices
+            )?.map((choice) => choice);
           }
 
           if (field.type === "IntegerType" || field.type === "NumberType") {
-            config.componentProps = {
-              type: "number",
-            };
+            config.componentProps.type = "number";
           }
 
           if (field?.schema?.type === "upload") {

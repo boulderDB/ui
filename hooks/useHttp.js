@@ -11,13 +11,7 @@ const fetcher = (url, params) =>
     .then((response) => response.data);
 
 export function useCachedHttp(resource, params) {
-  let key = resource;
-
-  if (params) {
-    key += new URLSearchParams(params).toString();
-  }
-
-  const { data, error } = useSWR(key, () => fetcher(resource, params));
+  const { data, error } = useSWR(resource, () => fetcher(resource, params));
   const router = useRouter();
 
   if (error) {

@@ -20,6 +20,7 @@
 
 .isDisabledButton {
   opacity: 0.4;
+  cursor: not-allowed;
 }
 
 .separator {

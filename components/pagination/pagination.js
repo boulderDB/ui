@@ -13,19 +13,28 @@ export default function Pagination({
   nextPage,
 }) {
   const Button = ({ direction }) => {
-    const classNames = cn(
-      styles.button,
-      direction === "forward" && !canNextPage ? styles.isDisabledButton : null,
-      direction === "backward" && !canPreviousPage
-        ? styles.isDisabledButton
-        : null
-    );
+    let props = {
+      className: cn(
+        styles.button,
+        direction === "forward" && !canNextPage
+          ? styles.isDisabledButton
+          : null,
+        direction === "backward" && !canPreviousPage
+          ? styles.isDisabledButton
+          : null
+      ),
+    };
+
+    if (direction === "forward" && canNextPage) {
+      props.onClick = nextPage;
+    }
+
+    if (direction === "backward" && canPreviousPage) {
+      props.onClick = previousPage;
+    }
 
     return (
-      <span
-        onClick={direction === "forward" ? nextPage : previousPage}
-        className={classNames}
-      >
+      <span {...props}>
         {direction === "forward" ? <Forward /> : <Backward />}
       </span>
     );
@@ -50,6 +59,4 @@ export default function Pagination({
 Pagination.defaultProps = {
   pageIndex: 0,
   pageSize: 50,
-  previousPage: "",
-  nextPage: "",
 };

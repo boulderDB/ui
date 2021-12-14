@@ -4,13 +4,15 @@ import { layoutStyles, typography } from "../../../../styles/utilities";
 import cn from "classnames";
 import AdminTable from "../../../../components/adminTable/adminTable";
 import { useCachedHttp } from "../../../../hooks/useHttp";
-import { useContext } from "react";
+import { useContext, useMemo } from "react";
 import { AppContext } from "../../../_app";
 import Loader from "../../../../components/loader/loader";
 import { renderers } from "../[model]";
 import extractRoleName from "../../../../utilties/extractRoleName";
 import Button from "../../../../components/button/button";
 import Breadcrumbs from "../../../../components/breadcrumbs/breadcrumbs";
+import styles from "../index.module.css";
+import { DetailLinkColumn } from "../index";
 
 export default function Index() {
   const { currentLocation } = useContext(AppContext);
@@ -25,6 +27,7 @@ export default function Index() {
     return {
       ...item,
       roles: roles.map((role) => extractRoleName(currentLocation.id, role)),
+      href: `/${currentLocation.url}/admin/users`,
     };
   });
 
@@ -35,20 +38,27 @@ export default function Index() {
     api: "/users",
   };
 
-  const columns = [
-    {
-      property: "username",
-      renderer: renderers.TextType,
-    },
-    {
-      property: "visible",
-      renderer: renderers.CheckboxType,
-    },
-    {
-      property: "roles",
-      renderer: (value) => <>{value.join(", ")}</>,
-    },
-  ];
+  const columns = useMemo(() => {
+    return [
+      {
+        Header: "Username",
+        accessor: "username",
+      },
+      {
+        Header: "Roles",
+        accessor: "roles",
+        Cell: ({ value }) => {
+          return value.join(", ");
+        },
+      },
+      {
+        id: "href",
+        accessor: "href",
+        className: styles.link,
+        Cell: DetailLinkColumn,
+      },
+    ];
+  }, []);
 
   if (!data) {
     return <Loader />;
@@ -84,7 +94,7 @@ export default function Index() {
         </div>
 
         <div className={layoutStyles.sideContent}>
-          <AdminTable columns={columns} data={data} config={config} />
+          <AdminTable columns={columns} data={data} />
         </div>
       </div>
     </Layout>

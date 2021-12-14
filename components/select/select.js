@@ -13,7 +13,7 @@ function Select({
   let isRequired = required;
 
   if (multiple && required) {
-    isRequired = value.length === 0;
+    isRequired = value?.length === 0;
   }
 
   if (!value && multiple) {
@@ -29,6 +29,7 @@ function Select({
       options={options}
       autoHighlight
       value={value}
+      openOnFocus
       multiple={multiple}
       {...rest}
       renderInput={(params) => (

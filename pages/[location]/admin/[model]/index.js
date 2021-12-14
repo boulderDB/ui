@@ -3,30 +3,40 @@ import Layout from "../../../../components/layout/layout";
 import { models } from "../index";
 import { layoutStyles, typography } from "../../../../styles/utilities";
 import cn from "classnames";
-import { useContext } from "react";
+import { useContext, useMemo, useState } from "react";
 import { AppContext } from "../../../_app";
 import { useRouter } from "next/router";
-import { useCachedHttp } from "../../../../hooks/useHttp";
+import { useCachedHttp, useHttp } from "../../../../hooks/useHttp";
 import AdminTable from "../../../../components/adminTable/adminTable";
 import Button from "../../../../components/button/button";
 import Loader from "../../../../components/loader/loader";
 import Breadcrumbs from "../../../../components/breadcrumbs/breadcrumbs";
 import Pagination from "../../../../components/pagination/pagination";
-import Link from "next/link";
+import IndeterminateCheckbox from "../../../../components/table/IndeterminateCheckbox";
+import styles from "../../../../components/boulderView/boulderView.module.css";
+import Bar from "../../../../components/bar/bar";
+import toast from "../../../../utilties/toast";
+import { useSWRConfig } from "swr";
 
 export default function Index() {
   const { currentLocation } = useContext(AppContext);
   const router = useRouter();
-  let { model, page } = router.query;
+  const http = useHttp();
+  const { dispatchMessage } = useContext(AppContext);
+  const { mutate } = useSWRConfig();
 
+  let { model, page } = router.query;
   page = page ? parseInt(page) : 0;
 
   const config = models.find((item) => item.route === model);
 
   let api = `/${currentLocation?.url}${config.api}`;
+
   let parameters = {
     filter: "all",
   };
+
+  let tableProps = {};
 
   if (config.archive) {
     api += `/archive`;
@@ -36,16 +46,19 @@ export default function Index() {
     };
   }
 
-  let data = useCachedHttp(api, parameters);
-
-  if (!data) {
-    return <Loader />;
+  if (config.mass) {
+    tableProps.onSelectRows = (ids) => setSelected(ids);
   }
 
-  let paginationProps = {};
+  const data = useCachedHttp(api, parameters);
+  const [selected, setSelected] = useState([]);
 
-  if (config.archive) {
-    paginationProps = {
+  const paginationProps = useMemo(() => {
+    if (!data) {
+      return {};
+    }
+
+    return {
       pageIndex: page,
       pages: data.pages,
       pageSize: data.size,
@@ -71,16 +84,50 @@ export default function Index() {
         });
       },
     };
+  }, [data, router]);
 
-    data = data.items;
+  const columns = useMemo(() => {
+    const items = config.columns;
+
+    if (config.mass) {
+      items.unshift({
+        id: "selection",
+        Header: ({ getToggleAllRowsSelectedProps }) => (
+          <>
+            <IndeterminateCheckbox {...getToggleAllRowsSelectedProps()} />
+          </>
+        ),
+        Cell: ({ row }) => (
+          <IndeterminateCheckbox {...row.getToggleRowSelectedProps()} />
+        ),
+      });
+    }
+
+    return items;
+  }, [config]);
+
+  const tableData = useMemo(() => {
+    if (!data) {
+      return [];
+    }
+
+    let items = data;
+
+    if (config.archive) {
+      items = data.items;
+    }
+
+    return items.map((data) => {
+      return {
+        ...data,
+        href: `/${currentLocation.url}/admin${config.api}`,
+      };
+    });
+  }, [data]);
+
+  if (!data) {
+    return <Loader />;
   }
-
-  data = data.map((data) => {
-    return {
-      ...data,
-      href: `/${currentLocation.url}/admin${config.api}`,
-    };
-  });
 
   return (
     <Layout>
@@ -112,11 +159,34 @@ export default function Index() {
         </div>
 
         <div className={layoutStyles.sideContent}>
-          <AdminTable columns={config.columns} data={data} />
+          <AdminTable data={tableData} columns={columns} {...tableProps} />
 
           {config.archive && <Pagination {...paginationProps} />}
         </div>
       </div>
+
+      <Bar visible={selected.length > 0}>
+        <span className={typography.gamma}>Selected ({selected.length})</span>
+
+        <span className={styles.barButtons}>
+          <Button
+            variant={"danger"}
+            onClick={async () => {
+              try {
+                await http.put(`/${currentLocation?.url}/boulders/mass`, {
+                  items: selected,
+                  operation: "reactivate",
+                });
+                mutate(api);
+              } catch (error) {
+                dispatchMessage(toast(error));
+              }
+            }}
+          >
+            Reactivate
+          </Button>
+        </span>
+      </Bar>
     </Layout>
   );
 }

@@ -43,8 +43,6 @@ export default function useForm(defaults) {
     await callback(formData, resetForm);
 
     setSubmitting(false);
-
-    return false;
   };
 
   const setKeyValue = (key, value) => {

@@ -1,10 +1,16 @@
-import { useGlobalFilter, useSortBy, useTable } from "react-table";
+import {
+  useGlobalFilter,
+  useRowSelect,
+  useSortBy,
+  useTable,
+} from "react-table";
 import TextField from "../textField/textField";
 import TableHeader from "../table/tableHeader";
 import TableRow from "../table/tableRow";
 import styles from "./adminTable.module.css";
+import { useEffect } from "react";
 
-export default function AdminTable({ data, columns }) {
+export default function AdminTable({ data, columns, onSelectRows }) {
   const {
     getTableProps,
     getTableBodyProps,
@@ -12,14 +18,22 @@ export default function AdminTable({ data, columns }) {
     prepareRow,
     headerGroups,
     setGlobalFilter,
+    selectedFlatRows,
   } = useTable(
     {
       columns,
       data,
     },
     useGlobalFilter,
-    useSortBy
+    useSortBy,
+    useRowSelect
   );
+
+  useEffect(() => {
+    if (onSelectRows) {
+      onSelectRows(selectedFlatRows.map((item) => item.original.id));
+    }
+  }, [selectedFlatRows]);
 
   return (
     <div>

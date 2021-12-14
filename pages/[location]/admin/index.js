@@ -19,7 +19,7 @@ function deleteCommon(payload) {
   delete payload.updatedAt;
 }
 
-const DetailLinkColumn = ({ row, value }) => (
+export const DetailLinkColumn = ({ row, value }) => (
   <Button href={`${value}/${row.original.id}`} inverted={true} size={"s"}>
     Detail
   </Button>
@@ -88,6 +88,7 @@ export const models = [
       };
     },
     archive: true,
+    mass: true,
   },
   {
     title: "Users",
