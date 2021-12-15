@@ -1,6 +1,7 @@
 import styles from "./breadcrumbs.module.css";
 import Link from "next/link";
 import { colors } from "../../styles/utilities";
+import { Fragment } from "react";
 
 export default function Breadcrumbs({ items }) {
   return (
@@ -9,8 +10,8 @@ export default function Breadcrumbs({ items }) {
         const isNotLastItem = index + 1 < items.length;
 
         return (
-          <>
-            <li key={index}>
+          <Fragment key={index}>
+            <li>
               {isNotLastItem ? (
                 <Link href={item.href}>
                   <a className={colors.lila}>{item.title}</a>
@@ -20,7 +21,7 @@ export default function Breadcrumbs({ items }) {
               )}
             </li>
             {isNotLastItem && <li className={styles.separator}>/</li>}
-          </>
+          </Fragment>
         );
       })}
     </ol>

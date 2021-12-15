@@ -297,6 +297,10 @@ export const models = [
       };
     },
   },
+  {
+    title: "Reported errors",
+    route: "errors",
+  },
 ];
 
 export default function Index() {

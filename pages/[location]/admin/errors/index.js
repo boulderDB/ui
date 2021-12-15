@@ -7,17 +7,15 @@ import { useCachedHttp } from "../../../../hooks/useHttp";
 import { useContext, useMemo } from "react";
 import { AppContext } from "../../../_app";
 import Loader from "../../../../components/loader/loader";
-import extractRoleName from "../../../../utilties/extractRoleName";
-import Button from "../../../../components/button/button";
 import Breadcrumbs from "../../../../components/breadcrumbs/breadcrumbs";
 import styles from "../index.module.css";
 import { DetailLinkColumn } from "../index";
 
 const config = {
-  title: "Users",
-  route: "users",
-  schema: "user",
-  api: "/users",
+  title: "Reported errors",
+  route: "errors",
+  schema: "boulderError",
+  api: "/boulder-errors",
 };
 
 export default function Index() {
@@ -26,13 +24,8 @@ export default function Index() {
   let data = useCachedHttp(`/${currentLocation?.url}${config.api}`);
 
   data = data?.map((item) => {
-    const roles = item?.roles?.filter((role) =>
-      role.includes(currentLocation.id)
-    );
-
     return {
       ...item,
-      roles: roles.map((role) => extractRoleName(currentLocation.id, role)),
       href: `/${currentLocation.url}/admin/${config.route}`,
     };
   });
@@ -40,14 +33,20 @@ export default function Index() {
   const columns = useMemo(() => {
     return [
       {
-        Header: "Username",
-        accessor: "username",
+        Header: "Boulder",
+        accessor: "boulder.name",
       },
       {
-        Header: "Roles",
-        accessor: "roles",
+        Header: "Message",
+        accessor: "message",
+      },
+      {
+        Header: "Created at",
+        accessor: "createdAt",
         Cell: ({ value }) => {
-          return value.join(", ");
+          const date = new Date(value);
+
+          return `${date.getDate()}-${date.getMonth()}-${date.getFullYear()} `;
         },
       },
       {
@@ -65,7 +64,7 @@ export default function Index() {
 
   return (
     <Layout>
-      <Meta title={`Admin / Users`} />
+      <Meta title={`Admin / Reported errors`} />
 
       <div className={layoutStyles.grid}>
         <div className={layoutStyles.sideTitle}>
@@ -83,13 +82,6 @@ export default function Index() {
               ]}
             />
           </h2>
-
-          <Button
-            size={"s"}
-            href={`/${currentLocation?.url}/admin${config.api}/create`}
-          >
-            Create
-          </Button>
         </div>
 
         <div className={layoutStyles.sideContent}>
