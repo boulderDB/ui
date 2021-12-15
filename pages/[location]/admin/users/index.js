@@ -32,7 +32,7 @@ export default function Index() {
 
     return {
       ...item,
-      roles: roles.map((role) => extractRoleName(currentLocation.id, role)),
+      roles: roles?.map((role) => extractRoleName(currentLocation.id, role)),
       href: `/${currentLocation.url}/admin/${config.route}`,
     };
   });
