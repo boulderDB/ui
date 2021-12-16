@@ -88,11 +88,7 @@ export const getServerSideProps = async ({ params }) => {
 
   try {
     await axios.get(
-      `${
-        process.env.NEXT_PUBLIC_API_PROXY
-          ? process.env.NEXT_PUBLIC_API_PROXY
-          : ""
-      }/api/password-reset/${token}`
+      `${process.env.NEXT_PUBLIC_API_HOST}/api/password-reset/${token}`
     );
   } catch (error) {
     if (error?.response?.status === 404) {
