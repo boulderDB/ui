@@ -166,7 +166,9 @@ function MyApp({ Component, pageProps, locations }) {
 MyApp.getInitialProps = async (appContext) => {
   const appProps = await App.getInitialProps(appContext);
   const { data: locations } = await axios.get(
-    `${process.env.NEXT_PUBLIC_API_PROXY}/api/locations`
+    `${
+      process.env.NEXT_PUBLIC_API_PROXY ? process.env.NEXT_PUBLIC_API_PROXY : ""
+    }/api/locations`
   );
 
   return {
