@@ -22,20 +22,29 @@ const config = {
 
 export default function Index() {
   const { currentLocation } = useContext(AppContext);
+  const data = useCachedHttp(`/${currentLocation?.url}${config.api}`);
 
-  let data = useCachedHttp(`/${currentLocation?.url}${config.api}`);
+  const tableData = useMemo(() => {
+    if (!data) {
+      return [];
+    }
 
-  data = data?.map((item) => {
-    const roles = item?.roles?.filter((role) =>
-      role.includes(currentLocation.id)
-    );
+    let items = data;
 
-    return {
-      ...item,
-      roles: roles?.map((role) => extractRoleName(currentLocation.id, role)),
-      href: `/${currentLocation.url}/admin/${config.route}`,
-    };
-  });
+    if (config.archive) {
+      items = data.items;
+    }
+
+    return items.map((item) => {
+      return {
+        ...item,
+        roles: item.roles
+          ?.filter((role) => role.includes(currentLocation.id))
+          .map((role) => extractRoleName(currentLocation.id, role)),
+        href: `/${currentLocation.url}/admin/${config.route}`,
+      };
+    });
+  }, [data]);
 
   const columns = useMemo(() => {
     return [
@@ -93,7 +102,7 @@ export default function Index() {
         </div>
 
         <div className={layoutStyles.sideContent}>
-          <AdminTable columns={columns} data={data} />
+          <AdminTable columns={columns} data={tableData} />
         </div>
       </div>
     </Layout>
