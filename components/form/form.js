@@ -5,7 +5,6 @@ import EntitySelect from "../entitySelect/entitySelect";
 import Switch from "../switch/switch";
 import { Upload } from "../upload/upload";
 import Select from "../select/select";
-import TextField from "../textField/textField";
 
 function Form({ defaults, fields, onSubmit, submitLabel }) {
   const {
@@ -23,16 +22,8 @@ function Form({ defaults, fields, onSubmit, submitLabel }) {
         handleSubmit(onSubmit);
       }}
     >
-      {fields.map(({ name, label, Component, componentProps }, index) => {
-        let value = null;
-
-        if (formData) {
-          value = name in formData ? formData[name] : "";
-        }
-
-        if (!value && Component === TextField) {
-          value = "";
-        }
+      {fields.map(({ name, label, Component, componentProps = {} }, index) => {
+        let value = formData ? formData[name] : null;
 
         if (Component === EntitySelect || Component === Select) {
           componentProps.onChange = (event, value) => setKeyValue(name, value);

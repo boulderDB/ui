@@ -23,7 +23,6 @@ const config = {
 export default function Index() {
   const { currentLocation } = useContext(AppContext);
   const data = useCachedHttp(`/${currentLocation?.url}${config.api}`);
-  console.log(data);
 
   const tableData = useMemo(() => {
     if (!data) {

@@ -1,6 +1,8 @@
-import { useCachedHttp, useHttp } from "./useHttp";
-import { useContext, useEffect, useState } from "react";
-import EntitySelect from "../components/entitySelect/entitySelect";
+import { useCachedHttp } from "./useHttp";
+import { useContext } from "react";
+import EntitySelect, {
+  optionRenderers,
+} from "../components/entitySelect/entitySelect";
 import { AppContext } from "../pages/_app";
 import TextField from "../components/textField/textField";
 import Switch from "../components/switch/switch";
@@ -18,101 +20,103 @@ const components = {
   NumberType: TextField,
 };
 
-export default function useSchemaForm(name) {
-  const { currentLocation } = useContext(AppContext);
+export default function useSchemaForm(name, action) {
   const schema = useCachedHttp(`/schemas/${name}`);
-  const http = useHttp();
+  const { currentLocation } = useContext(AppContext);
 
-  const [fields, setFields] = useState([]);
-  const [defaults, setDefaults] = useState({});
-
-  useEffect(async () => {
-    if (!schema) {
-      return {};
-    }
-
-    setFields(
-      await Promise.all(
-        schema.map(async (field, index) => {
-          const Component = components[field.type];
-
-          let config = {
-            name: field.name,
-            label: field.name,
-            Component,
-            componentProps: {
-              ...Object.assign(
-                {},
-                ...field.options?.constraints?.map((constraint) => {
-                  if (constraint.name === "NotBlank") {
-                    return {
-                      required: true,
-                    };
-                  }
-                })
-              ),
-            },
-          };
-
-          if (index === 0) {
-            config.componentProps.autoFocus = "autoFocus";
-          }
-
-          if (field.type === "EntityType") {
-            const { data } = await http.get(
-              `/${currentLocation?.url}${field.schema.resource}`
-            );
-
-            const labelProperty = field.schema.labelProperty
-              ? field.schema.labelProperty
-              : name;
-
-            config.componentProps = {
-              ...config.componentProps,
-              renderOption: (option) => {
-                return labelProperty ? option[labelProperty] : option.name;
-              },
-              getOptionLabel: (option) => {
-                return labelProperty ? option[labelProperty] : option.name;
-              },
-              options: data,
-              multiple: field.options.multiple,
-              labelProperty,
-            };
-          }
-
-          if (field.type === "ChoiceType") {
-            config.componentProps.options = Object.keys(
-              field?.options?.choices
-            )?.map((choice) => choice);
-          }
-
-          if (field.type === "IntegerType" || field.type === "NumberType") {
-            config.componentProps.type = "number";
-          }
-
-          if (field?.schema?.type === "upload") {
-            config.Component = Upload;
-          }
-
-          return config;
-        })
-      )
-    );
-
-    let defaultValues = {};
-
-    schema.forEach((field) => {
-      defaultValues[field.name] = field.schema?.default
-        ? field.schema?.default
-        : null;
-    });
-
-    setDefaults(defaultValues);
-  }, [schema, currentLocation]);
+  if (!schema) {
+    return { fields: [], defaults: [] };
+  }
 
   return {
-    fields,
-    defaults,
+    fields: schema.map((field, index) => {
+      const Component = components[field.type];
+      console.log(field);
+
+      const constraints = field.options?.constraints
+        ? field.options?.constraints?.map((constraint) => {
+            if (constraint.name === "NotBlank") {
+              return {
+                required: true,
+              };
+            }
+          })
+        : [];
+
+      let config = {
+        name: field.name,
+        label: field.name,
+        Component,
+        componentProps: { ...Object.assign({}, constraints) },
+      };
+
+      if (index === 0 && field.type === "TextType" && action === "create") {
+        config.componentProps.autoFocus = "autoFocus";
+      }
+
+      if (field.type === "EntityType") {
+        const labelProperty = field.schema.labelProperty
+          ? field.schema.labelProperty
+          : name;
+
+        let renderOption = (option) => {
+          if (!labelProperty || !option) {
+            return "";
+          }
+
+          return labelProperty ? option[labelProperty] : option.name;
+        };
+
+        if (optionRenderers[field.name]) {
+          renderOption = optionRenderers[field.name];
+        }
+
+        config.componentProps = {
+          ...config.componentProps,
+          renderOption: renderOption,
+          getOptionLabel: (option) => {
+            if (!labelProperty || !option) {
+              return "";
+            }
+
+            return labelProperty ? option[labelProperty] : option.name;
+          },
+          multiple: field.options.multiple,
+          labelProperty,
+          resource: `/${currentLocation.url}${field.schema.resource}`,
+        };
+      }
+
+      if (field.type === "ChoiceType") {
+        config.componentProps.options = Object.keys(
+          field?.options?.choices
+        )?.map((choice) => choice);
+      }
+
+      if (field.type === "IntegerType" || field.type === "NumberType") {
+        config.componentProps.type = "number";
+      }
+
+      if (field?.schema?.type === "upload") {
+        config.Component = Upload;
+      }
+
+      return config;
+    }),
+    defaults: schema
+      .map((field) => {
+        const name = field.name;
+
+        if (field.schema?.default) {
+          return { [name]: field.schema?.default };
+        }
+
+        if (field.options.multiple) {
+          return { [name]: [] };
+        }
+
+        return { [name]: null };
+      })
+      .reduce((object, item) => Object.assign(object, { ...item }), {}),
   };
 }

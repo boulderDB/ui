@@ -16,7 +16,7 @@ function Button({
   inverted,
   size,
   as,
-  loading,
+  loading = false,
   onClick,
   href,
   ...rest

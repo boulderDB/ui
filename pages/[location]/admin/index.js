@@ -298,6 +298,28 @@ export const models = [
     },
   },
   {
+    title: "Setters",
+    route: "setters",
+    schema: "setter",
+    api: "/setters",
+    columns: [
+      {
+        Header: "Username",
+        accessor: "username",
+      },
+      {
+        Header: "Active",
+        accessor: ({ active }) => active.toString(),
+      },
+      {
+        id: "href",
+        accessor: "href",
+        className: styles.link,
+        Cell: DetailLinkColumn,
+      },
+    ],
+  },
+  {
     title: "Reported errors",
     route: "errors",
   },

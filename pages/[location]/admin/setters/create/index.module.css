@@ -1,0 +1,8 @@
+.match {
+  display: flex;
+  justify-content: space-between;
+}
+
+.section {
+  margin-top: 64px;
+}

@@ -9,9 +9,6 @@ import {
 } from "react-table";
 import useMediaQuery from "../../hooks/useMediaQuery";
 import styles from "./boulderTable.module.css";
-import filterStyles from "./filter.module.css";
-import AscentIcon from "../ascentIcon/ascentIcon";
-import HoldType from "../holdType/holdType";
 import TableHeader from "../table/tableHeader";
 import TableRow from "../table/tableRow";
 import IndeterminateCheckbox from "../table/IndeterminateCheckbox";
@@ -19,6 +16,7 @@ import Pagination from "../../components/pagination/pagination";
 import Grade from "../grade/grade";
 import cn from "classnames";
 import { typography } from "../../styles/utilities";
+import { optionRenderers } from "../entitySelect/entitySelect";
 
 export const ascentTypes = [
   {
@@ -259,22 +257,12 @@ export const columns = {
 export const filters = {
   holdType: {
     label: "Hold type",
-    renderOption: (option) => (
-      <div className={filterStyles.hasIconOption}>
-        <HoldType image={option.image} small={true} /> {option.name}
-      </div>
-    ),
+    renderOption: optionRenderers.holdtype,
     getOptionLabel: (option) => option.name,
   },
   grade: {
     label: "Grade",
-    renderOption: (option) => (
-      <Grade
-        color={option.color}
-        name={option.name}
-        internalName={option.internalName}
-      />
-    ),
+    renderOption: optionRenderers.grade,
     getOptionLabel: (option) => option.name,
   },
   setter: {
@@ -289,11 +277,7 @@ export const filters = {
   ascent: {
     label: "Ascent",
     options: ascentTypes,
-    renderOption: (option) => (
-      <div className={filterStyles.hasIconOption}>
-        <AscentIcon type={option.name} fill={true} /> {option.name}
-      </div>
-    ),
+    renderOption: optionRenderers.ascent,
     getOptionLabel: (option) => option.name,
   },
   area: {

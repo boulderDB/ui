@@ -21,7 +21,7 @@ export default function Index() {
   const { model } = query;
 
   const config = models.find((item) => item.route === model);
-  const { fields, defaults } = useSchemaForm(config.schema);
+  const { fields, defaults } = useSchemaForm(config.schema, "create");
 
   const onSubmit = async (payload, reset) => {
     delete payload.id;

@@ -37,10 +37,7 @@ function Select({
           required={isRequired}
           {...params}
           label={label}
-          inputProps={{
-            ...params.inputProps,
-            autoComplete: "new-password",
-          }}
+          inputProps={params.inputProps}
         />
       )}
     />
