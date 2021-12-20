@@ -16,7 +16,7 @@ function Form({ defaults, fields, onSubmit, submitLabel }) {
     setKeyValue,
   } = useForm(defaults);
 
-  if (!Object.keys(formData).length) {
+  if (!Object.keys(formData)?.length) {
     return <Loader />;
   }
 
