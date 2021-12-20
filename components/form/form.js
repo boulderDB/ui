@@ -5,7 +5,6 @@ import EntitySelect from "../entitySelect/entitySelect";
 import Switch from "../switch/switch";
 import { Upload } from "../upload/upload";
 import Select from "../select/select";
-import Loader from "../loader/loader";
 
 function Form({ defaults, fields, onSubmit, submitLabel }) {
   const {
@@ -16,10 +15,6 @@ function Form({ defaults, fields, onSubmit, submitLabel }) {
     setKeyValue,
   } = useForm(defaults);
 
-  if (!formData || !Object.keys(formData)?.length) {
-    return <Loader />;
-  }
-
   return (
     <form
       onSubmit={(event) => {
@@ -28,7 +23,7 @@ function Form({ defaults, fields, onSubmit, submitLabel }) {
       }}
     >
       {fields.map(({ name, label, Component, componentProps = {} }, index) => {
-        let value = null;
+        let value = "";
 
         if (formData) {
           value = name in formData ? formData[name] : "";
