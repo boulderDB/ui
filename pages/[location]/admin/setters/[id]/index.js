@@ -3,7 +3,11 @@ import Meta from "../../../../../components/meta/meta";
 import { layoutStyles, typography } from "../../../../../styles/utilities";
 import cn from "classnames";
 import { useRouter } from "next/router";
-import { useCachedHttp, useHttp } from "../../../../../hooks/useHttp";
+import {
+  fetchOnceConfig,
+  useCachedHttp,
+  useHttp,
+} from "../../../../../hooks/useHttp";
 import React, { useContext, useMemo } from "react";
 import { AppContext } from "../../../../_app";
 import Loader from "../../../../../components/loader/loader";
@@ -13,12 +17,19 @@ import toast from "../../../../../utilties/toast";
 import extractErrorMessage from "../../../../../utilties/extractErrorMessage";
 import Breadcrumbs from "../../../../../components/breadcrumbs/breadcrumbs";
 import Switch from "../../../../../components/switch/switch";
+import { models } from "../../index";
 
 export default function Index() {
   const { query } = useRouter();
   const http = useHttp();
   const { currentLocation, dispatchMessage } = useContext(AppContext);
-  const data = useCachedHttp(`/${currentLocation?.url}/setters/${query.id}`);
+  const data = useCachedHttp(
+    `/${currentLocation?.url}/setters/${query.id}`,
+    null,
+    fetchOnceConfig
+  );
+
+  const config = models.find((item) => item.route === "setters");
 
   const fields = useMemo(() => {
     return [
@@ -33,7 +44,10 @@ export default function Index() {
 
   const onSubmit = async (data) => {
     try {
-      await http.put(`/${currentLocation?.url}/setters/${query.id}`, data);
+      await http.put(
+        `/${currentLocation?.url}/setters/${query.id}`,
+        config.beforeSubmit(data)
+      );
 
       await mutate(`/${currentLocation?.url}/setters/${query.id}`);
       await mutate(`/${currentLocation?.url}/setters`);

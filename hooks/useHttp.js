@@ -10,14 +10,21 @@ const fetcher = (url, params) =>
     })
     .then((response) => response.data);
 
-export function useCachedHttp(resource, params) {
+export const fetchOnceConfig = {
+  revalidateOnFocus: false,
+  refreshWhenOffline: false,
+  refreshWhenHidden: false,
+  refreshInterval: 0,
+};
+
+export function useCachedHttp(resource, params, config) {
   let key = resource;
 
   if (params) {
     key += new URLSearchParams(params).toString();
   }
 
-  const { data, error } = useSWR(key, () => fetcher(resource, params));
+  const { data, error } = useSWR(key, () => fetcher(resource, params), config);
   const router = useRouter();
 
   if (error) {

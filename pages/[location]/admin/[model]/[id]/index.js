@@ -7,7 +7,11 @@ import Form from "../../../../../components/form/form";
 import React, { useContext } from "react";
 import { AppContext } from "../../../../_app";
 import { useRouter } from "next/router";
-import { useCachedHttp, useHttp } from "../../../../../hooks/useHttp";
+import {
+  fetchOnceConfig,
+  useCachedHttp,
+  useHttp,
+} from "../../../../../hooks/useHttp";
 import Loader from "../../../../../components/loader/loader";
 import toast from "../../../../../utilties/toast";
 import extractErrorMessage from "../../../../../utilties/extractErrorMessage";
@@ -25,9 +29,11 @@ export default function Index() {
   const { mutate } = useSWRConfig();
 
   const config = models.find((item) => item.route === model);
-
-  const data = useCachedHttp(`/${currentLocation?.url}${config?.api}/${id}`);
-
+  const data = useCachedHttp(
+    `/${currentLocation?.url}${config?.api}/${id}`,
+    null,
+    fetchOnceConfig
+  );
   const { fields } = useSchemaForm(config?.schema);
 
   const onSubmit = async (payload) => {

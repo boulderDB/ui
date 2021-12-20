@@ -14,6 +14,7 @@ import { mutate } from "swr";
 import toast from "../../../../../utilties/toast";
 import extractErrorMessage from "../../../../../utilties/extractErrorMessage";
 import Breadcrumbs from "../../../../../components/breadcrumbs/breadcrumbs";
+import { models } from "../../index";
 
 const roles = ["ADMIN", "SETTER"];
 
@@ -22,6 +23,8 @@ export default function Index() {
   const http = useHttp();
   const { currentLocation, dispatchMessage } = useContext(AppContext);
   const data = useCachedHttp(`/${currentLocation?.url}/users/${query.id}`);
+
+  const config = models.find((item) => item.route === "users");
 
   const fields = useMemo(() => {
     return [
@@ -59,7 +62,7 @@ export default function Index() {
 
   return (
     <Layout>
-      <Meta title={`Admin / Users`} />
+      <Meta title={`Admin / ${config.title} / ${data.username}`} />
 
       <div className={layoutStyles.grid}>
         <h1 className={cn(layoutStyles.sideTitle, typography.alpha700)}>

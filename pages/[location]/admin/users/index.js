@@ -102,7 +102,11 @@ export default function Index() {
         </div>
 
         <div className={layoutStyles.sideContent}>
-          <AdminTable columns={columns} data={tableData} />
+          <AdminTable
+            columns={columns}
+            data={tableData}
+            sortProperty={"username"}
+          />
         </div>
       </div>
     </Layout>

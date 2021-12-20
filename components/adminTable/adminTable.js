@@ -9,8 +9,14 @@ import TableHeader from "../table/tableHeader";
 import TableRow from "../table/tableRow";
 import styles from "./adminTable.module.css";
 import { useEffect } from "react";
+import sortItemsAlphabetically from "../../utilties/sortItemsAlphabetically";
 
-export default function AdminTable({ data, columns, onSelectRows }) {
+export default function AdminTable({
+  data,
+  columns,
+  onSelectRows,
+  sortProperty = "name",
+}) {
   const {
     getTableProps,
     getTableBodyProps,
@@ -22,7 +28,7 @@ export default function AdminTable({ data, columns, onSelectRows }) {
   } = useTable(
     {
       columns,
-      data,
+      data: sortItemsAlphabetically(data, sortProperty),
     },
     useGlobalFilter,
     useSortBy,

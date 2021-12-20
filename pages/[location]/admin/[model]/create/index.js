@@ -23,7 +23,7 @@ export default function Index() {
   const config = models.find((item) => item.route === model);
   const { fields, defaults } = useSchemaForm(config.schema, "create");
 
-  const onSubmit = async (payload, reset) => {
+  const onSubmit = async (payload, resetForm) => {
     delete payload.id;
 
     try {
@@ -31,8 +31,9 @@ export default function Index() {
         `/${currentLocation?.url}${config.api}`,
         config?.beforeSubmit ? config?.beforeSubmit(payload) : payload
       );
+
       dispatchMessage(toast("Success", `Created!`, "success"));
-      reset();
+      resetForm();
     } catch (error) {
       console.error(error);
       dispatchMessage(toast("Error", extractErrorMessage(error), "error"));

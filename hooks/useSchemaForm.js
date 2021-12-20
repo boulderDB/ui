@@ -1,4 +1,4 @@
-import { useCachedHttp } from "./useHttp";
+import { fetchOnceConfig, useCachedHttp, useHttp } from "./useHttp";
 import { useContext } from "react";
 import EntitySelect, {
   optionRenderers,
@@ -21,17 +21,16 @@ const components = {
 };
 
 export default function useSchemaForm(name, action) {
-  const schema = useCachedHttp(`/schemas/${name}`);
+  const schema = useCachedHttp(`/schemas/${name}`, null, fetchOnceConfig);
   const { currentLocation } = useContext(AppContext);
 
   if (!schema) {
-    return { fields: [], defaults: [] };
+    return { fields: [], defaults: {} };
   }
 
   return {
     fields: schema.map((field, index) => {
       const Component = components[field.type];
-      console.log(field);
 
       const constraints = field.options?.constraints
         ? field.options?.constraints?.map((constraint) => {
@@ -51,7 +50,7 @@ export default function useSchemaForm(name, action) {
       };
 
       if (index === 0 && field.type === "TextType" && action === "create") {
-        config.componentProps.autoFocus = "autoFocus";
+        config.componentProps.autoFocus = true;
       }
 
       if (field.type === "EntityType") {
@@ -115,7 +114,7 @@ export default function useSchemaForm(name, action) {
           return { [name]: [] };
         }
 
-        return { [name]: null };
+        return { [name]: "" };
       })
       .reduce((object, item) => Object.assign(object, { ...item }), {}),
   };

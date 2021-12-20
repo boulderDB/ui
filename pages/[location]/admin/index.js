@@ -89,16 +89,19 @@ export const models = [
     },
     archive: true,
     mass: true,
+    sortProperty: "name",
   },
   {
     title: "Users",
     route: "users",
+    sortProperty: "username",
   },
   {
     title: "Areas",
     route: "areas",
     schema: "area",
     api: "/areas",
+    sortProperty: "name",
     columns: [
       {
         Header: "Name",
@@ -129,6 +132,7 @@ export const models = [
     route: "walls",
     schema: "wall",
     api: "/walls",
+    sortProperty: "name",
     columns: [
       {
         Header: "Name",
@@ -158,6 +162,7 @@ export const models = [
     route: "grades",
     schema: "grade",
     api: "/grades",
+    sortProperty: "name",
     columns: [
       {
         Header: "Name",
@@ -190,6 +195,7 @@ export const models = [
     route: "holdtypes",
     schema: "holdType",
     api: "/holdtypes",
+    sortProperty: "name",
     columns: [
       {
         Header: "Image",
@@ -224,6 +230,7 @@ export const models = [
     route: "boulder-tags",
     schema: "boulderTag",
     api: "/boulder-tags",
+    sortProperty: "name",
     columns: [
       {
         Header: "Name",
@@ -258,6 +265,7 @@ export const models = [
     route: "events",
     schema: "event",
     api: "/events",
+    sortProperty: "name",
     columns: [
       {
         Header: "Name",
@@ -302,6 +310,15 @@ export const models = [
     route: "setters",
     schema: "setter",
     api: "/setters",
+    sortProperty: "username",
+    beforeSubmit: (payload) => {
+      deleteCommon(payload);
+
+      return {
+        ...payload,
+        user: payload.user?.id,
+      };
+    },
     columns: [
       {
         Header: "Username",

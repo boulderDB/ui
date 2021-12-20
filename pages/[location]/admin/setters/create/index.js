@@ -88,7 +88,11 @@ export default function Index() {
             renderMatch={(match) => (
               <div className={styles.match}>
                 <div>{match.username}</div>
-                <Button size={"s"} inverted={true} onClick={createSetter}>
+                <Button
+                  size={"s"}
+                  inverted={true}
+                  onClick={() => createSetter({ user: match.id })}
+                >
                   Add
                 </Button>
               </div>

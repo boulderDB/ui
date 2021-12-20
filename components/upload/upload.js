@@ -4,6 +4,7 @@ import styles from "./upload.module.css";
 import Loader from "../loader/loader";
 import toast from "../../utilties/toast";
 import { AppContext } from "../../pages/_app";
+import extractErrorMessage from "../../utilties/extractErrorMessage";
 
 function defaultValueRenderer(value) {
   return (
@@ -37,7 +38,7 @@ function Upload({
 
       onSuccess(data.file);
     } catch (error) {
-      dispatchMessage(toast("error", error, "error"));
+      dispatchMessage(toast("error", extractErrorMessage(error), "error"));
     }
 
     setLoading(false);

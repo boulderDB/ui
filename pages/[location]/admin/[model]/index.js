@@ -159,7 +159,12 @@ export default function Index() {
         </div>
 
         <div className={layoutStyles.sideContent}>
-          <AdminTable data={tableData} columns={columns} {...tableProps} />
+          <AdminTable
+            data={tableData}
+            columns={columns}
+            sortProperty={config?.sortProperty}
+            {...tableProps}
+          />
 
           {config.archive && <Pagination {...paginationProps} />}
         </div>
