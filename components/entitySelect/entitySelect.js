@@ -47,33 +47,35 @@ function EntitySelect({
   resource,
   multiple,
   labelProperty = "name",
-  compareProperty = "id",
+  getComparisonProperty = (option) => option.id,
+  required,
   ...rest
 }) {
   const http = useHttp();
   const [open, setOpen] = useState(false);
   const [options, setOptions] = useState([]);
-  const loading = open && options.length === 0;
+  const [fetching, setFetching] = useState(false);
+
+  const loading = open && fetching;
+
+  let isRequired = required;
+
+  if (multiple && required) {
+    isRequired = value?.length === 0;
+  }
 
   useEffect(() => {
-    let active = true;
-
-    if (!loading) {
-      return undefined;
+    if (!open) {
+      return;
     }
 
     (async () => {
+      setFetching(true);
       const { data } = await http.get(resource);
-
-      if (active) {
-        setOptions(sortItemsAlphabetically(data, labelProperty));
-      }
+      setOptions(sortItemsAlphabetically(data, labelProperty));
+      setFetching(false);
     })();
-
-    return () => {
-      active = false;
-    };
-  }, [loading]);
+  }, [open]);
 
   useEffect(() => {
     if (!open) {
@@ -91,7 +93,7 @@ function EntitySelect({
         setOpen(false);
       }}
       getOptionSelected={(option, value) => {
-        return option[compareProperty] === value[compareProperty];
+        return getComparisonProperty(option) === getComparisonProperty(value);
       }}
       loading={loading}
       multiple={multiple}
@@ -100,6 +102,7 @@ function EntitySelect({
       renderInput={(params) => (
         <TextField
           {...params}
+          required={isRequired}
           label={label}
           InputProps={{
             ...params.InputProps,

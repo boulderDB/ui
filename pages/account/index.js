@@ -1,5 +1,5 @@
 import Layout from "../../components/layout/layout";
-import { useCachedHttp, useHttp } from "../../hooks/useHttp";
+import { fetchOnceConfig, useCachedHttp, useHttp } from "../../hooks/useHttp";
 import { layoutStyles, typography } from "../../styles/utilities";
 import cn from "classnames";
 import Meta from "../../components/meta/meta";
@@ -15,10 +15,12 @@ import TextField from "../../components/textField/textField";
 import styles from "./index.module.css";
 import Loader from "../../components/loader/loader";
 import { Upload } from "../../components/upload/upload";
+import EntitySelect from "../../components/entitySelect/entitySelect";
+import filterId from "../../utilties/filterId";
 
 export default function Index() {
   const http = useHttp();
-  const data = useCachedHttp("/me");
+  const data = useCachedHttp("/me", null, fetchOnceConfig);
   const { dispatchMessage } = useContext(AppContext);
 
   const settingsFormFields = [
@@ -46,17 +48,17 @@ export default function Index() {
       Component: TextField,
       componentProps: {},
     },
-    /*{
+    {
       name: "notifications",
       label: "Notifications",
-      Component: Select,
+      Component: EntitySelect,
       componentProps: {
         multiple: true,
-        options: data?.notifications,
+        resource: `/notifications`,
         renderOption: (option) => `${option.type}@${option.location.name}`,
         getOptionLabel: (option) => `${option.type}@${option.location.name}`,
       },
-    },*/
+    },
   ];
 
   const passwordFormFields = [
@@ -86,9 +88,7 @@ export default function Index() {
         visible: data.visible,
         firstName: data.firstName,
         lastName: data.lastName,
-        notifications: data.notifications.map(
-          (notification) => notification.id
-        ),
+        notifications: filterId(data.notifications),
       });
 
       await mutate("/me");
@@ -126,12 +126,7 @@ export default function Index() {
             submitLabel={"Update"}
             onSubmit={onSettingsFormSubmit}
             fields={settingsFormFields}
-            defaults={{
-              ...data,
-              notifications: data?.notifications.filter(
-                (notification) => notification.active === true
-              ),
-            }}
+            defaults={data}
           />
         </div>
       </div>

@@ -24,8 +24,6 @@ export default function Index() {
   const { fields, defaults } = useSchemaForm(config.schema, "create");
 
   const onSubmit = async (payload, resetForm) => {
-    delete payload.id;
-
     try {
       await http.post(
         `/${currentLocation?.url}${config.api}`,
