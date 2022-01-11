@@ -13,11 +13,11 @@ export default function RateButton({
   disabled = false,
 }) {
   const http = useHttp();
-  const { dispatchMessage } = useContext(AppContext);
+  const { dispatchMessage, currentLocation } = useContext(AppContext);
 
   const onAdd = async () => {
     try {
-      await http.post(`/boulder-ratings`, {
+      await http.post(`/${currentLocation?.url}/boulder-ratings`, {
         rating: 10,
         boulder: boulderId,
       });
@@ -31,7 +31,7 @@ export default function RateButton({
 
   const onRemove = async () => {
     try {
-      await http.post(`/boulder-ratings`, {
+      await http.post(`/${currentLocation?.url}/boulder-ratings`, {
         rating: 0,
         boulder: boulderId,
       });
