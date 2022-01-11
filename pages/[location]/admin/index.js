@@ -57,6 +57,10 @@ export const models = [
         Header: "Status",
       },
       {
+        accessor: "readableIdentifier.value",
+        Header: "Readable identifier",
+      },
+      {
         ...columns.date,
       },
       {
@@ -70,13 +74,12 @@ export const models = [
       deleteCommon(payload);
 
       delete payload.comments;
-      delete payload.readableIdentifier;
       delete payload.userAscent;
       delete payload.currentPoints;
       delete payload.ascents;
       delete payload.areas;
 
-      return {
+      let data = {
         ...payload,
         setters: filterId(payload.setters),
         tags: filterId(payload.tags),
@@ -86,6 +89,12 @@ export const models = [
         holdType: filterId(payload.holdType),
         internalGrade: filterId(payload.internalGrade),
       };
+
+      if (payload.readableIdentifier) {
+        data.readableIdentifier = filterId(payload.readableIdentifier);
+      }
+
+      return data;
     },
     archive: true,
     mass: true,

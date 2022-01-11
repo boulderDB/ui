@@ -21,8 +21,15 @@ const components = {
 };
 
 export default function useSchemaForm(name, action) {
-  const schema = useCachedHttp(`/schemas/${name}`, null, fetchOnceConfig);
   const { currentLocation } = useContext(AppContext);
+
+  const schema = useCachedHttp(
+    `/schemas/${name}`,
+    {
+      location: currentLocation?.url,
+    },
+    fetchOnceConfig
+  );
 
   if (!schema) {
     return { fields: [], defaults: {} };
@@ -32,22 +39,18 @@ export default function useSchemaForm(name, action) {
     fields: schema.map((field, index) => {
       const Component = components[field.type];
 
-      const constraints = field.options?.constraints
-        ? field.options?.constraints?.map((constraint) => {
-            if (constraint.name === "NotBlank") {
-              return {
-                required: true,
-              };
-            }
-          })
-        : [];
-
       let config = {
         name: field.name,
         label: field.name,
         Component,
-        componentProps: { ...Object.assign({}, constraints) },
+        componentProps: {},
       };
+
+      field.options?.constraints.forEach((constraint) => {
+        if (constraint.name === "NotBlank") {
+          config.componentProps.required = true;
+        }
+      });
 
       if (index === 0 && field.type === "TextType" && action === "create") {
         config.componentProps.autoFocus = true;
