@@ -148,7 +148,6 @@ function MyApp({ Component, pageProps, locations }) {
         value={{
           isOpen,
           setOpen,
-          toggle: () => setOpen(!isOpen),
         }}
       >
         <SWRConfig>

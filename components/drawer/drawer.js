@@ -7,11 +7,11 @@ import styles from "./drawer.module.css";
 export const DrawerContext = createContext({});
 
 export default function Drawer({ children, onClose }) {
-  const { isOpen, toggle } = useContext(DrawerContext);
+  const { isOpen, setOpen } = useContext(DrawerContext);
   const drawerRef = useRef();
 
   useClickOutside(drawerRef, () => {
-    toggle(false);
+    setOpen(false);
   });
 
   useEffect(() => {
@@ -46,7 +46,7 @@ export default function Drawer({ children, onClose }) {
           </motion.div>
 
           <motion.div
-            transition={{ type: "spring", bounce: 0, duration: 0.8 }}
+            transition={{ type: "spring", bounce: 0, duration: 0.4 }}
             initial={{ opacity: 0 }}
             animate={{
               opacity: 0.8,

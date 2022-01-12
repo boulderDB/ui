@@ -49,12 +49,12 @@ export default function BoulderView({ boulders, event, initialFilters = [] }) {
   const [globalFilter, setGlobalFilter] = useState("");
 
   useEffect(() => {
-    if (detailWall || detailBoulder) {
-      setOpen(true);
-    } else {
-      setOpen(false);
-    }
-  }, [detailWall, detailBoulder]);
+    setOpen(!!detailWall);
+  }, [detailWall]);
+
+  useEffect(() => {
+    setOpen(!!detailBoulder);
+  }, [detailBoulder]);
 
   const { filters, setFilters, applyFilter } = useBoulderFilters(
     initialFilters
