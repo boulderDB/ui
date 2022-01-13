@@ -17,7 +17,7 @@ export const fetchOnceConfig = {
   refreshInterval: 0,
 };
 
-export function useCachedHttp(resource, params, config) {
+export function useCachedHttp(resource, params, config, throwError = true) {
   let key = resource;
 
   if (params) {
@@ -33,7 +33,10 @@ export function useCachedHttp(resource, params, config) {
     }
 
     console.error(error?.response);
-    throw error;
+
+    if (throwError) {
+      throw error;
+    }
   }
 
   return data;

@@ -12,6 +12,7 @@ import styles from "./index.module.css";
 import Grade from "../../../components/grade/grade";
 import { columns } from "../../../components/boulderTable/boulderTable";
 import parseDate from "../../../utilties/parseDate";
+import Label from "../../../components/label/label";
 
 function deleteCommon(payload) {
   delete payload.id;
@@ -282,6 +283,23 @@ export const models = [
         accessor: "name",
       },
       {
+        Header: "State",
+        accessor: "state",
+        Cell: ({ value }) => {
+          let variant = "default";
+
+          if (value === "active") {
+            variant = "success";
+          }
+
+          if (value === "ended") {
+            variant = "danger";
+          }
+
+          return <Label text={value} variant={variant} />;
+        },
+      },
+      {
         Header: "Start date",
         accessor: ({ startDate }) =>
           startDate ? parseDate(startDate, true)?.string : null,
@@ -303,14 +321,34 @@ export const models = [
         id: "href",
         accessor: "href",
         className: styles.link,
-        Cell: DetailLinkColumn,
+        Cell: ({ row, value }) => {
+          return (
+            <>
+              <Button
+                inverted={true}
+                size={"s"}
+                href={`/flashh/events/${row.original.id}/ranking`}
+                variant={"success"}
+              >
+                Ranking
+              </Button>
+
+              <DetailLinkColumn row={row} value={value} />
+            </>
+          );
+        },
       },
     ],
     beforeSubmit: (payload) => {
       deleteCommon(payload);
 
+      if (payload.state === "ended") {
+        delete payload.boulders;
+      }
+
       delete payload.isParticipant;
       delete payload.participants;
+      delete payload.state;
 
       return {
         ...payload,

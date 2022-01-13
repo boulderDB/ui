@@ -27,6 +27,11 @@
   color: var(--color-white);
 }
 
+.isSuccess {
+  background: var(--color-top);
+  color: var(--color-white);
+}
+
 .isLoading {
   opacity: 0.3;
   cursor: not-allowed;
@@ -55,4 +60,13 @@
 
 .isInverted.isDanger {
   color: var(--color-red);
+}
+
+.isInverted.isSuccess:hover {
+  background: var(--color-top-400);
+  color: var(--color-top);
+}
+
+.isInverted.isSuccess {
+  color: var(--color-top);
 }

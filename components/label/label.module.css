@@ -1,0 +1,19 @@
+.root {
+  padding: 4px 8px;
+  border-radius: 4px;
+}
+
+.isDefault {
+  background: var(--color-lila);
+  color: var(--color-white);
+}
+
+.isSuccess {
+  background: var(--color-top);
+  color: var(--color-white);
+}
+
+.isDanger {
+  background: var(--color-red);
+  color: var(--color-white);
+}
