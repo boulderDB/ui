@@ -36,7 +36,6 @@ function MyApp({ Component, pageProps, locations }) {
 
   const [message, setMessage] = useState(null);
   const [isOpen, setOpen] = useState(false);
-  const [events, setEvents] = useState([]);
 
   const [lastVisitedLocation, setLastVisitedLocation] = usePersistentState(
     "lastVisitedLocation",
@@ -105,20 +104,6 @@ function MyApp({ Component, pageProps, locations }) {
     }
   }, [isAuthenticated]);
 
-  useEffect(async () => {
-    if (!currentLocation || !isAuthenticated) {
-      return;
-    }
-
-    try {
-      const { data } = await http.get(`/${currentLocation?.url}/events`);
-
-      setEvents(data);
-    } catch (error) {
-      console.error(error);
-    }
-  }, [currentLocation]);
-
   useEffect(() => {
     if (isOpen) {
       disableScroll();
@@ -134,7 +119,6 @@ function MyApp({ Component, pageProps, locations }) {
         currentLocation,
         lastVisitedLocation,
         locations,
-        events,
         isAuthenticated,
         roles,
         tokenPayload,

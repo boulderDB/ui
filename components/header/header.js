@@ -8,6 +8,7 @@ import { Burger, Close } from "../icon/icon";
 import cn from "classnames";
 import { useRouter } from "next/router";
 import useDocumentScrollLock from "../../hooks/useDocumentScrollLock";
+import { useCachedHttp } from "../../hooks/useHttp";
 
 export default function Header() {
   const {
@@ -17,7 +18,6 @@ export default function Header() {
     tokenPayload,
     reset,
     roles,
-    events,
     locations,
   } = useContext(AppContext);
   const { pathname, query } = useRouter();
@@ -27,6 +27,9 @@ export default function Header() {
   const [disableScroll, enableScroll] = useDocumentScrollLock({
     disableOnMount: false,
   });
+
+  const events = useCachedHttp(`/${currentLocation.url}/events`);
+  console.log(events);
 
   useEffect(() => {
     setMobileNavOverlayVisible(false);
@@ -87,7 +90,7 @@ export default function Header() {
       ));
     }
 
-    events.forEach((event) => {
+    events?.forEach((event) => {
       items.primary.push(() => (
         <NavItem
           href={`/${currentLocation?.url}/events/${event.id}/boulder`}

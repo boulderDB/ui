@@ -11,6 +11,7 @@ import Button from "../../../components/button/button";
 import styles from "./index.module.css";
 import Grade from "../../../components/grade/grade";
 import { columns } from "../../../components/boulderTable/boulderTable";
+import parseDate from "../../../utilties/parseDate";
 
 function deleteCommon(payload) {
   delete payload.id;
@@ -282,11 +283,13 @@ export const models = [
       },
       {
         Header: "Start date",
-        accessor: "startData",
+        accessor: ({ startDate }) =>
+          startDate ? parseDate(startDate, true)?.string : null,
       },
       {
         Header: "End date",
-        accessor: "endDate",
+        accessor: ({ endDate }) =>
+          endDate ? parseDate(endDate, true)?.string : null,
       },
       {
         Header: "Visible",
@@ -306,7 +309,8 @@ export const models = [
     beforeSubmit: (payload) => {
       deleteCommon(payload);
 
-      delete payload.participants; /* todo: remove */
+      delete payload.isParticipant;
+      delete payload.participants;
 
       return {
         ...payload,

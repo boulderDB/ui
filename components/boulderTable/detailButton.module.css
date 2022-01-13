@@ -5,6 +5,7 @@
   appearance: none;
   border: 0;
   text-decoration: underline;
+  overflow: hidden;
 }
 
 .isActive .icon {
