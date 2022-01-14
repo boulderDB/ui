@@ -153,9 +153,9 @@ export default function BoulderView({ boulders, event, initialFilters = [] }) {
       },
       {
         ...columns.startWall,
+        className: styles.startWallCell,
         Cell: ({ value, row }) => (
           <span
-            className={styles.wallLink}
             onClick={() => {
               setDetailWall(row.original.startWall.id);
             }}
@@ -169,7 +169,6 @@ export default function BoulderView({ boulders, event, initialFilters = [] }) {
         className: styles.endWallCell,
         Cell: ({ value, row }) => (
           <span
-            className={styles.wallLink}
             onClick={() => {
               setDetailWall(row.original.endWall?.id);
             }}

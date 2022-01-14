@@ -7,11 +7,11 @@ import TableRow from "../table/tableRow";
 
 export function UserRank({ image, username, sentAllBoulders = false }) {
   return (
-    <>
+    <div className={styles.rank}>
       <Avatar image={image} />
       <span className={styles.rankUsername}>{username}</span>
       {sentAllBoulders && <span className={styles.rankBadge}>🥋</span>}
-    </>
+    </div>
   );
 }
 

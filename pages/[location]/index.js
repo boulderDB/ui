@@ -64,8 +64,8 @@ function EventList({ title, items }) {
               <span className={typography.delta700}>{event.name}</span>
 
               <p className={typography.delta}>
-                {parseDate(event.startDate).string} –{" "}
-                {parseDate(event.endDate).string}
+                {parseDate(event.startDate, true).string} –{" "}
+                {parseDate(event.endDate, true).string}
               </p>
             </div>
 
