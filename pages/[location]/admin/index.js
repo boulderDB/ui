@@ -327,7 +327,9 @@ export const models = [
               <Button
                 inverted={true}
                 size={"s"}
-                href={`/flashh/events/${row.original.id}/ranking`}
+                href={`${value.replace("/admin", "")}/${
+                  row.original.id
+                }/ranking`}
                 variant={"success"}
               >
                 Ranking
@@ -336,7 +338,7 @@ export const models = [
               <Button
                 inverted={true}
                 size={"s"}
-                href={`/flashh/events/${row.original.id}/ranking`}
+                href={`${value}/${row.original.id}/add-participant`}
                 variant={"success"}
               >
                 Add user
