@@ -32,6 +32,11 @@
   color: var(--color-white);
 }
 
+.isDark {
+  background: var(--color-white);
+  color: var(--color-black);
+}
+
 .isLoading {
   opacity: 0.3;
   cursor: not-allowed;
@@ -69,4 +74,13 @@
 
 .isInverted.isSuccess {
   color: var(--color-top);
+}
+
+.isInverted.isDark:hover {
+  background: var(--color-lightgrey);
+  color: var(--color-black);
+}
+
+.isInverted.isDark {
+  color: var(--color-black);
 }

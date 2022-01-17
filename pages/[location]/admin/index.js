@@ -333,6 +333,15 @@ export const models = [
                 Ranking
               </Button>
 
+              <Button
+                inverted={true}
+                size={"s"}
+                href={`/flashh/events/${row.original.id}/ranking`}
+                variant={"success"}
+              >
+                Add user
+              </Button>
+
               <DetailLinkColumn row={row} value={value} />
             </>
           );
@@ -342,17 +351,15 @@ export const models = [
     beforeSubmit: (payload) => {
       deleteCommon(payload);
 
-      if (payload.state === "ended") {
-        delete payload.boulders;
-      }
-
       delete payload.isParticipant;
-      delete payload.participants;
       delete payload.state;
 
       return {
         ...payload,
         boulders: filterId(payload.boulders),
+        participants: filterId(payload.participants),
+        startDate: payload.startDate + "+00:00",
+        endDate: payload.endDate + "+00:00",
       };
     },
   },

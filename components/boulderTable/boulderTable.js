@@ -17,6 +17,7 @@ import Grade from "../grade/grade";
 import cn from "classnames";
 import { typography } from "../../styles/utilities";
 import { optionRenderers } from "../entitySelect/entitySelect";
+import parseDate from "../../utilties/parseDate";
 
 export const ascentTypes = [
   {
@@ -220,11 +221,7 @@ export const columns = {
     accessor: "createdAt",
     Header: "Date",
     sortType: (a, b) => (new Date(a) > new Date(b) ? -1 : 1),
-    Cell: ({ value }) => {
-      const date = new Date(value);
-
-      return `${date.getDate()}-${date.getMonth()}-${date.getFullYear()} `;
-    },
+    Cell: ({ value }) => parseDate(value)?.string,
   },
   ascent: {
     id: "ascent",
