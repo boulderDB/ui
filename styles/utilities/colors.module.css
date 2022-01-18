@@ -13,3 +13,7 @@
 .lila {
   color: var(--color-lila);
 }
+
+.danger {
+  color: var(--color-red);
+}

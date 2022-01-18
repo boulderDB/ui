@@ -6,6 +6,7 @@ import {
   usePagination,
   useSortBy,
   useRowSelect,
+  useAsyncDebounce,
 } from "react-table";
 import useMediaQuery from "../../hooks/useMediaQuery";
 import styles from "./boulderTable.module.css";
@@ -70,6 +71,7 @@ export default function BoulderTable({
       columns,
       data,
       initialState: { pageIndex: 0, pageSize: 50, filters },
+      autoResetGlobalFilter: false,
       autoResetFilters: false,
       autoResetSortBy: false,
       autoResetPage: false,
@@ -81,6 +83,8 @@ export default function BoulderTable({
     useRowSelect
   );
 
+  console.log(filters);
+
   useEffect(() => {
     setAllFilters(filters);
   }, [filters]);
@@ -91,8 +95,12 @@ export default function BoulderTable({
     }
   }, [selectedFlatRows]);
 
+  const onGlobalFilterChange = useAsyncDebounce((value) => {
+    setGlobalFilter(value || undefined);
+  }, 100);
+
   useEffect(() => {
-    setGlobalFilter(globalFilter);
+    onGlobalFilterChange(globalFilter);
   }, [globalFilter]);
 
   return (

@@ -33,6 +33,8 @@ export default function Index() {
     {
       name: "visible",
       label: "Visible",
+      description:
+        "Please note that if you choose not to be visible, you will not be able to participate in events or see rankings.",
       Component: Switch,
       componentProps: {},
     },

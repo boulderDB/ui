@@ -9,6 +9,7 @@ function TextField({
   value,
   type = "text",
   placeholder,
+  children,
   ...rest
 }) {
   if (area) {
@@ -23,13 +24,16 @@ function TextField({
   }
 
   return (
-    <MUITextField
-      {...rest}
-      type={type}
-      value={value}
-      placeholder={placeholder}
-      className={cn(styles.root, typography.gamma, className)}
-    />
+    <>
+      {children}
+      <MUITextField
+        {...rest}
+        type={type}
+        value={value}
+        placeholder={placeholder}
+        className={cn(styles.root, typography.gamma, className)}
+      ></MUITextField>
+    </>
   );
 }
 

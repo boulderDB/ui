@@ -338,6 +338,17 @@ export const models = [
               <Button
                 inverted={true}
                 size={"s"}
+                href={`${value.replace("/admin", "")}/${
+                  row.original.id
+                }/ranking/export`}
+                variant={"success"}
+              >
+                CSV Ranking
+              </Button>
+
+              <Button
+                inverted={true}
+                size={"s"}
                 href={`${value}/${row.original.id}/add-participant`}
                 variant={"success"}
               >
