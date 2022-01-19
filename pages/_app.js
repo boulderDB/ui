@@ -113,36 +113,48 @@ function MyApp({ Component, pageProps, locations }) {
   }, [isOpen]);
 
   return (
-    <AppContext.Provider
-      value={{
-        dispatchMessage,
-        currentLocation,
-        lastVisitedLocation,
-        locations,
-        isAuthenticated,
-        roles,
-        tokenPayload,
-        setTokenPayload,
-        reset,
-      }}
-    >
-      <Header />
-
-      <DrawerContext.Provider
+    <>
+      <AppContext.Provider
         value={{
-          isOpen,
-          setOpen,
+          dispatchMessage,
+          currentLocation,
+          lastVisitedLocation,
+          locations,
+          isAuthenticated,
+          roles,
+          tokenPayload,
+          setTokenPayload,
+          reset,
         }}
       >
-        <SWRConfig>
-          <Component {...pageProps} />
-        </SWRConfig>
-      </DrawerContext.Provider>
+        <Header />
 
-      <Footer />
+        <DrawerContext.Provider
+          value={{
+            isOpen,
+            setOpen,
+          }}
+        >
+          <SWRConfig>
+            <Component {...pageProps} />
+          </SWRConfig>
+        </DrawerContext.Provider>
 
-      <Toaster message={message} />
-    </AppContext.Provider>
+        <Footer />
+
+        <Toaster message={message} />
+      </AppContext.Provider>
+
+      <script
+        type="text/javascript"
+        dangerouslySetInnerHTML={{
+          __html: `window.$crisp = [];
+            window.CRISP_WEBSITE_ID = "41427455-fa41-40ef-ba3d-2992db379922";
+            (function (){d = document;s=d.createElement("script");s.src="https://client.crisp.chat/l.js";s.async=1;d.getElementsByTagName("head")[0].appendChild(s);})
+            ();`,
+        }}
+      />
+    </>
   );
 }
 

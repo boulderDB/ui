@@ -6,6 +6,7 @@
   border: 0;
   text-decoration: underline;
   overflow: hidden;
+  position: relative;
 }
 
 .isActive .icon {
@@ -20,6 +21,8 @@
 }
 
 .icon {
+  position: absolute;
+  right: 0;
   margin-left: auto;
   transform: rotate(0);
   transition: transform 200ms ease-in-out;

@@ -5,10 +5,7 @@ import Loader from "../../../../../components/loader/loader";
 import { useRouter } from "next/router";
 import Layout from "../../../../../components/layout/layout";
 import Meta from "../../../../../components/meta/meta";
-import { layoutStyles, typography } from "../../../../../styles/utilities";
-import cn from "classnames";
 import BoulderView from "../../../../../components/boulderView/boulderView";
-import Button from "../../../../../components/button/button";
 
 export default function Index() {
   const { currentLocation } = useContext(AppContext);
@@ -25,21 +22,15 @@ export default function Index() {
     <Layout>
       <Meta title={"Boulders"} />
 
-      <div className={layoutStyles.grid}>
-        <h1 className={cn(layoutStyles.sideTitle, typography.alpha700)}>
-          {event.name} Boulder ({event.boulders.length})
-          <Button
-            size={"s"}
-            href={`/${currentLocation?.url}/events/${id}/ranking`}
-          >
-            Ranking
-          </Button>
-        </h1>
-
-        <div className={layoutStyles.sideContent}>
-          <BoulderView boulders={event.boulders} event={event} />
-        </div>
-      </div>
+      <BoulderView
+        boulders={boulders}
+        initialFilters={[
+          {
+            id: "ascent",
+            value: "todo",
+          },
+        ]}
+      />
     </Layout>
   );
 }

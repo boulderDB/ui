@@ -22,7 +22,7 @@ export default function TableRow({ cells, className, showMobileLabel, style }) {
               </div>
             )}
 
-            <div className={typography.delta}>{cell.render("Cell")}</div>
+            {cell.render("Cell")}
           </div>
         );
       })}

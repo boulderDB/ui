@@ -43,6 +43,7 @@ export default function BoulderTable({
   columns,
   data,
   onSelectRows,
+  onFilter = (rows) => null,
   globalFilter,
   filters,
   rowClassName,
@@ -66,6 +67,7 @@ export default function BoulderTable({
     setGlobalFilter,
     selectedFlatRows,
     state: { pageIndex, pageSize },
+    rows,
   } = useTable(
     {
       columns,
@@ -83,18 +85,6 @@ export default function BoulderTable({
     useRowSelect
   );
 
-  console.log(filters);
-
-  useEffect(() => {
-    setAllFilters(filters);
-  }, [filters]);
-
-  useEffect(() => {
-    if (onSelectRows) {
-      onSelectRows(selectedFlatRows.map((item) => item.original.id));
-    }
-  }, [selectedFlatRows]);
-
   const onGlobalFilterChange = useAsyncDebounce((value) => {
     setGlobalFilter(value || undefined);
   }, 100);
@@ -102,6 +92,20 @@ export default function BoulderTable({
   useEffect(() => {
     onGlobalFilterChange(globalFilter);
   }, [globalFilter]);
+
+  useEffect(() => {
+    setAllFilters(filters);
+  }, [filters]);
+
+  useEffect(() => {
+    onFilter(rows);
+  }, [rows]);
+
+  useEffect(() => {
+    if (onSelectRows) {
+      onSelectRows(selectedFlatRows.map((item) => item.original.id));
+    }
+  }, [selectedFlatRows]);
 
   return (
     <>

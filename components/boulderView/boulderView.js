@@ -47,6 +47,7 @@ export default function BoulderView({ boulders, event, initialFilters = [] }) {
   const [detailBoulder, setDetailBoulder] = useState(null);
   const [selected, setSelected] = useState([]);
   const [globalFilter, setGlobalFilter] = useState("");
+  const [matches, setMatches] = useState(0);
 
   useEffect(() => {
     setOpen(!!detailWall);
@@ -135,6 +136,7 @@ export default function BoulderView({ boulders, event, initialFilters = [] }) {
       },
       {
         ...columns.name,
+        className: styles.nameCell,
         Cell: ({ value, row }) => {
           const boulderId = row.original.id;
 
@@ -296,6 +298,7 @@ export default function BoulderView({ boulders, event, initialFilters = [] }) {
 
   return (
     <>
+      <div className={cn(typography.alpha700)}>Boulder ({matches})</div>
       <div className={styles.filters}>
         <Select
           {...boulderFilters.area}
@@ -375,6 +378,9 @@ export default function BoulderView({ boulders, event, initialFilters = [] }) {
       />
 
       <BoulderTable
+        onFilter={(rows) => {
+          setMatches(rows.length);
+        }}
         columns={tableColumns}
         data={boulders}
         filters={filters}
