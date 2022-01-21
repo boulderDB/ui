@@ -3,31 +3,10 @@
 // https://nextjs.org/docs/api-reference/next.config.js/introduction
 // https://docs.sentry.io/platforms/javascript/guides/nextjs/
 
-const { withSentryConfig } = require("@sentry/nextjs");
+const { withSentryConfig } = require('@sentry/nextjs');
 
 const moduleExports = {
-  async rewrites() {
-    const entries = [];
-
-    if (process.env.NEXT_PUBLIC_API_PROXY) {
-      entries.push({
-        source: "/api/:path*",
-        destination: `${process.env.NEXT_PUBLIC_API_PROXY}/api/:path*`,
-        basePath: false,
-      });
-    }
-
-    return entries;
-  },
-  async redirects() {
-    return [
-      {
-        source: "/",
-        destination: "/login",
-        permanent: false,
-      },
-    ];
-  },
+  // Your existing module.exports
 };
 
 const sentryWebpackPluginOptions = {
@@ -42,4 +21,6 @@ const sentryWebpackPluginOptions = {
   // https://github.com/getsentry/sentry-webpack-plugin#options.
 };
 
+// Make sure adding Sentry options is the last code to run before exporting, to
+// ensure that your source maps include changes from all other Webpack plugins
 module.exports = withSentryConfig(moduleExports, sentryWebpackPluginOptions);
