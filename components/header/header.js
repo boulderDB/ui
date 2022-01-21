@@ -29,7 +29,9 @@ export default function Header() {
   });
 
   const events = useCachedHttp(
-    isAuthenticated ? `/${currentLocation?.url}/events` : null,
+    isAuthenticated && currentLocation
+      ? `/${currentLocation?.url}/events`
+      : null,
     null,
     null,
     false

@@ -408,8 +408,30 @@ export const models = [
     ],
   },
   {
-    title: "Reported errors",
-    route: "errors",
+    title: "Readable identifiers",
+    route: "readable-identifiers",
+    schema: "readableIdentifier",
+    api: "/readable-identifiers",
+    sortProperty: "id",
+    beforeSubmit: (payload) => {
+      deleteCommon(payload);
+
+      return {
+        ...payload,
+      };
+    },
+    columns: [
+      {
+        Header: "Value",
+        accessor: "value",
+      },
+      {
+        id: "href",
+        accessor: "href",
+        className: styles.link,
+        Cell: DetailLinkColumn,
+      },
+    ],
   },
 ];
 
