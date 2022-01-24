@@ -13,10 +13,7 @@ const Avatar = ({ image }) => {
   }
 
   return (
-    <div
-      className={styles.root}
-      style={{ backgroundImage: `url(${image}?w=80&h=80&fit=crop)` }}
-    />
+    <div className={styles.root} style={{ backgroundImage: `url(${image})` }} />
   );
 };
 
