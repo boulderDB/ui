@@ -90,6 +90,7 @@ export default function Index() {
         visible: data.visible,
         firstName: data.firstName,
         lastName: data.lastName,
+        username: data.username,
         notifications: filterId(data.notifications),
       });
 
