@@ -60,7 +60,7 @@ function Form({ defaults, fields, onSubmit, submitLabel }) {
               />
 
               {description && (
-                <span className={cn(typography.eta, colors.danger)}>
+                <span className={cn(typography.eta, colors.black)}>
                   {description}
                 </span>
               )}

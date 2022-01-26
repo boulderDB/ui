@@ -21,7 +21,7 @@ import filterId from "../../utilties/filterId";
 export default function Index() {
   const http = useHttp();
   const data = useCachedHttp("/me", null, fetchOnceConfig);
-  const { dispatchMessage } = useContext(AppContext);
+  const { dispatchMessage, reset, tokenPayload } = useContext(AppContext);
 
   const settingsFormFields = [
     {
@@ -41,6 +41,8 @@ export default function Index() {
     {
       name: "username",
       label: "Username",
+      description:
+        "After updating your username, you will be redirected to the login page.",
       Component: TextField,
       componentProps: {},
     },
@@ -93,6 +95,10 @@ export default function Index() {
         username: data.username,
         notifications: filterId(data.notifications),
       });
+
+      if (data.username !== tokenPayload?.user?.username) {
+        reset();
+      }
 
       await mutate("/me");
 
