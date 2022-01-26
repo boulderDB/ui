@@ -17,13 +17,11 @@ import Loader from "../../components/loader/loader";
 import { Upload } from "../../components/upload/upload";
 import EntitySelect from "../../components/entitySelect/entitySelect";
 import filterId from "../../utilties/filterId";
-import { useRouter } from "next/router";
 
 export default function Index() {
   const http = useHttp();
   const data = useCachedHttp("/me", null, fetchOnceConfig);
   const { dispatchMessage, reset, tokenPayload } = useContext(AppContext);
-  const router = useRouter();
 
   const settingsFormFields = [
     {
@@ -100,7 +98,11 @@ export default function Index() {
 
       if (data.username !== tokenPayload?.user?.username) {
         reset();
-        await router.push(`/login`);
+
+        if (typeof window !== "undefined") {
+          window.location.pathname = "/login";
+        }
+
         return;
       }
 
