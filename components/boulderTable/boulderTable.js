@@ -8,7 +8,6 @@ import {
   useRowSelect,
   useAsyncDebounce,
 } from "react-table";
-import useMediaQuery from "../../hooks/useMediaQuery";
 import styles from "./boulderTable.module.css";
 import TableHeader from "../table/tableHeader";
 import TableRow from "../table/tableRow";
@@ -19,6 +18,8 @@ import cn from "classnames";
 import { typography } from "../../styles/utilities";
 import { optionRenderers } from "../entitySelect/entitySelect";
 import parseDate from "../../utilties/parseDate";
+import { useMediaQuery } from "@material-ui/core";
+import { customMedia } from "../../styles/cssExports";
 
 export const ascentTypes = [
   {
@@ -50,7 +51,9 @@ export default function BoulderTable({
   headerClassName,
   collapsedRowRenderer,
 }) {
-  const { matches: isTabletOrMobile } = useMediaQuery("m-to-s");
+  const isTabletOrMobile = useMediaQuery(customMedia?.[`--m-to-s`], {
+    noSsr: true,
+  });
 
   const {
     getTableProps,
