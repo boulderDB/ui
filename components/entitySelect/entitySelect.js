@@ -62,6 +62,8 @@ function EntitySelect({
 
   if (multiple && required) {
     isRequired = value?.length === 0;
+  } else {
+    isRequired = false;
   }
 
   useEffect(() => {
@@ -102,7 +104,7 @@ function EntitySelect({
         />
       );
     },
-    [resource]
+    [resource, isRequired]
   );
 
   if (!resource) {
