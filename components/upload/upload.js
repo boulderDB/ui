@@ -10,7 +10,7 @@ function defaultValueRenderer(value) {
   return (
     <div
       className={styles.preview}
-      style={{ backgroundImage: `url(${value}?w=80&h=80&fit=crop)` }}
+      style={{ backgroundImage: `url(${value})` }}
     />
   );
 }

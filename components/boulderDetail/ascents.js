@@ -7,64 +7,53 @@ import { typography } from "../../styles/utilities";
 import { useContext, useEffect, useState } from "react";
 import { BoulderDetailContext } from "./boulderDetail";
 
-export default function Ascents({ ascents: all }) {
-  const limit = 10;
+const ascentPriorities = {
+  flash: 3,
+  top: 2,
+  resignation: 1,
+};
 
-  const [ascents, setAscents] = useState([]);
+export default function Ascents({ ascents }) {
   const { setPage, setPageData } = useContext(BoulderDetailContext);
-
-  useEffect(() => {
-    if (!all?.length > 0) {
-      return;
-    }
-
-    setAscents(all.slice(0, limit));
-  }, [all]);
 
   return (
     <ul>
-      {ascents.map((ascent) => {
-        const doubted = isDoubt(ascent.type);
-        const Icon = getIcon(ascent.type);
+      {ascents
+        .sort((a, b) => {
+          return ascentPriorities[a.type] > ascentPriorities[b.type] ? -1 : 1;
+        })
+        .map((ascent) => {
+          const doubted = isDoubt(ascent.type);
+          const Icon = getIcon(ascent.type);
 
-        if (ascents.length === limit && ascent.id + 1 === limit) {
           return (
-            <li className={cn(styles.listItem)} key={ascent.id}>
-              <Button size={"small"} onClick={() => setAscents(all)}>
-                show {ascents.length - limit} more
-              </Button>
+            <li className={styles.listItem} key={ascent.id}>
+              <span
+                className={cn(
+                  typography.epsilon,
+                  styles.ascent,
+                  doubted ? styles.isDoubtedAscent : null
+                )}
+              >
+                <Icon fill={true} />
+                {ascent.user?.username}
+              </span>
+
+              {!doubted && ascent.type !== "resignation" && (
+                <Button
+                  size={"s"}
+                  inverted={true}
+                  onClick={() => {
+                    setPageData({ ascent });
+                    setPage("doubt");
+                  }}
+                >
+                  Doubt it
+                </Button>
+              )}
             </li>
           );
-        }
-
-        return (
-          <li className={styles.listItem} key={ascent.id}>
-            <span
-              className={cn(
-                typography.epsilon,
-                styles.ascent,
-                doubted ? styles.isDoubtedAscent : null
-              )}
-            >
-              <Icon fill={true} />
-              {ascent.user?.username}
-            </span>
-
-            {!doubted && ascent.type !== "resignation" && (
-              <Button
-                size={"s"}
-                inverted={true}
-                onClick={() => {
-                  setPageData({ ascent });
-                  setPage("doubt");
-                }}
-              >
-                Doubt it
-              </Button>
-            )}
-          </li>
-        );
-      })}
+        })}
     </ul>
   );
 }

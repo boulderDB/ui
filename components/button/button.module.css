@@ -27,6 +27,16 @@
   color: var(--color-white);
 }
 
+.isSuccess {
+  background: var(--color-top);
+  color: var(--color-white);
+}
+
+.isDark {
+  background: var(--color-white);
+  color: var(--color-black);
+}
+
 .isLoading {
   opacity: 0.3;
   cursor: not-allowed;
@@ -55,4 +65,22 @@
 
 .isInverted.isDanger {
   color: var(--color-red);
+}
+
+.isInverted.isSuccess:hover {
+  background: var(--color-top-400);
+  color: var(--color-top);
+}
+
+.isInverted.isSuccess {
+  color: var(--color-top);
+}
+
+.isInverted.isDark:hover {
+  background: var(--color-lightgrey);
+  color: var(--color-black);
+}
+
+.isInverted.isDark {
+  color: var(--color-black);
 }

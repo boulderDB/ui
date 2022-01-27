@@ -20,7 +20,7 @@ export default function WallDetail({ id }) {
       <Header title={wall.name} onClose={null} />
 
       <div className={styles.content}>
-        <img src={wall.media} alt={wall.name} className={styles.image} />
+        <img src={`${wall.media}`} alt={wall.name} className={styles.image} />
 
         <p className={cn(typography.epsilon, styles.description)}>
           {wall.description}

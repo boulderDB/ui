@@ -2,6 +2,7 @@
   display: grid;
   grid-template-columns: repeat(7, 1fr);
   grid-column-gap: 16px;
+  margin-top: 32px;
 }
 
 .tableRow,
@@ -39,7 +40,9 @@
   margin-left: 8px;
 }
 
-.wallLink {
+.startWallCell,
+.endWallCell {
+  overflow: hidden;
   text-decoration: underline;
   cursor: pointer;
 }

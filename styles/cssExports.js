@@ -23,6 +23,7 @@ module.exports = {
 		'--color-lightblue': '#cdcefe',
 		'--color-flash': '#1687ff',
 		'--color-top': '#02deaf',
+		'--color-top-400': '#d1f6eb',
 		'--color-resign': '#ff5d5f',
 		'--color-warning': '#fcf6a4',
 		'--color-white': '#ffffff',

@@ -1,5 +1,5 @@
 import sortItemsAlphabetically from "../../utilties/sortItemsAlphabetically";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useHttp } from "../../hooks/useHttp";
 import { TextField } from "@material-ui/core";
 import Loader from "../loader/loader";
@@ -83,6 +83,40 @@ function EntitySelect({
     }
   }, [open]);
 
+  const renderInput = useCallback(
+    (params) => {
+      return (
+        <TextField
+          {...params}
+          required={isRequired}
+          label={label}
+          InputProps={{
+            ...params.InputProps,
+            endAdornment: (
+              <>
+                {loading ? <Loader /> : null}
+                {params.InputProps.endAdornment}
+              </>
+            ),
+          }}
+        />
+      );
+    },
+    [resource]
+  );
+
+  if (!resource) {
+    return (
+      <Autocomplete
+        multiple={multiple}
+        value={value}
+        options={options}
+        renderInput={renderInput}
+        {...rest}
+      />
+    );
+  }
+
   return (
     <Autocomplete
       open={open}
@@ -99,22 +133,7 @@ function EntitySelect({
       multiple={multiple}
       value={value}
       options={options}
-      renderInput={(params) => (
-        <TextField
-          {...params}
-          required={isRequired}
-          label={label}
-          InputProps={{
-            ...params.InputProps,
-            endAdornment: (
-              <>
-                {loading ? <Loader /> : null}
-                {params.InputProps.endAdornment}
-              </>
-            ),
-          }}
-        />
-      )}
+      renderInput={renderInput}
       {...rest}
     />
   );

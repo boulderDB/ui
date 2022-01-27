@@ -11,6 +11,8 @@ import Button from "../../../components/button/button";
 import styles from "./index.module.css";
 import Grade from "../../../components/grade/grade";
 import { columns } from "../../../components/boulderTable/boulderTable";
+import parseDate from "../../../utilties/parseDate";
+import Label from "../../../components/label/label";
 
 function deleteCommon(payload) {
   delete payload.id;
@@ -281,12 +283,31 @@ export const models = [
         accessor: "name",
       },
       {
+        Header: "State",
+        accessor: "state",
+        Cell: ({ value }) => {
+          let variant = "default";
+
+          if (value === "active") {
+            variant = "success";
+          }
+
+          if (value === "ended") {
+            variant = "danger";
+          }
+
+          return <Label text={value} variant={variant} />;
+        },
+      },
+      {
         Header: "Start date",
-        accessor: "startData",
+        accessor: ({ startDate }) =>
+          startDate ? parseDate(startDate, true)?.string : null,
       },
       {
         Header: "End date",
-        accessor: "endDate",
+        accessor: ({ endDate }) =>
+          endDate ? parseDate(endDate, true)?.string : null,
       },
       {
         Header: "Visible",
@@ -300,17 +321,58 @@ export const models = [
         id: "href",
         accessor: "href",
         className: styles.link,
-        Cell: DetailLinkColumn,
+        Cell: ({ row, value }) => {
+          return (
+            <>
+              <Button
+                inverted={true}
+                size={"s"}
+                href={`${value.replace("/admin", "")}/${
+                  row.original.id
+                }/ranking`}
+                variant={"success"}
+              >
+                Ranking
+              </Button>
+
+              <Button
+                inverted={true}
+                size={"s"}
+                href={`${value.replace("/admin", "")}/${
+                  row.original.id
+                }/ranking/export`}
+                variant={"success"}
+              >
+                CSV Ranking
+              </Button>
+
+              <Button
+                inverted={true}
+                size={"s"}
+                href={`${value}/${row.original.id}/add-participant`}
+                variant={"success"}
+              >
+                Add user
+              </Button>
+
+              <DetailLinkColumn row={row} value={value} />
+            </>
+          );
+        },
       },
     ],
     beforeSubmit: (payload) => {
       deleteCommon(payload);
 
-      delete payload.participants; /* todo: remove */
+      delete payload.isParticipant;
+      delete payload.state;
 
       return {
         ...payload,
         boulders: filterId(payload.boulders),
+        participants: filterId(payload.participants),
+        startDate: payload.startDate + "+00:00",
+        endDate: payload.endDate + "+00:00",
       };
     },
   },
@@ -346,8 +408,30 @@ export const models = [
     ],
   },
   {
-    title: "Reported errors",
-    route: "errors",
+    title: "Readable identifiers",
+    route: "readable-identifiers",
+    schema: "readableIdentifier",
+    api: "/readable-identifiers",
+    sortProperty: "id",
+    beforeSubmit: (payload) => {
+      deleteCommon(payload);
+
+      return {
+        ...payload,
+      };
+    },
+    columns: [
+      {
+        Header: "Value",
+        accessor: "value",
+      },
+      {
+        id: "href",
+        accessor: "href",
+        className: styles.link,
+        Cell: DetailLinkColumn,
+      },
+    ],
   },
 ];
 

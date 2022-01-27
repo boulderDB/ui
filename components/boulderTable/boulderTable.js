@@ -6,6 +6,7 @@ import {
   usePagination,
   useSortBy,
   useRowSelect,
+  useAsyncDebounce,
 } from "react-table";
 import useMediaQuery from "../../hooks/useMediaQuery";
 import styles from "./boulderTable.module.css";
@@ -17,6 +18,7 @@ import Grade from "../grade/grade";
 import cn from "classnames";
 import { typography } from "../../styles/utilities";
 import { optionRenderers } from "../entitySelect/entitySelect";
+import parseDate from "../../utilties/parseDate";
 
 export const ascentTypes = [
   {
@@ -41,6 +43,7 @@ export default function BoulderTable({
   columns,
   data,
   onSelectRows,
+  onFilter = (rows) => null,
   globalFilter,
   filters,
   rowClassName,
@@ -64,11 +67,13 @@ export default function BoulderTable({
     setGlobalFilter,
     selectedFlatRows,
     state: { pageIndex, pageSize },
+    rows,
   } = useTable(
     {
       columns,
       data,
       initialState: { pageIndex: 0, pageSize: 50, filters },
+      autoResetGlobalFilter: false,
       autoResetFilters: false,
       autoResetSortBy: false,
       autoResetPage: false,
@@ -80,19 +85,27 @@ export default function BoulderTable({
     useRowSelect
   );
 
+  const onGlobalFilterChange = useAsyncDebounce((value) => {
+    setGlobalFilter(value || undefined);
+  }, 100);
+
+  useEffect(() => {
+    onGlobalFilterChange(globalFilter);
+  }, [globalFilter]);
+
   useEffect(() => {
     setAllFilters(filters);
   }, [filters]);
+
+  useEffect(() => {
+    onFilter(rows);
+  }, [rows]);
 
   useEffect(() => {
     if (onSelectRows) {
       onSelectRows(selectedFlatRows.map((item) => item.original.id));
     }
   }, [selectedFlatRows]);
-
-  useEffect(() => {
-    setGlobalFilter(globalFilter);
-  }, [globalFilter]);
 
   return (
     <>
@@ -220,11 +233,7 @@ export const columns = {
     accessor: "createdAt",
     Header: "Date",
     sortType: (a, b) => (new Date(a) > new Date(b) ? -1 : 1),
-    Cell: ({ value }) => {
-      const date = new Date(value);
-
-      return `${date.getDate()}-${date.getMonth()}-${date.getFullYear()} `;
-    },
+    Cell: ({ value }) => parseDate(value)?.string,
   },
   ascent: {
     id: "ascent",

@@ -1,5 +1,6 @@
 .root {
   padding-top: calc(4 * var(--spacing-unit));
+  overflow: hidden;
 }
 
 .wallLink {

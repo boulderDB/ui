@@ -21,7 +21,7 @@ import filterId from "../../utilties/filterId";
 export default function Index() {
   const http = useHttp();
   const data = useCachedHttp("/me", null, fetchOnceConfig);
-  const { dispatchMessage } = useContext(AppContext);
+  const { dispatchMessage, reset, tokenPayload } = useContext(AppContext);
 
   const settingsFormFields = [
     {
@@ -33,12 +33,16 @@ export default function Index() {
     {
       name: "visible",
       label: "Visible",
+      description:
+        "Please note that if you choose not to be visible, you will not be able to participate in events or see rankings.",
       Component: Switch,
       componentProps: {},
     },
     {
       name: "username",
       label: "Username",
+      description:
+        "After updating your username, you will be redirected to the login page.",
       Component: TextField,
       componentProps: {},
     },
@@ -88,8 +92,19 @@ export default function Index() {
         visible: data.visible,
         firstName: data.firstName,
         lastName: data.lastName,
+        username: data.username,
         notifications: filterId(data.notifications),
       });
+
+      if (data.username !== tokenPayload?.user?.username) {
+        reset();
+
+        if (typeof window !== "undefined") {
+          window.location.pathname = "/login";
+        }
+
+        return;
+      }
 
       await mutate("/me");
 

@@ -18,7 +18,7 @@ export default function GlobalFilter({
           setGlobalFilter(event.target.value);
         }}
         onKeyDown={(event) => {
-          if (event.key === "Backspace") {
+          if (event.key === "Backspace" && globalFilter.length === 0) {
             filters.pop();
             setFilters([...filters]);
           }

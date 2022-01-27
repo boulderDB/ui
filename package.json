@@ -1,6 +1,6 @@
 {
   "name": "boulder-ui-next",
-  "version": "2.3.1",
+  "version": "2.6.1",
   "private": true,
   "scripts": {
     "pre-build": "npm run css-exports",
@@ -12,11 +12,13 @@
   "dependencies": {
     "@material-ui/core": "^4.12.3",
     "@material-ui/lab": "^4.0.0-alpha.60",
+    "@sentry/nextjs": "^6.16.1",
     "axios": "^0.24.0",
     "classnames": "^2.3.1",
     "framer-motion": "^5.2.0",
     "jwt-decode": "^3.1.2",
     "lodash": "^4.17.21",
+    "lodash.debounce": "^4.0.8",
     "moment": "^2.29.1",
     "next": "12.0.3",
     "postcss": "^8.3.6",

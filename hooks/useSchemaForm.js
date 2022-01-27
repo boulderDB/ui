@@ -46,7 +46,7 @@ export default function useSchemaForm(name, action) {
         componentProps: {},
       };
 
-      field.options?.constraints.forEach((constraint) => {
+      field.options?.constraints?.forEach((constraint) => {
         if (constraint.name === "NotBlank") {
           config.componentProps.required = true;
         }
@@ -85,7 +85,9 @@ export default function useSchemaForm(name, action) {
           },
           multiple: field.options.multiple,
           labelProperty,
-          resource: `/${currentLocation.url}${field.schema.resource}`,
+          resource: field.schema.resource
+            ? `/${currentLocation.url}${field.schema.resource}`
+            : null,
         };
       }
 
