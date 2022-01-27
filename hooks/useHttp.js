@@ -17,7 +17,14 @@ export const fetchOnceConfig = {
   refreshInterval: 0,
 };
 
-export function useCachedHttp(resource, params, config) {
+export function useCachedHttp(
+  resource,
+  params,
+  config,
+  throwError = true,
+  defaultData = null
+) {
+  const router = useRouter();
   let key = resource;
 
   if (params) {
@@ -25,15 +32,28 @@ export function useCachedHttp(resource, params, config) {
   }
 
   const { data, error } = useSWR(key, () => fetcher(resource, params), config);
-  const router = useRouter();
 
   if (error) {
     if (error?.response.status === 404) {
       return router.push("/404");
     }
 
+    if (error?.response.status === 401) {
+      return router.push({
+        pathname: "/login",
+        query: { intent: router.asPath },
+      });
+    }
+
     console.error(error?.response);
-    throw error;
+
+    if (throwError) {
+      throw error;
+    }
+  }
+
+  if (!resource && defaultData) {
+    return defaultData;
   }
 
   return data;

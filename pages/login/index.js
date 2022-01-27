@@ -55,6 +55,12 @@ export default function Index() {
 
       setTokenPayload(data);
 
+      if (router.query.intent) {
+        console.log(router.query.intent);
+        await router.push(router.query.intent);
+        return;
+      }
+
       if (!data?.lastVisitedLocation) {
         await router.push(`/salon`);
       } else {
