@@ -45,7 +45,9 @@ export function useCachedHttp(
       });
     }
 
-    console.error(error?.response);
+    if (error?.response.status === 403) {
+      return router.push("/403");
+    }
 
     if (throwError) {
       throw error;
