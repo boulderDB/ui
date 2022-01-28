@@ -23,7 +23,7 @@ export default function Index() {
       <Meta title={"Boulders"} />
 
       <BoulderView
-        boulders={boulders}
+        boulders={event.boulders}
         initialFilters={[
           {
             id: "ascent",
