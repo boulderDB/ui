@@ -44,6 +44,7 @@ function Meta({
       />
       <meta name={`twitter:image`} content={image} />
       <meta name={`twitter:card`} content={`summary_large_image`} />
+      <meta name="google" content="notranslate" />
 
       {children}
     </Head>
