@@ -19,7 +19,7 @@ export default function Ascents({ ascents }) {
   return (
     <ul>
       {ascents
-        .sort((a, b) => {
+        ?.sort((a, b) => {
           return ascentPriorities[a.type] > ascentPriorities[b.type] ? -1 : 1;
         })
         .map((ascent) => {
