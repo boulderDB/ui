@@ -143,7 +143,6 @@ export default function BoulderView({ boulders, event, initialFilters = [] }) {
           return (
             <DetailButton
               active={detailBoulder === boulderId}
-              boulderId={boulderId}
               onClick={() => {
                 setDetailBoulder(boulderId);
               }}
