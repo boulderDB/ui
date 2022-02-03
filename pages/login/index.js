@@ -43,12 +43,12 @@ export default function Index() {
     ];
   }, []);
 
-  useEffect(async () => {
+  /*useEffect(async () => {
     if (isAuthenticated && lastVisitedLocation && !router.query.intent) {
       await router.push(`${lastVisitedLocation?.url}`);
     }
   }, [isAuthenticated]);
-
+*/
   const onSubmit = async (payload) => {
     try {
       const { data } = await http.post("/login", payload);

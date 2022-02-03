@@ -103,7 +103,7 @@ function MyApp({ Component, pageProps, locations }) {
     ) {
       return router.push(`/login`);
     }
-  }, [isAuthenticated]);
+  }, [isAuthenticated, router.pathname, router.query.intent]);
 
   useEffect(() => {
     if (isOpen) {
