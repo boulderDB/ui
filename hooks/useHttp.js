@@ -39,6 +39,7 @@ export function useCachedHttp(
 
       return defaultData;
     }
+    console.log(error.response.status);
 
     if (error.response.status === 401) {
       router.push({
