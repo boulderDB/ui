@@ -4,11 +4,7 @@ import useSWR from "swr";
 import { useRouter } from "next/router";
 
 const fetcher = (url, params) =>
-  axios
-    .get(`/api${url}`, {
-      params,
-    })
-    .then((response) => response.data);
+  axios.get(`/api${url}`, { params }).then((response) => response.data);
 
 export const fetchOnceConfig = {
   revalidateOnFocus: false,
@@ -31,22 +27,32 @@ export function useCachedHttp(
     key += new URLSearchParams(params).toString();
   }
 
-  const { data, error } = useSWR(key, () => fetcher(resource, params), config);
+  const { data, error } = useSWR(
+    key,
+    async () => await fetcher(resource, params),
+    config
+  );
 
   if (error) {
-    if (error?.response.status === 404) {
-      return router.push("/404");
+    if (error.response.status === 404) {
+      router.push("/404");
+
+      return defaultData;
     }
 
-    if (error?.response.status === 401) {
-      return router.push({
+    if (error.response.status === 401) {
+      router.push({
         pathname: "/login",
         query: { intent: router.asPath },
       });
+
+      return defaultData;
     }
 
-    if (error?.response.status === 403) {
-      return router.push("/403");
+    if (error.response.status === 403) {
+      router.push("/403");
+
+      return defaultData;
     }
 
     if (throwError) {
