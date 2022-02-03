@@ -98,7 +98,8 @@ function MyApp({ Component, pageProps, locations }) {
   useEffect(() => {
     if (
       !isAuthenticated &&
-      !loginRedirectExclusions.includes(router.pathname)
+      !loginRedirectExclusions.includes(router.pathname) &&
+      !router.query.intent
     ) {
       return router.push(`/login`);
     }
