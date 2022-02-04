@@ -12,9 +12,13 @@ export default function Index() {
   const {
     query: { id },
   } = useRouter();
-  const event = useCachedHttp(`/${currentLocation?.url}/events/${id}`);
 
-  if (!event) {
+  const event = useCachedHttp(`/${currentLocation?.url}/events/${id}`);
+  const boulders = useCachedHttp(`/${currentLocation?.url}/boulders`, {
+    event: id,
+  });
+
+  if (!event || !boulders) {
     return <Loader />;
   }
 
@@ -23,7 +27,8 @@ export default function Index() {
       <Meta title={"Boulders"} />
 
       <BoulderView
-        boulders={event.boulders}
+        event={event}
+        boulders={boulders}
         initialFilters={[
           {
             id: "ascent",

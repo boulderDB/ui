@@ -223,59 +223,77 @@ export default function BoulderView({ boulders, event, initialFilters = [] }) {
     return defaultColumns;
   }, [isAdmin, detailBoulder]);
 
-  const addHandler = useCallback(async (boulder, type) => {
-    try {
-      await http.post(`/${currentLocation?.url}/ascents`, {
-        boulder,
-        type,
-      });
+  const addHandler = useCallback(
+    async (boulder, type) => {
+      try {
+        await http.post(
+          `/${currentLocation?.url}/ascents`,
+          {
+            boulder,
+            type,
+          },
+          {
+            params: {
+              eventId: event.id,
+            },
+          }
+        );
 
-      mutate(`/${currentLocation?.url}/boulders`);
+        mutate(`/${currentLocation?.url}/boulders`);
 
-      if (event) {
-        mutate(`/${currentLocation?.url}/events/${event.id}`);
+        if (event) {
+          mutate(`/${currentLocation?.url}/events/${event.id}`);
+        }
+
+        dispatchMessage(
+          toast(
+            "Ascent added",
+            <>
+              <span>
+                <AscentIcon type={type} fill={true} />+{"points"}
+              </span>
+
+              <div className={styles.rating}>
+                <span>Leave a rating:</span>
+
+                <RateButton direction={"up"} boulderId={boulder} />
+
+                <span>/</span>
+
+                <RateButton direction={"down"} boulderId={boulder} />
+              </div>
+            </>,
+            "info",
+            4000
+          )
+        );
+      } catch (error) {
+        dispatchMessage(toast("Error", extractErrorMessage(error), "error"));
       }
+    },
+    [event]
+  );
 
-      dispatchMessage(
-        toast(
-          "Ascent added",
-          <>
-            <span>
-              <AscentIcon type={type} fill={true} />+{"points"}
-            </span>
+  const removeHandler = useCallback(
+    async ({ id }) => {
+      try {
+        await http.delete(`/${currentLocation?.url}/ascents/${id}`, {
+          params: {
+            eventId: event.id,
+          },
+        });
 
-            <div className={styles.rating}>
-              <span>Leave a rating:</span>
+        mutate(`/${currentLocation?.url}/boulders`);
 
-              <RateButton direction={"up"} boulderId={boulder} />
-
-              <span>/</span>
-
-              <RateButton direction={"down"} boulderId={boulder} />
-            </div>
-          </>,
-          "info",
-          4000
-        )
-      );
-    } catch (error) {
-      dispatchMessage(toast("Error", extractErrorMessage(error), "error"));
-    }
-  }, []);
-
-  const removeHandler = useCallback(async ({ id }) => {
-    try {
-      await http.delete(`/${currentLocation?.url}/ascents/${id}`);
-
-      mutate(`/${currentLocation?.url}/boulders`);
-
-      if (event) {
-        mutate(`/${currentLocation?.url}/events/${event.id}`);
+        if (event) {
+          mutate(`/${currentLocation?.url}/events/${event.id}`);
+        }
+      } catch (error) {
+        dispatchMessage(toast("Error", extractErrorMessage(error), "error"));
       }
-    } catch (error) {
-      dispatchMessage(toast("Error", extractErrorMessage(error), "error"));
-    }
-  }, []);
+    },
+    [event]
+  );
 
   const resolveFilterValue = (id, options, property = "name") => {
     if (!filters) {
@@ -400,7 +418,7 @@ export default function BoulderView({ boulders, event, initialFilters = [] }) {
           setDetailWall(null);
         }}
       >
-        {detailBoulder && <BoulderDetail id={detailBoulder} />}
+        {detailBoulder && <BoulderDetail id={detailBoulder} event={event} />}
         {detailWall && <WallDetail id={detailWall} />}
       </Drawer>
 
