@@ -15,14 +15,14 @@ import extractRoleName from "../utilties/extractRoleName";
 
 export const AppContext = createContext(null);
 
-const loginRedirectExclusions = [
+/*const loginRedirectExclusions = [
   "/login",
   "/sign-up",
   "/reset-password",
   "/reset-password/[token]",
   "/404",
   "/500",
-];
+];*/
 
 function MyApp({ Component, pageProps, locations }) {
   const router = useRouter();
@@ -95,7 +95,14 @@ function MyApp({ Component, pageProps, locations }) {
     setTimeout(() => setMessage(null), 3000);
   }, [message]);
 
-  useEffect(() => {
+  /*  useEffect(() => {
+    console.log("_app");
+    console.log(
+      isAuthenticated,
+      loginRedirectExclusions.includes(router.pathname),
+      router.query.intent
+    );
+
     if (
       !isAuthenticated &&
       !loginRedirectExclusions.includes(router.pathname) &&
@@ -103,7 +110,7 @@ function MyApp({ Component, pageProps, locations }) {
     ) {
       return router.push(`/login`);
     }
-  }, [isAuthenticated, router.pathname, router.query.intent]);
+  }, [isAuthenticated, router.pathname, router.query.intent]);*/
 
   useEffect(() => {
     if (isOpen) {

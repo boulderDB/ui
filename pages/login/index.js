@@ -54,7 +54,8 @@ export default function Index() {
       const { data } = await http.post("/login", payload);
 
       setTokenPayload(data);
-
+      console.log("login");
+      console.log(isAuthenticated, router.query.intent);
       if (router.query.intent) {
         await router.push(router.query.intent);
         return;
