@@ -8,6 +8,7 @@ import { layoutStyles, typography } from "../../../../../styles/utilities";
 import cn from "classnames";
 import RankingView from "../../../../../components/rankingView/rankingView";
 import { useRouter } from "next/router";
+import Button from "../../../../../components/button/button";
 
 export default function Index() {
   const { currentLocation } = useContext(AppContext);
@@ -32,6 +33,13 @@ export default function Index() {
       <div className={layoutStyles.grid}>
         <h1 className={cn(layoutStyles.sideTitle, typography.alpha700)}>
           {event.name} Ranking
+          <Button inverted={true} size={"s"} variant={"success"}>
+            <a
+              href={`/api/${currentLocation?.url}/rankings/event/${event.id}/export`}
+            >
+              CSV
+            </a>
+          </Button>
         </h1>
 
         <div className={layoutStyles.sideContent}>

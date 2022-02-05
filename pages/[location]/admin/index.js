@@ -23,7 +23,7 @@ function deleteCommon(payload) {
 
 export const DetailLinkColumn = ({ row, value }) => (
   <Button href={`${value}/${row.original.id}`} inverted={true} size={"s"}>
-    Detail
+    ✏️
   </Button>
 );
 
@@ -310,14 +310,6 @@ export const models = [
           endDate ? parseDate(endDate, true)?.string : null,
       },
       {
-        Header: "Visible",
-        accessor: (row) => row.visible.toString(),
-      },
-      {
-        Header: "Public",
-        accessor: (row) => row.public.toString(),
-      },
-      {
         id: "href",
         accessor: "href",
         className: styles.link,
@@ -338,21 +330,19 @@ export const models = [
               <Button
                 inverted={true}
                 size={"s"}
-                href={`${value.replace("/admin", "")}/${
-                  row.original.id
-                }/ranking/export`}
+                href={`${value}/${row.original.id}/add-participant`}
                 variant={"success"}
               >
-                CSV Ranking
+                Add participant
               </Button>
 
               <Button
                 inverted={true}
                 size={"s"}
-                href={`${value}/${row.original.id}/add-participant`}
-                variant={"success"}
+                href={`${value}/${row.original.id}/participants`}
+                variant={"default"}
               >
-                Add user
+                Participants
               </Button>
 
               <DetailLinkColumn row={row} value={value} />

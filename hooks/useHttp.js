@@ -24,8 +24,10 @@ export function useCachedHttp(
   let key = resource;
 
   if (params) {
-    key += new URLSearchParams(params).toString();
+    key += `?` + new URLSearchParams(params).toString();
   }
+
+  console.debug(`Key: ${key}`);
 
   const { data, error } = useSWR(
     key,

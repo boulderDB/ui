@@ -34,8 +34,14 @@ import Bar from "../bar/bar";
 import Button from "../button/button";
 import Tooltip from "../tooltip/tooltip";
 import WallDetail from "../wallDetail/wallDetail";
+import mutateApi from "../../utilties/mutateApi";
 
-export default function BoulderView({ boulders, event, initialFilters = [] }) {
+export default function BoulderView({
+  boulders,
+  event,
+  initialFilters = [],
+  userId = null,
+}) {
   const http = useHttp();
   const { setOpen } = useDrawer();
   const { mutate } = useSWRConfig();
@@ -226,6 +232,12 @@ export default function BoulderView({ boulders, event, initialFilters = [] }) {
   const addHandler = useCallback(
     async (boulder, type) => {
       try {
+        let params = {};
+
+        if (userId) {
+          params.forUser = userId;
+        }
+
         await http.post(
           `/${currentLocation?.url}/ascents`,
           {
@@ -233,16 +245,21 @@ export default function BoulderView({ boulders, event, initialFilters = [] }) {
             type,
           },
           {
-            params: {
-              eventId: event.id,
-            },
+            params,
           }
         );
 
-        mutate(`/${currentLocation?.url}/boulders`);
+        mutateApi(`/${currentLocation?.url}/boulders`);
+
+        if (userId) {
+          mutateApi(`/${currentLocation?.url}/events/${event.id}`);
+        }
 
         if (event) {
-          mutate(`/${currentLocation?.url}/events/${event.id}`);
+          mutateApi(`/${currentLocation?.url}/boulders`, {
+            event: event.id,
+            forUser: userId,
+          });
         }
 
         dispatchMessage(
@@ -271,17 +288,19 @@ export default function BoulderView({ boulders, event, initialFilters = [] }) {
         dispatchMessage(toast("Error", extractErrorMessage(error), "error"));
       }
     },
-    [event]
+    [event, userId]
   );
 
   const removeHandler = useCallback(
     async ({ id }) => {
       try {
-        await http.delete(`/${currentLocation?.url}/ascents/${id}`, {
-          params: {
-            eventId: event.id,
-          },
-        });
+        let params = {};
+
+        if (userId) {
+          params.forUser = userId;
+        }
+
+        await http.delete(`/${currentLocation?.url}/ascents/${id}`, { params });
 
         mutate(`/${currentLocation?.url}/boulders`);
 
@@ -292,7 +311,7 @@ export default function BoulderView({ boulders, event, initialFilters = [] }) {
         dispatchMessage(toast("Error", extractErrorMessage(error), "error"));
       }
     },
-    [event]
+    [event, userId]
   );
 
   const resolveFilterValue = (id, options, property = "name") => {
