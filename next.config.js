@@ -21,11 +21,11 @@ const moduleExports = {
   },
   async redirects() {
     return [
-      /*{
+      {
         source: "/",
         destination: "/login",
         permanent: true,
-      },*/
+      },
     ];
   },
 };
