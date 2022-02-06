@@ -10,17 +10,18 @@ import BoulderView from "../../../../../components/boulderView/boulderView";
 export default function Index() {
   const { currentLocation } = useContext(AppContext);
   const {
-    query: { id, user },
+    query: { id, user: userId },
   } = useRouter();
 
   const event = useCachedHttp(`/${currentLocation?.url}/events/${id}`);
+  const user = useCachedHttp(userId ? `/users/${userId}` : null);
 
   let boulderQueryParameters = {
     event: id,
   };
 
-  if (user) {
-    boulderQueryParameters.forUser = user;
+  if (userId) {
+    boulderQueryParameters.forUser = userId;
   }
 
   const boulders = useCachedHttp(
@@ -38,7 +39,7 @@ export default function Index() {
 
       <BoulderView
         event={event}
-        userId={user}
+        forUser={user}
         boulders={boulders}
         initialFilters={[
           {

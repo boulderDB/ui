@@ -1,0 +1,7 @@
+.root {
+  background: var(--color-red-400);
+  color: var(--color-red);
+  border-radius: 4px;
+  padding: 8px 16px;
+  display: inline-flex;
+}

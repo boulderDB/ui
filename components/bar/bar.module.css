@@ -5,8 +5,6 @@
   left: 0;
   width: 100%;
   padding: calc(4 * var(--spacing-unit));
-  background: var(--color-lila);
-  color: var(--color-white);
   transition: bottom 200ms ease-in-out;
   display: flex;
   justify-content: space-between;
@@ -15,4 +13,14 @@
 
 .isVisible {
   bottom: 0;
+}
+
+.isDefault {
+  background: var(--color-lila);
+  color: var(--color-white);
+}
+
+.isDanger {
+  background: var(--color-red);
+  color: var(--color-white);
 }

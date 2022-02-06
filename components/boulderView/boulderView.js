@@ -35,12 +35,13 @@ import Button from "../button/button";
 import Tooltip from "../tooltip/tooltip";
 import WallDetail from "../wallDetail/wallDetail";
 import mutateApi from "../../utilties/mutateApi";
+import Banner from "../banner/banner";
 
 export default function BoulderView({
   boulders,
   event,
   initialFilters = [],
-  userId = null,
+  forUser = null,
 }) {
   const http = useHttp();
   const { setOpen } = useDrawer();
@@ -234,8 +235,8 @@ export default function BoulderView({
       try {
         let params = {};
 
-        if (userId) {
-          params.forUser = userId;
+        if (forUser) {
+          params.forUser = forUser?.id;
         }
 
         await http.post(
@@ -251,14 +252,14 @@ export default function BoulderView({
 
         mutateApi(`/${currentLocation?.url}/boulders`);
 
-        if (userId) {
+        if (forUser) {
           mutateApi(`/${currentLocation?.url}/events/${event.id}`);
         }
 
         if (event) {
           mutateApi(`/${currentLocation?.url}/boulders`, {
             event: event.id,
-            forUser: userId,
+            forUser: forUser?.id,
           });
         }
 
@@ -288,7 +289,7 @@ export default function BoulderView({
         dispatchMessage(toast("Error", extractErrorMessage(error), "error"));
       }
     },
-    [event, userId]
+    [event, forUser]
   );
 
   const removeHandler = useCallback(
@@ -296,8 +297,8 @@ export default function BoulderView({
       try {
         let params = {};
 
-        if (userId) {
-          params.forUser = userId;
+        if (forUser) {
+          params.forUser = forUser?.id;
         }
 
         await http.delete(`/${currentLocation?.url}/ascents/${id}`, { params });
@@ -311,7 +312,7 @@ export default function BoulderView({
         dispatchMessage(toast("Error", extractErrorMessage(error), "error"));
       }
     },
-    [event, userId]
+    [event, forUser]
   );
 
   const resolveFilterValue = (id, options, property = "name") => {
@@ -443,7 +444,6 @@ export default function BoulderView({
 
       <Bar visible={selected.length > 0}>
         <span className={typography.gamma}>Selected ({selected.length})</span>
-
         <span className={styles.barButtons}>
           <Button
             variant={"danger"}
@@ -463,6 +463,13 @@ export default function BoulderView({
             Deactivate
           </Button>
         </span>
+      </Bar>
+
+      <Bar visible={!!forUser} variant={"danger"}>
+        <div>
+          ⚠️ You are currently checking boulders for user&nbsp;
+          <strong>{forUser?.username}</strong>
+        </div>
       </Bar>
     </>
   );

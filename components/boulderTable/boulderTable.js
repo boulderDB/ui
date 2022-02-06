@@ -243,7 +243,7 @@ export const columns = {
     accessor: "userAscent",
     Header: "Ascent",
     sortType: (a, b) => {
-      return a.values.ascent.type > b.values.ascent.type ? -1 : 1;
+      return a.values.ascent?.type > b.values.ascent?.type ? -1 : 1;
     },
     filter: (rows, id, filterValue) => {
       return rows.filter((row) => {

@@ -41,7 +41,7 @@ export default function Index() {
               <Button
                 inverted={true}
                 size={"s"}
-                href={`/${currentLocation?.url}/events/${event?.id}/boulder?user=${value}`}
+                href={`/${currentLocation?.url}/events/${query.id}/boulder?user=${value}`}
               >
                 Check boulders
               </Button>
