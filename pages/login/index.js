@@ -54,12 +54,16 @@ export default function Index() {
       const { data } = await http.post("/login", payload);
 
       setTokenPayload(data);
+
       console.log("login");
-      console.log(isAuthenticated, router.query.intent);
+      console.log(router.query.intent);
+
       if (router.query.intent) {
         await router.push(router.query.intent);
         return;
       }
+
+      console.log(data?.lastVisitedLocation);
 
       if (!data?.lastVisitedLocation) {
         await router.push(`/salon`);
