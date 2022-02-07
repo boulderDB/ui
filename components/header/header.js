@@ -97,16 +97,18 @@ export default function Header() {
       ));
     }
 
-    events?.forEach((event) => {
-      items.primary.push(() => (
-        <NavItem
-          href={`/${currentLocation?.url}/events/${event.id}/boulder`}
-          className={colors.lila}
-        >
-          {event.name}
-        </NavItem>
-      ));
-    });
+    if (events?.length) {
+      events.forEach((event) => {
+        items.primary.push(() => (
+          <NavItem
+            href={`/${currentLocation?.url}/events/${event.id}/boulder`}
+            className={colors.lila}
+          >
+            {event.name}
+          </NavItem>
+        ));
+      });
+    }
 
     items.secondary.push(() => (
       <NavItem href={`/account`}>[{tokenPayload?.user?.username}]</NavItem>

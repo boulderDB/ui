@@ -43,12 +43,6 @@ export default function Index() {
     ];
   }, []);
 
-  useEffect(async () => {
-    if (isAuthenticated && lastVisitedLocation) {
-      await router.push(`${lastVisitedLocation?.url}`);
-    }
-  }, [isAuthenticated]);
-
   const onSubmit = async (payload) => {
     try {
       const { data } = await http.post("/login", payload);
@@ -71,6 +65,12 @@ export default function Index() {
       dispatchMessage(toast("Error", extractErrorMessage(error), "error"));
     }
   };
+
+  useEffect(() => {
+    if (isAuthenticated && lastVisitedLocation) {
+      router.push(lastVisitedLocation?.url);
+    }
+  }, [isAuthenticated, lastVisitedLocation]);
 
   return (
     <Layout>

@@ -46,7 +46,7 @@ export default function Index() {
     };
   }
 
-  if (config.mass) {
+  if (config.massActions) {
     tableProps.onSelectRows = (ids) => setSelected(ids);
   }
 
@@ -89,7 +89,7 @@ export default function Index() {
   const columns = useMemo(() => {
     const items = config.columns;
 
-    if (config.mass) {
+    if (config.massActions) {
       items.unshift({
         id: "selection",
         Header: ({ getToggleAllRowsSelectedProps }) => (
@@ -170,28 +170,31 @@ export default function Index() {
         </div>
       </div>
 
-      <Bar visible={selected.length > 0}>
-        <span className={typography.gamma}>Selected ({selected.length})</span>
+      {config.massActions && (
+        <Bar visible={selected.length > 0}>
+          <span className={typography.gamma}>Selected ({selected.length})</span>
+          <span className={styles.barButtons}>
+            {config.massActions.map((action) => {
+              return (
+                <Button
+                  variant={action.buttonVariant}
+                  onClick={async () => {
+                    try {
+                      await action.handle(http, selected, currentLocation);
 
-        <span className={styles.barButtons}>
-          <Button
-            variant={"danger"}
-            onClick={async () => {
-              try {
-                await http.put(`/${currentLocation?.url}/boulders/mass`, {
-                  items: selected,
-                  operation: "reactivate",
-                });
-                mutate(api + new URLSearchParams(parameters).toString());
-              } catch (error) {
-                dispatchMessage(toast(error));
-              }
-            }}
-          >
-            Reactivate
-          </Button>
-        </span>
-      </Bar>
+                      mutate(api + new URLSearchParams(parameters).toString());
+                    } catch (error) {
+                      dispatchMessage(toast(error));
+                    }
+                  }}
+                >
+                  {action.label}
+                </Button>
+              );
+            })}
+          </span>
+        </Bar>
+      )}
     </Layout>
   );
 }

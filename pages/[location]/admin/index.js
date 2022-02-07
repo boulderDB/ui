@@ -13,6 +13,7 @@ import Grade from "../../../components/grade/grade";
 import { columns } from "../../../components/boulderTable/boulderTable";
 import parseDate from "../../../utilties/parseDate";
 import Label from "../../../components/label/label";
+import toast from "../../../utilties/toast";
 
 function deleteCommon(payload) {
   delete payload.id;
@@ -99,8 +100,19 @@ export const models = [
       return data;
     },
     archive: true,
-    mass: true,
     sortProperty: "name",
+    massActions: [
+      {
+        handle: async (http, items, currentLocation) => {
+          await http.put(`/${currentLocation?.url}/boulders/mass`, {
+            items,
+            operation: "reactivate",
+          });
+        },
+        buttonVariant: "danger",
+        label: "Reactivate",
+      },
+    ],
   },
   {
     title: "Users",
@@ -404,6 +416,18 @@ export const models = [
         accessor: "href",
         className: styles.link,
         Cell: DetailLinkColumn,
+      },
+    ],
+    massActions: [
+      {
+        handle: async (http, items, currentLocation) => {
+          await http.put(`/${currentLocation?.url}/setters/mass`, {
+            items,
+            operation: "deactivate",
+          });
+        },
+        buttonVariant: "danger",
+        label: "Deactivate",
       },
     ],
   },
