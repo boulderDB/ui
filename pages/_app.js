@@ -11,11 +11,13 @@ import { DrawerContext } from "../components/drawer/drawer";
 import { SWRConfig } from "swr";
 import useDocumentScrollLock from "../hooks/useDocumentScrollLock";
 import extractRoleName from "../utilties/extractRoleName";
+import { useHttp } from "../hooks/useHttp";
 
 export const AppContext = createContext(null);
 
 function MyApp({ Component, pageProps, locations }) {
   const router = useRouter();
+  const http = useHttp();
 
   const locationParameter = router?.query?.location;
 
@@ -77,6 +79,20 @@ function MyApp({ Component, pageProps, locations }) {
       enableScroll();
     }
   }, [isOpen]);
+
+  useEffect(async () => {
+    if (!lastVisitedLocation) {
+      setLastVisitedLocation(tokenPayload?.lastVisitedLocation);
+    }
+
+    if (currentLocation && isAuthenticated) {
+      try {
+        await http.get(`/${currentLocation?.url}/ping`);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  }, [tokenPayload, currentLocation, isAuthenticated]);
 
   return (
     <>
