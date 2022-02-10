@@ -24,7 +24,7 @@ const moduleExports = {
       {
         source: "/",
         destination: "/login",
-        permanent: false,
+        permanent: true,
       },
     ];
   },

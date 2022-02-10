@@ -54,7 +54,7 @@ export default function Index() {
 
   return (
     <Layout>
-      <Meta title={`Admin / Setters`} />
+      <Meta title={`Admin / Events / ${event.name}`} />
 
       <div className={layoutStyles.grid}>
         <h1 className={cn(layoutStyles.sideTitle, typography.alpha700)}>

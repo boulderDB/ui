@@ -16,9 +16,16 @@ import Comments from "./comments";
 
 export const BoulderDetailContext = createContext(null);
 
-export default function BoulderDetail({ id }) {
+export default function BoulderDetail({ id, event }) {
   const { currentLocation } = useContext(AppContext);
-  const boulder = useCachedHttp(`/${currentLocation?.url}/boulders/${id}`);
+  const boulder = useCachedHttp(
+    `/${currentLocation?.url}/boulders/${id}`,
+    event
+      ? {
+          event: event.id,
+        }
+      : {}
+  );
   const [page, setPage] = useState("index");
 
   const [pageData, setPageData] = useState();

@@ -8,10 +8,10 @@ import axios from "axios";
 import usePersistentState from "../hooks/usePersistentState";
 import { useRouter } from "next/router";
 import { DrawerContext } from "../components/drawer/drawer";
+import { useHttp } from "../hooks/useHttp";
 import { SWRConfig } from "swr";
 import useDocumentScrollLock from "../hooks/useDocumentScrollLock";
 import extractRoleName from "../utilties/extractRoleName";
-import { useHttp } from "../hooks/useHttp";
 
 export const AppContext = createContext(null);
 
@@ -68,18 +68,6 @@ function MyApp({ Component, pageProps, locations }) {
     setLastVisitedLocation(null);
   };
 
-  useEffect(() => {
-    setTimeout(() => setMessage(null), 3000);
-  }, [message]);
-
-  useEffect(() => {
-    if (isOpen) {
-      disableScroll();
-    } else {
-      enableScroll();
-    }
-  }, [isOpen]);
-
   useEffect(async () => {
     if (!lastVisitedLocation) {
       setLastVisitedLocation(tokenPayload?.lastVisitedLocation);
@@ -93,6 +81,18 @@ function MyApp({ Component, pageProps, locations }) {
       }
     }
   }, [tokenPayload, currentLocation, isAuthenticated]);
+
+  useEffect(() => {
+    setTimeout(() => setMessage(null), 3000);
+  }, [message]);
+
+  useEffect(() => {
+    if (isOpen) {
+      disableScroll();
+    } else {
+      enableScroll();
+    }
+  }, [isOpen]);
 
   return (
     <>
@@ -142,7 +142,6 @@ function MyApp({ Component, pageProps, locations }) {
 
 MyApp.getInitialProps = async (appContext) => {
   const appProps = await App.getInitialProps(appContext);
-
   const { data: locations } = await axios.get(
     `${process.env.NEXT_PUBLIC_API_HOST}/api/locations`
   );

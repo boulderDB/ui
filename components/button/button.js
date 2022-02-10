@@ -26,7 +26,6 @@ function Button({
     variant,
     size,
     as,
-    loading,
     className: cn(
       styles.root,
       styles[`is${capitalize(variant)}`],

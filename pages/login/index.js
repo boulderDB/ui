@@ -43,6 +43,12 @@ export default function Index() {
     ];
   }, []);
 
+  useEffect(async () => {
+    if (isAuthenticated && lastVisitedLocation && !router.query.intent) {
+      await router.push(`/${lastVisitedLocation?.url}`);
+    }
+  }, [isAuthenticated]);
+
   const onSubmit = async (payload) => {
     try {
       const { data } = await http.post("/login", payload);
@@ -50,27 +56,23 @@ export default function Index() {
       setTokenPayload(data);
 
       if (router.query.intent) {
-        console.log(router.query.intent);
-        await router.push(router.query.intent);
+        router.push(router.query.intent);
+
         return;
       }
 
       if (!data?.lastVisitedLocation) {
         await router.push(`/salon`);
-      } else {
-        await router.push(`/${data.lastVisitedLocation.url}`);
+
+        return;
       }
+
+      router.push(`/${data.lastVisitedLocation.url}`);
     } catch (error) {
       console.error(error);
       dispatchMessage(toast("Error", extractErrorMessage(error), "error"));
     }
   };
-
-  useEffect(() => {
-    if (isAuthenticated && lastVisitedLocation) {
-      router.push(lastVisitedLocation?.url);
-    }
-  }, [isAuthenticated, lastVisitedLocation]);
 
   return (
     <Layout>
