@@ -48,6 +48,7 @@ function EntitySelect({
   multiple,
   labelProperty = "name",
   getComparisonProperty = (option) => option.id,
+  fetchOnce = true,
   required,
   ...rest
 }) {
@@ -55,6 +56,7 @@ function EntitySelect({
   const [open, setOpen] = useState(false);
   const [options, setOptions] = useState([]);
   const [fetching, setFetching] = useState(false);
+  const [fetched, setFetched] = useState(false);
 
   const loading = open && fetching;
 
@@ -71,15 +73,25 @@ function EntitySelect({
       return;
     }
 
+    if (fetchOnce && fetched) {
+      return;
+    }
+
     (async () => {
       setFetching(true);
       const { data } = await http.get(resource);
+      setFetched(true);
+      setOptions;
       setOptions(sortItemsAlphabetically(data, labelProperty));
       setFetching(false);
     })();
   }, [open]);
 
   useEffect(() => {
+    if (fetchOnce && fetched) {
+      return;
+    }
+
     if (!open) {
       setOptions([]);
     }
