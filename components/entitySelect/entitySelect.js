@@ -108,7 +108,7 @@ function EntitySelect({
             ...params.InputProps,
             endAdornment: (
               <>
-                {loading ? <Loader /> : null}
+                {loading && !fetched && !fetchOnce ? <Loader /> : null}
                 {params.InputProps.endAdornment}
               </>
             ),
