@@ -35,7 +35,6 @@ import Button from "../button/button";
 import Tooltip from "../tooltip/tooltip";
 import WallDetail from "../wallDetail/wallDetail";
 import mutateApi from "../../utilties/mutateApi";
-import Banner from "../banner/banner";
 
 export default function BoulderView({
   boulders,
@@ -257,6 +256,12 @@ export default function BoulderView({
         }
 
         if (event) {
+          mutateApi(`/${currentLocation?.url}/boulders`, {
+            event: event.id,
+          });
+        }
+
+        if (event && forUser) {
           mutateApi(`/${currentLocation?.url}/boulders`, {
             event: event.id,
             forUser: forUser?.id,
