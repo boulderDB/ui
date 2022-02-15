@@ -1,10 +1,10 @@
 {
   "name": "boulder-ui-next",
-  "version": "2.8.1",
+  "version": "2.8.2",
   "private": true,
   "scripts": {
     "pre-build": "npm run css-exports",
-    "dev": "npm run pre-build && next dev",
+    "dev": "npm run pre-build && next -p 80",
     "build": "npm run pre-build && next build",
     "start": "next start",
     "css-exports": "postcss styles/globals/variables.css --config ./config/ > /dev/null"
