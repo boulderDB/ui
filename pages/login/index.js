@@ -69,7 +69,7 @@ export default function Index() {
           return;
         }
 
-        await router.push(`/${data.lastVisitedLocation.url}/poop`);
+        await router.push(`/${data.lastVisitedLocation.url}`);
       }, 200);
     } catch (error) {
       console.error(error);
