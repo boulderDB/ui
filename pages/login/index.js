@@ -55,6 +55,7 @@ export default function Index() {
       setTokenPayload(data);
 
       setTimeout(async () => {
+        console.log(router.query.intent);
         if (router.query.intent) {
           router.push(router.query.intent);
           return;
