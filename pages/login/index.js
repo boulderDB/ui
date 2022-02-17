@@ -57,9 +57,6 @@ export default function Index() {
       setTimeout(async () => {
         if (router.query.intent) {
           router.push(router.query.intent);
-
-          console.log(router.query.intent);
-
           return;
         }
 

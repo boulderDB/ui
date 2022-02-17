@@ -5,21 +5,23 @@ import useSwipeOut from "../../hooks/useSwipeOut";
 import styles from "./ascents.module.css";
 import Tooltip from "../tooltip/tooltip";
 
-export default function Ascents({ onRemove, onAdd, userAscent, boulderId }) {
+export default function Ascents({ onRemove, onAdd, boulder }) {
+  const ascent = boulder.userAscent;
+
   const { close } = useSwipeOut();
-  const isDoubted = isDoubt(userAscent?.type);
+  const isDoubted = isDoubt(ascent?.type);
 
   return (
     <div className={cn(styles.root, isDoubted ? styles.isDoubted : null)}>
       <Tooltip title={"Flash"}>
         <Ascent
           type="flash"
-          disabled={userAscent && userAscent?.type !== "flash"}
-          checked={userAscent?.type === "flash"}
+          disabled={ascent && ascent?.type !== "flash"}
+          checked={ascent?.type === "flash"}
           onClick={async () => {
-            userAscent
-              ? await onRemove(userAscent)
-              : await onAdd(boulderId, "flash");
+            ascent
+              ? await onRemove(boulder, ascent)
+              : await onAdd(boulder, "flash");
 
             if (close) {
               close();
@@ -31,12 +33,12 @@ export default function Ascents({ onRemove, onAdd, userAscent, boulderId }) {
       <Tooltip title={"Top"}>
         <Ascent
           type="top"
-          disabled={userAscent && userAscent?.type !== "top"}
-          checked={userAscent?.type === "top"}
+          disabled={ascent && ascent?.type !== "top"}
+          checked={ascent?.type === "top"}
           onClick={async () => {
-            userAscent
-              ? await onRemove(userAscent)
-              : await onAdd(boulderId, "top");
+            ascent
+              ? await onRemove(boulder, ascent)
+              : await onAdd(boulder, "top");
 
             if (close) {
               close();
@@ -48,12 +50,12 @@ export default function Ascents({ onRemove, onAdd, userAscent, boulderId }) {
       <Tooltip title={"Resignation"}>
         <Ascent
           type="resignation"
-          disabled={userAscent && userAscent?.type !== "resignation"}
-          checked={userAscent?.type === "resignation"}
+          disabled={ascent && ascent?.type !== "resignation"}
+          checked={ascent?.type === "resignation"}
           onClick={async () => {
-            userAscent
-              ? await onRemove(userAscent)
-              : await onAdd(boulderId, "resignation");
+            ascent
+              ? await onRemove(boulder, ascent)
+              : await onAdd(boulder, "resignation");
 
             if (close) {
               close();

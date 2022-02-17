@@ -76,7 +76,9 @@ export default function BoulderDetail({ id, event }) {
                 boulder.ascents.length > 0 ? boulder.ascents.length : 0
               })`}
             >
-              <Ascents ascents={boulder.ascents} />
+              {boulder.ascents.length > 0 && (
+                <Ascents ascents={boulder.ascents} />
+              )}
             </Section>
 
             <Section title={"Comments"}>

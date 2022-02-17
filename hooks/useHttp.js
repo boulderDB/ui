@@ -36,13 +36,13 @@ export function useCachedHttp(
   );
 
   if (error) {
-    if (error.response.status === 404) {
+    if (error?.response?.status === 404) {
       router.push("/404");
 
       return defaultData;
     }
 
-    if (error.response.status === 401) {
+    if (error?.response?.status === 401) {
       router.push({
         pathname: "/login",
         query: { intent: router.asPath },
@@ -51,7 +51,7 @@ export function useCachedHttp(
       return defaultData;
     }
 
-    if (error.response.status === 403) {
+    if (error?.response?.status === 403) {
       router.push("/403");
 
       return defaultData;
