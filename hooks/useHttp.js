@@ -36,7 +36,8 @@ export function useCachedHttp(
   );
 
   if (error) {
-    console.debug(`${error?.response?.status} — ${resource}`);
+    console.error(`Request failed for resource: ${key}`);
+    console.error(error?.response);
 
     if (error?.response?.status === 404) {
       router.push("/404");

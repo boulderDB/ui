@@ -23,7 +23,7 @@ export default function Index() {
 
   const addHandler = useAddAscent();
   const removeHandler = useRemoveAscent();
-
+  console.log("init");
   if (!boulder) {
     return <Loader />;
   }

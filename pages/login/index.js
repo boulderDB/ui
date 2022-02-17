@@ -53,22 +53,20 @@ export default function Index() {
     try {
       const { data } = await http.post("/login", payload);
       setTokenPayload(data);
+      console.log(data);
 
-      setTimeout(async () => {
-        console.log(router.query.intent);
-        if (router.query.intent) {
-          router.push(router.query.intent);
-          return;
-        }
+      if (router.query.intent) {
+        await router.push(router.query.intent);
+        return;
+      }
 
-        if (!data?.lastVisitedLocation) {
-          await router.push(`/salon`);
+      if (!data?.lastVisitedLocation) {
+        await router.push(`/salon`);
 
-          return;
-        }
+        return;
+      }
 
-        await router.push(`/${data.lastVisitedLocation.url}`);
-      }, 200);
+      await router.push(`/${data.lastVisitedLocation.url}`);
     } catch (error) {
       console.error(error);
       dispatchMessage(toast("Error", extractErrorMessage(error), "error"));
