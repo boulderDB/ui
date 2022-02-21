@@ -18,6 +18,7 @@ export function useCachedHttp(
   params,
   config,
   throwError = true,
+  redirectError = true,
   defaultData = null
 ) {
   const router = useRouter();
@@ -39,13 +40,13 @@ export function useCachedHttp(
     console.error(`Request failed for resource: ${key}`);
     console.error(error?.response);
 
-    if (error?.response?.status === 404) {
+    if (redirectError && error?.response?.status === 404) {
       router.push("/404");
 
       return defaultData;
     }
 
-    if (error?.response?.status === 401) {
+    if (redirectError && error?.response?.status === 401) {
       router.push({
         pathname: "/login",
         query: { intent: router.asPath },
@@ -54,7 +55,7 @@ export function useCachedHttp(
       return defaultData;
     }
 
-    if (error?.response?.status === 403) {
+    if (redirectError && error?.response?.status === 403) {
       router.push("/403");
 
       return defaultData;
@@ -63,6 +64,8 @@ export function useCachedHttp(
     if (throwError) {
       throw error;
     }
+
+    return null;
   }
 
   if (!resource && defaultData) {

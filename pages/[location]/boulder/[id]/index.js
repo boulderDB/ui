@@ -13,30 +13,77 @@ import Grade from "../../../../components/grade/grade";
 import Tooltip from "../../../../components/tooltip/tooltip";
 import { typography } from "../../../../styles/utilities";
 import styles from "./index.module.css";
+import Button from "../../../../components/button/button";
 
 export default function Index() {
   const { query } = useRouter();
-  const { currentLocation } = useContext(AppContext);
+  const { currentLocation, roles } = useContext(AppContext);
+  const router = useRouter();
+
+  const isAdmin = roles?.includes("admin");
+
   const boulder = useCachedHttp(
-    `/${currentLocation?.url}/boulders/${query.id}`
+    `/${currentLocation?.url}/boulders/${query.id}`,
+    null,
+    null,
+    false,
+    false
+  );
+
+  const identifier = useCachedHttp(
+    `/${currentLocation?.url}/readable-identifiers/${query.id}`
   );
 
   const addHandler = useAddAscent();
   const removeHandler = useRemoveAscent();
-  console.log("init");
-  if (!boulder) {
+
+  if (boulder === null && identifier && isAdmin) {
+    return (
+      <Layout>
+        <Meta title={`Assign identifier to boulder`} />
+
+        <div className={styles.root}>
+          <div className={styles.row}>
+            <Button href={"/foo"}>Assign to existing boulder</Button>
+          </div>
+
+          <div className={styles.row}>
+            <Button href={"/bar"}>Create new boulder</Button>
+          </div>
+        </div>
+      </Layout>
+    );
+
+    router.push({
+      pathname:
+        "/[location]/admin/boulders/assign-readable-identifier/[identifier]",
+      query: {
+        location: currentLocation?.url,
+        identifier: query.id,
+      },
+    });
+
+    return;
+  }
+
+  if (boulder === undefined) {
     return <Loader />;
+  }
+
+  if (boulder === null) {
+    return router.push("/404");
   }
 
   return (
     <Layout>
-      <Meta title={"Boulders"} />
+      <Meta title={`Check boulder ${boulder.name}`} />
 
       <div className={styles.root}>
         <h1 className={typography.alpha700}>{boulder.name}</h1>
         {boulder.startWall.name} > {boulder.endWall.name}
         <div className={styles.row}>
           <span className={styles.label}>Hold:</span>
+
           <Tooltip title={boulder.holdType.name}>
             <HoldType {...boulder.holdType} size={"large"} />
           </Tooltip>

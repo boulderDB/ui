@@ -426,7 +426,7 @@ export const models = [
     route: "readable-identifiers",
     schema: "readableIdentifier",
     api: "/readable-identifiers",
-    sortProperty: "id",
+    sortProperty: "value",
     beforeSubmit: (payload) => {
       deleteCommon(payload);
 

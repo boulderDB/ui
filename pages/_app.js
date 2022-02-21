@@ -18,8 +18,8 @@ export const AppContext = createContext(null);
 const loginRedirectExclusions = [
   "/login",
   "/sign-up",
-  "/reset-password",
-  "/reset-password/[token]",
+  "/password-reset",
+  "/password-reset/[token]",
   "/404",
   "/500",
 ];

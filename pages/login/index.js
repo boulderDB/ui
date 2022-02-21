@@ -90,7 +90,7 @@ export default function Index() {
               <a className={cn(typography.epsilon, colors.black)}>Sign up</a>
             </Link>
 
-            <Link href={"/reset-password"}>
+            <Link href={"/password-reset"}>
               <a className={cn(typography.epsilon, colors.midGrey)}>
                 Reset password
               </a>

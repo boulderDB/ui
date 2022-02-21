@@ -89,7 +89,10 @@ export default function Index() {
   const columns = useMemo(() => {
     const items = config.columns;
 
-    if (config.massActions) {
+    if (
+      config.massActions &&
+      !items.find((column) => column.id === "selection")
+    ) {
       items.unshift({
         id: "selection",
         Header: ({ getToggleAllRowsSelectedProps }) => (
@@ -104,7 +107,7 @@ export default function Index() {
     }
 
     return items;
-  }, []);
+  }, [config]);
 
   const tableData = useMemo(() => {
     if (!data) {
