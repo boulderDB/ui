@@ -1,7 +1,7 @@
 import { useHttp } from "../../hooks/useHttp";
 import useDrawer from "../../hooks/useDrawer";
 import { useSWRConfig } from "swr";
-import { useCallback, useContext, useEffect, useMemo, useState } from "react";
+import { useContext, useEffect, useMemo, useState } from "react";
 import { AppContext } from "../../pages/_app";
 import useBoulderFilters from "../../hooks/useBoulderFilters";
 import filterPresentOptions from "../../utilties/filterPresentOptions";
@@ -21,9 +21,6 @@ import Link from "next/link";
 import cn from "classnames";
 import { typography } from "../../styles/utilities";
 import toast from "../../utilties/toast";
-import AscentIcon from "../ascentIcon/ascentIcon";
-import RateButton from "../boulderTable/rateButton";
-import extractErrorMessage from "../../utilties/extractErrorMessage";
 import Loader from "../loader/loader";
 import Select from "../select/select";
 import GlobalFilter from "../boulderTable/globalFilter";

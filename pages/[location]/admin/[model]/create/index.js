@@ -18,10 +18,10 @@ export default function Index() {
   const { query } = useRouter();
   const http = useHttp();
   const { dispatchMessage, currentLocation } = useContext(AppContext);
-  const { model } = query;
+  const { model, data } = query;
 
   const config = models.find((item) => item.route === model);
-  const { fields, defaults } = useSchemaForm(config.schema, "create");
+  let { fields, defaults } = useSchemaForm(config.schema, "create");
 
   const onSubmit = async (payload, resetForm) => {
     try {
@@ -37,6 +37,10 @@ export default function Index() {
       dispatchMessage(toast("Error", extractErrorMessage(error), "error"));
     }
   };
+
+  if (data) {
+    defaults = Object.assign({}, defaults, JSON.parse(data));
+  }
 
   if (!fields || !defaults) {
     return <Loader />;

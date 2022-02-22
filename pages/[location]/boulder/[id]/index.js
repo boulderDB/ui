@@ -38,32 +38,37 @@ export default function Index() {
   const removeHandler = useRemoveAscent();
 
   if (boulder === null && identifier && isAdmin) {
+    const data = JSON.stringify({
+      readableIdentifier: identifier,
+    });
+
     return (
       <Layout>
         <Meta title={`Assign identifier to boulder`} />
 
         <div className={styles.root}>
+          <h1 className={typography.alpha700}>
+            This identifier is currently not assigned to any boulder.
+          </h1>
+
           <div className={styles.row}>
-            <Button href={"/foo"}>Assign to existing boulder</Button>
+            <Button
+              href={`/${currentLocation?.url}/admin/boulders/assign-readable-identifier/${query.id}`}
+            >
+              Assign to existing boulder
+            </Button>
           </div>
 
           <div className={styles.row}>
-            <Button href={"/bar"}>Create new boulder</Button>
+            <Button
+              href={`/${currentLocation?.url}/admin/boulders/create?data=${data}`}
+            >
+              Create new boulder
+            </Button>
           </div>
         </div>
       </Layout>
     );
-
-    router.push({
-      pathname:
-        "/[location]/admin/boulders/assign-readable-identifier/[identifier]",
-      query: {
-        location: currentLocation?.url,
-        identifier: query.id,
-      },
-    });
-
-    return;
   }
 
   if (boulder === undefined) {
