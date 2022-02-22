@@ -426,7 +426,7 @@ export const models = [
     route: "readable-identifiers",
     schema: "readableIdentifier",
     api: "/readable-identifiers",
-    sortProperty: "value",
+    sortProperty: "id",
     beforeSubmit: (payload) => {
       deleteCommon(payload);
 
@@ -443,7 +443,24 @@ export const models = [
         id: "href",
         accessor: "href",
         className: styles.link,
-        Cell: DetailLinkColumn,
+        Cell: ({ row, value }) => {
+          return (
+            <>
+              <Button
+                externalHref={true}
+                inverted={true}
+                size={"s"}
+                href={`/api${value.replace("/admin", "")}/${
+                  row.original.value
+                }/code`}
+              >
+                QR Code
+              </Button>
+
+              <DetailLinkColumn row={row} value={value} />
+            </>
+          );
+        },
       },
     ],
   },

@@ -19,6 +19,7 @@ function Button({
   loading = false,
   onClick,
   href,
+  externalHref = false,
   ...rest
 }) {
   let props = {
@@ -37,6 +38,14 @@ function Button({
     ),
     ...rest,
   };
+
+  if (href && externalHref) {
+    return (
+      <a href={href}>
+        <a {...props} />
+      </a>
+    );
+  }
 
   if (href) {
     return (

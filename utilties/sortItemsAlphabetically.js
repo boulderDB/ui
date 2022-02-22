@@ -4,6 +4,10 @@ function sortItemsAlphabetically(items, property) {
       return a > b ? 1 : 1;
     }
 
+    if (typeof a[property] === "number" && typeof b[property] === "number") {
+      return a > b ? 1 : 1;
+    }
+
     return a[property]?.toLowerCase() > b[property]?.toLowerCase() ? 1 : -1;
   });
 }
