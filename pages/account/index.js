@@ -44,13 +44,17 @@ export default function Index() {
       description:
         "After updating your username, you will be redirected to the login page.",
       Component: TextField,
-      componentProps: {},
+      componentProps: {
+        required: true,
+      },
     },
     {
       name: "email",
       label: "E-Mail",
       Component: TextField,
-      componentProps: {},
+      componentProps: {
+        required: true,
+      },
     },
     {
       name: "notifications",
