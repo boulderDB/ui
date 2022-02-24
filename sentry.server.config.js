@@ -20,5 +20,5 @@ Sentry.init({
 });
 
 Sentry.configureScope((scope) => {
-  scope.setTag("version", version);
+  scope.setTag("ui-version", version);
 });
