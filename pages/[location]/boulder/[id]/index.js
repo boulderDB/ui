@@ -18,16 +18,11 @@ import Button from "../../../../components/button/button";
 export default function Index() {
   const { query } = useRouter();
   const { currentLocation, roles } = useContext(AppContext);
-  const router = useRouter();
 
   const isAdmin = roles?.includes("admin");
 
   const boulder = useCachedHttp(
-    `/${currentLocation?.url}/boulders/${query.id}`,
-    null,
-    null,
-    false,
-    false
+    `/${currentLocation?.url}/boulders/${query.id}`
   );
 
   const identifier = useCachedHttp(
@@ -37,7 +32,7 @@ export default function Index() {
   const addHandler = useAddAscent();
   const removeHandler = useRemoveAscent();
 
-  if (boulder === null && identifier && isAdmin) {
+  /*  if (!boulder && identifier && isAdmin) {
     const data = JSON.stringify({
       readableIdentifier: identifier,
     });
@@ -69,14 +64,10 @@ export default function Index() {
         </div>
       </Layout>
     );
-  }
+  }*/
 
-  if (boulder === undefined) {
+  if (!boulder) {
     return <Loader />;
-  }
-
-  if (boulder === null) {
-    return router.push("/404");
   }
 
   return (
