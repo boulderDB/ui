@@ -98,7 +98,7 @@ export default function Header() {
       ));
     }
 
-    if (events?.length) {
+    if (events && events?.length > 0) {
       events.forEach((event) => {
         items.primary.push(() => (
           <NavItem

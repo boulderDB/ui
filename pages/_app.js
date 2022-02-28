@@ -47,10 +47,13 @@ function MyApp({ Component, pageProps, locations }) {
     null
   );
 
-  const currentLocation = useMemo(
-    () => locations?.find((location) => location.url === locationParameter),
-    [locations, locationParameter]
-  );
+  const currentLocation = useMemo(() => {
+    if (!locations) {
+      return null;
+    }
+
+    return locations?.find((location) => location.url === locationParameter);
+  }, [locations, locationParameter]);
 
   const isAuthenticated = useMemo(() => {
     if (!tokenPayload) {
