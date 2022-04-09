@@ -1,4 +1,4 @@
-import { fetchOnceConfig, useCachedHttp, useHttp } from "./useHttp";
+import { fetchOnceConfig, useCachedHttp } from "./useHttp";
 import { useContext } from "react";
 import EntitySelect, {
   optionRenderers,

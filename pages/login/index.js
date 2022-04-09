@@ -53,7 +53,6 @@ export default function Index() {
     try {
       const { data } = await http.post("/login", payload);
       setTokenPayload(data);
-      console.log(data);
 
       if (router.query.intent) {
         await router.push(router.query.intent);

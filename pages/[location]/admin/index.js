@@ -14,6 +14,7 @@ import { columns } from "../../../components/boulderTable/boulderTable";
 import parseDate from "../../../utilties/parseDate";
 import Label from "../../../components/label/label";
 import toast from "../../../utilties/toast";
+import BoulderForm from "../../../components/boulderForm/boulderForm";
 
 function deleteCommon(payload) {
   delete payload.id;
@@ -113,6 +114,7 @@ export const models = [
         label: "Reactivate",
       },
     ],
+    form: BoulderForm,
   },
   {
     title: "Users",

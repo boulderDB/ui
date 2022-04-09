@@ -13,58 +13,17 @@ import Grade from "../../../../components/grade/grade";
 import Tooltip from "../../../../components/tooltip/tooltip";
 import { typography } from "../../../../styles/utilities";
 import styles from "./index.module.css";
-import Button from "../../../../components/button/button";
 
 export default function Index() {
   const { query } = useRouter();
-  const { currentLocation, roles } = useContext(AppContext);
-
-  const isAdmin = roles?.includes("admin");
+  const { currentLocation } = useContext(AppContext);
 
   const boulder = useCachedHttp(
     `/${currentLocation?.url}/boulders/${query.id}`
   );
 
-  const identifier = useCachedHttp(
-    `/${currentLocation?.url}/readable-identifiers/${query.id}`
-  );
-
   const addHandler = useAddAscent();
   const removeHandler = useRemoveAscent();
-
-  /*  if (!boulder && identifier && isAdmin) {
-    const data = JSON.stringify({
-      readableIdentifier: identifier,
-    });
-
-    return (
-      <Layout>
-        <Meta title={`Assign identifier to boulder`} />
-
-        <div className={styles.root}>
-          <h1 className={typography.alpha700}>
-            This identifier is currently not assigned to any boulder.
-          </h1>
-
-          <div className={styles.row}>
-            <Button
-              href={`/${currentLocation?.url}/admin/boulders/assign-readable-identifier/${query.id}`}
-            >
-              Assign to existing boulder
-            </Button>
-          </div>
-
-          <div className={styles.row}>
-            <Button
-              href={`/${currentLocation?.url}/admin/boulders/create?data=${data}`}
-            >
-              Create new boulder
-            </Button>
-          </div>
-        </div>
-      </Layout>
-    );
-  }*/
 
   if (!boulder) {
     return <Loader />;

@@ -1,31 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { set } from "lodash";
+import Switch from "../components/switch/switch";
+import { Upload } from "../components/upload/upload";
 
 const dataResolvers = {
-  "select-multiple": (current, event) => {
-    set(
-      current,
-      event.target.name,
-      Array.from(event.target.selectedOptions, (option) => option.value)
-    );
+  Select: ({ value }) => {
+    return value;
   },
-  "styled-multiselect": (current, event) => {
-    set(
-      current,
-      event.target.name,
-      event.target.selected.map((option) => option.value)
-    );
+  Switch: ({ event }) => {
+    return event.target.checked;
   },
-  "styled-select": (current, event) => {
-    const selected = event.target.selected;
-    set(
-      current,
-      event.target.name,
-      selected.length > 0 ? selected.map((option) => option.value)[0] : null
-    );
-  },
-  checkbox: (current, event) => {
-    set(current, event.target.name, event.target.checked);
+  EntitySelect: ({ value }) => {
+    return value;
   },
 };
 
@@ -52,17 +38,48 @@ export default function useForm(defaults) {
     setFormData({ ...current });
   };
 
-  const observeField = (event) => {
-    const current = { ...formData };
-    const resolver = dataResolvers[event.target.type];
+  const setValue = ({ name, value }) => {
+    set(formData, name, value);
 
-    if (!resolver) {
-      set(current, event.target.name, event.target.value);
-    } else {
-      resolver(current, event);
+    setFormData({ ...formData });
+  };
+
+  const observeField = ({ event, value, name, component }) => {
+    const resolver = dataResolvers[component];
+
+    setValue({
+      name,
+      value: resolver ? resolver({ event, value }) : event.target.value,
+    });
+  };
+
+  const getFieldComponentProps = ({
+    name,
+    componentProps = {},
+    Component,
+    ...rest
+  }) => {
+    let value = "";
+
+    if (formData) {
+      value = name in formData ? formData[name] : "";
     }
 
-    setFormData({ ...current });
+    if (Component === Switch) {
+      componentProps.checked = Boolean(value);
+    }
+
+    if (Component === Upload) {
+      componentProps.onSuccess = (value) => setKeyValue(name, value);
+    }
+
+    return {
+      name,
+      value,
+      componentProps,
+      Component,
+      ...rest,
+    };
   };
 
   useEffect(() => {
@@ -72,11 +89,12 @@ export default function useForm(defaults) {
   return {
     formData,
     setFormData,
-    setKeyValue,
     handleSubmit,
     submitting,
     setSubmitting,
     observeField,
+    setValue,
     resetForm,
+    getFieldComponentProps,
   };
 }

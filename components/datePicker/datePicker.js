@@ -4,7 +4,7 @@ import { typography } from "../../styles/utilities";
 import styles from "./datePicker.module.css";
 
 export default function DatePicker({ label, name, value, ...rest }) {
-  const date = moment(value, moment.ISO_8601);
+  const date = moment(value);
 
   return (
     <>
@@ -12,6 +12,7 @@ export default function DatePicker({ label, name, value, ...rest }) {
         {" "}
         {label}
       </label>
+
       <input
         name={name}
         type={"datetime-local"}

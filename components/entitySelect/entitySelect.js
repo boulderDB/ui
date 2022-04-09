@@ -1,5 +1,5 @@
 import sortItemsAlphabetically from "../../utilties/sortItemsAlphabetically";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useHttp } from "../../hooks/useHttp";
 import { TextField } from "@material-ui/core";
 import Loader from "../loader/loader";
@@ -81,7 +81,6 @@ function EntitySelect({
       setFetching(true);
       const { data } = await http.get(resource);
       setFetched(true);
-      setOptions;
       setOptions(sortItemsAlphabetically(data, labelProperty));
       setFetching(false);
     })();

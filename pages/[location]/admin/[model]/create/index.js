@@ -18,9 +18,8 @@ export default function Index() {
   const { query } = useRouter();
   const http = useHttp();
   const { dispatchMessage, currentLocation } = useContext(AppContext);
-  const { model, data } = query;
 
-  const config = models.find((item) => item.route === model);
+  const config = models.find((item) => item.route === query.model);
   let { fields, defaults } = useSchemaForm(config.schema, "create");
 
   const onSubmit = async (payload, resetForm) => {
@@ -38,9 +37,7 @@ export default function Index() {
     }
   };
 
-  if (data) {
-    defaults = Object.assign({}, defaults, JSON.parse(data));
-  }
+  const FormComponent = config.form ? config.form : Form;
 
   if (!fields || !defaults) {
     return <Loader />;
@@ -71,7 +68,7 @@ export default function Index() {
         </h1>
 
         <div className={layoutStyles.sideContent}>
-          <Form
+          <FormComponent
             submitLabel={"Create"}
             onSubmit={onSubmit}
             fields={fields}
