@@ -10,6 +10,7 @@ import Loader from "../../../../components/loader/loader";
 import Breadcrumbs from "../../../../components/breadcrumbs/breadcrumbs";
 import styles from "../index.module.css";
 import { DetailLinkColumn } from "../index";
+import { parseDate } from "../../../../utilties/parseDate";
 
 const config = {
   title: "Reported errors",
@@ -43,11 +44,7 @@ export default function Index() {
       {
         Header: "Created at",
         accessor: "createdAt",
-        Cell: ({ value }) => {
-          const date = new Date(value);
-
-          return `${date.getDate()}-${date.getMonth()}-${date.getFullYear()} `;
-        },
+        Cell: ({ value }) => parseDate(value),
       },
       {
         id: "href",

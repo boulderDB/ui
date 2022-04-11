@@ -11,9 +11,8 @@ import Button from "../../../components/button/button";
 import styles from "./index.module.css";
 import Grade from "../../../components/grade/grade";
 import { columns } from "../../../components/boulderTable/boulderTable";
-import parseDate from "../../../utilties/parseDate";
+import { addTimeOffset, parseDate } from "../../../utilties/parseDate";
 import Label from "../../../components/label/label";
-import toast from "../../../utilties/toast";
 import BoulderForm from "../../../components/boulderForm/boulderForm";
 
 function deleteCommon(payload) {
@@ -375,8 +374,8 @@ export const models = [
         ...payload,
         boulders: filterId(payload.boulders),
         participants: filterId(payload.participants),
-        startDate: payload.startDate + "+00:00",
-        endDate: payload.endDate + "+00:00",
+        startDate: addTimeOffset(payload.startDate),
+        endDate: addTimeOffset(payload.endDate),
       };
     },
   },

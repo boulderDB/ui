@@ -4,7 +4,7 @@ import { useContext, useMemo } from "react";
 import { Female, Male } from "../icon/icon";
 import { Progress } from "../progress/progress";
 import calculatePercentage from "../../utilties/calculatePercentage";
-import parseDate from "../../utilties/parseDate";
+import { parseDate } from "../../utilties/parseDate";
 import Link from "next/link";
 import cn from "classnames";
 import { colors, typography } from "../../styles/utilities";
