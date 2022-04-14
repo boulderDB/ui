@@ -17,7 +17,7 @@ import Grade from "../grade/grade";
 import cn from "classnames";
 import { typography } from "../../styles/utilities";
 import { optionRenderers } from "../entitySelect/entitySelect";
-import parseDate from "../../utilties/parseDate";
+import { parseDate } from "../../utilties/parseDate";
 import { useMediaQuery } from "@material-ui/core";
 import { customMedia } from "../../styles/cssExports";
 

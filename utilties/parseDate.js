@@ -1,14 +1,16 @@
-import moment from "moment";
+import { DateTime } from "luxon";
 
-function parseDate(string, withTime = false) {
-  const date = moment(string);
+export function addTimeOffset(string) {
+  return DateTime.fromISO(string, { setZone: true }).toISO();
+}
+
+export function parseDate(string, withTime = false) {
+  const date = DateTime.fromISO(string);
 
   return {
     string: withTime
-      ? date.format("D MMMM YYYY HH:mm")
-      : date.format("D MMMM YYYY"),
-    timestamp: date.unix(),
+      ? date.toFormat("dd LL yyyy T")
+      : date.toFormat("dd LL yyyy"),
+    timestamp: date.toMillis(),
   };
 }
-
-export default parseDate;

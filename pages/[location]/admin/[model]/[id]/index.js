@@ -52,6 +52,8 @@ export default function Index() {
     }
   };
 
+  const FormComponent = config.form ? config.form : Form;
+
   if (!data || !fields) {
     return <Loader />;
   }
@@ -81,7 +83,7 @@ export default function Index() {
         </h1>
 
         <div className={layoutStyles.sideContent}>
-          <Form
+          <FormComponent
             submitLabel={"Update"}
             onSubmit={onSubmit}
             fields={fields}

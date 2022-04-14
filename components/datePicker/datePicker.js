@@ -1,10 +1,10 @@
-import moment from "moment";
+import { DateTime } from "luxon";
 import cn from "classnames";
 import { typography } from "../../styles/utilities";
 import styles from "./datePicker.module.css";
 
 export default function DatePicker({ label, name, value, ...rest }) {
-  const date = moment(value);
+  const date = DateTime.fromISO(value);
 
   return (
     <>
@@ -17,7 +17,7 @@ export default function DatePicker({ label, name, value, ...rest }) {
         name={name}
         type={"datetime-local"}
         {...rest}
-        value={date.format("YYYY-MM-DDTHH:mm")}
+        value={date.toISO({ includeOffset: false })}
       />
     </>
   );

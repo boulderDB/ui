@@ -8,7 +8,7 @@ import Link from "next/link";
 import styles from "./index.module.css";
 import { useCachedHttp, useHttp } from "../../hooks/useHttp";
 import Button from "../../components/button/button";
-import parseDate from "../../utilties/parseDate";
+import { parseDate } from "../../utilties/parseDate";
 import toast from "../../utilties/toast";
 import extractErrorMessage from "../../utilties/extractErrorMessage";
 import { mutate } from "swr";
