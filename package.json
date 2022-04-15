@@ -6,7 +6,7 @@
     "pre-build": "npm run css-exports",
     "dev": "npm run pre-build && next -p 80",
     "build": "npm run pre-build && next build",
-    "start": "next start -p 80",
+    "start": "next start",
     "css-exports": "postcss styles/globals/variables.css --config ./config/ > /dev/null"
   },
   "dependencies": {
