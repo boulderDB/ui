@@ -39,9 +39,13 @@ export default function useForm(defaults) {
   };
 
   const setValue = ({ name, value }) => {
-    set(formData, name, value);
+    const current = { ...formData };
 
-    setFormData({ ...formData });
+    set(current, name, value);
+
+    console.log(current);
+
+    setFormData({ ...current });
   };
 
   const observeField = ({ event, value, name, component }) => {
