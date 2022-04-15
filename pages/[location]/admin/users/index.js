@@ -56,7 +56,7 @@ export default function Index() {
         Header: "Roles",
         accessor: "roles",
         Cell: ({ value }) => {
-          return value.join(", ");
+          return value?.join(", ");
         },
       },
       {
