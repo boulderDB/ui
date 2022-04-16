@@ -31,8 +31,8 @@ import Bar from "../bar/bar";
 import Button from "../button/button";
 import Tooltip from "../tooltip/tooltip";
 import WallDetail from "../wallDetail/wallDetail";
-import useAddAscent from "../../actions/useAddAscent";
-import useRemoveAscent from "../../actions/useRemoveAscent";
+import useAddAscent from "../../hooks/useAddAscent";
+import useRemoveAscent from "../../hooks/useRemoveAscent";
 
 export default function BoulderView({
   boulders,
