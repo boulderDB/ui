@@ -10,8 +10,8 @@
     "css-exports": "postcss styles/globals/variables.css --config ./config/ > /dev/null"
   },
   "dependencies": {
-    "@material-ui/core": "^4.12.3",
-    "@material-ui/lab": "^4.0.0-alpha.60",
+    "@material-ui/core": "^4.12.4",
+    "@material-ui/lab": "^4.0.0-alpha.61",
     "@sentry/nextjs": "^6.16.1",
     "axios": "^0.24.0",
     "classnames": "^2.3.1",
@@ -20,7 +20,7 @@
     "lodash": "^4.17.21",
     "lodash.debounce": "^4.0.8",
     "luxon": "^2.3.1",
-    "next": "12.0.3",
+    "next": "^12.1.5",
     "postcss": "^8.3.6",
     "postcss-cli": "^8.3.1",
     "postcss-extend-rule": "^3.0.0",
@@ -28,7 +28,7 @@
     "postcss-import": "^14.0.2",
     "postcss-nested": "^5.0.6",
     "postcss-normalize": "^10.0.0",
-    "postcss-preset-env": "^6.7.0",
+    "postcss-preset-env": "^7.0.1",
     "react": "17.0.2",
     "react-dom": "17.0.2",
     "react-table": "^7.5.2",

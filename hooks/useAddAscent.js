@@ -1,16 +1,19 @@
 import { useCallback, useContext } from "react";
+import mutateApi from "../utilties/mutateApi";
 import toast from "../utilties/toast";
+import AscentIcon from "../components/ascentIcon/ascentIcon";
+import styles from "../components/boulderView/boulderView.module.css";
+import RateButton from "../components/boulderTable/rateButton";
 import extractErrorMessage from "../utilties/extractErrorMessage";
 import { AppContext } from "../pages/_app";
-import { useHttp } from "../hooks/useHttp";
-import mutateApi from "../utilties/mutateApi";
+import { useHttp } from "./useHttp";
 
-export default function useRemoveAscent(event = null, forUser = null) {
+export default function useAddAscent(event = null, forUser = null) {
   const { currentLocation, dispatchMessage } = useContext(AppContext);
   const http = useHttp();
 
   return useCallback(
-    async (boulder, ascent) => {
+    async (boulder, type) => {
       try {
         let params = {};
 
@@ -18,9 +21,16 @@ export default function useRemoveAscent(event = null, forUser = null) {
           params.forUser = forUser?.id;
         }
 
-        await http.delete(`/${currentLocation?.url}/ascents/${ascent.id}`, {
-          params,
-        });
+        await http.post(
+          `/${currentLocation?.url}/ascents`,
+          {
+            boulder: boulder.id,
+            type,
+          },
+          {
+            params,
+          }
+        );
 
         mutateApi(`/${currentLocation?.url}/boulders`);
 
@@ -46,6 +56,29 @@ export default function useRemoveAscent(event = null, forUser = null) {
             forUser: forUser?.id,
           });
         }
+
+        dispatchMessage(
+          toast(
+            "Ascent added",
+            <>
+              <span>
+                <AscentIcon type={type} fill={true} />+{"points"}
+              </span>
+
+              <div className={styles.rating}>
+                <span>Leave a rating:</span>
+
+                <RateButton direction={"up"} boulderId={boulder} />
+
+                <span>/</span>
+
+                <RateButton direction={"down"} boulderId={boulder} />
+              </div>
+            </>,
+            "info",
+            4000
+          )
+        );
       } catch (error) {
         dispatchMessage(toast("Error", extractErrorMessage(error), "error"));
       }
