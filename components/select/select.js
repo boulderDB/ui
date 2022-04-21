@@ -34,6 +34,7 @@ function Select({
       {...rest}
       renderInput={(params) => (
         <MUITextField
+          variant={"standard"}
           required={isRequired}
           {...params}
           label={label}
