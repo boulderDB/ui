@@ -172,4 +172,6 @@ function EntitySelect({
   );
 }
 
+EntitySelect.typename = "EntitySelect";
+
 export default EntitySelect;

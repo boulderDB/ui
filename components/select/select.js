@@ -45,4 +45,6 @@ function Select({
   );
 }
 
+Select.typename = "Select";
+
 export default Select;

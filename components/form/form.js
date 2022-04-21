@@ -37,14 +37,11 @@ function Form({ defaults, fields, onSubmit, submitLabel }) {
               label={label}
               value={value}
               onChange={(event, value) => {
-                console.log(Component.name);
-                console.log(Component);
-
                 return observeField({
                   event,
                   value,
                   name,
-                  component: Component.name,
+                  component: Component.typename,
                 });
               }}
               {...componentProps}
