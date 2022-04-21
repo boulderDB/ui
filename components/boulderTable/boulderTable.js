@@ -18,7 +18,7 @@ import cn from "classnames";
 import { typography } from "../../styles/utilities";
 import { optionRenderers } from "../entitySelect/entitySelect";
 import { parseDate } from "../../utilties/parseDate";
-import { useMediaQuery } from "@material-ui/core";
+import useMediaQuery from "@mui/material/useMediaQuery";
 import { customMedia } from "../../styles/cssExports";
 
 export const ascentTypes = [
@@ -269,7 +269,7 @@ export const columns = {
 export const filters = {
   holdType: {
     label: "Hold type",
-    renderOption: optionRenderers.holdtype,
+    renderOption: optionRenderers.holdType,
     getOptionLabel: (option) => option.name,
   },
   grade: {

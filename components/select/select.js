@@ -1,5 +1,5 @@
-import { Autocomplete } from "@material-ui/lab";
-import TextField from "@material-ui/core/TextField";
+import MUIAutocomplete from "@mui/material/Autocomplete";
+import MUITextField from "@mui/material/TextField";
 import React from "react";
 
 function Select({
@@ -25,7 +25,7 @@ function Select({
   }
 
   return (
-    <Autocomplete
+    <MUIAutocomplete
       options={options}
       autoHighlight
       value={value}
@@ -33,7 +33,7 @@ function Select({
       multiple={multiple}
       {...rest}
       renderInput={(params) => (
-        <TextField
+        <MUITextField
           required={isRequired}
           {...params}
           label={label}
