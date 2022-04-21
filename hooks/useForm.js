@@ -32,16 +32,19 @@ export default function useForm(defaults) {
   };
 
   const setValue = ({ name, value }) => {
-    console.log(name, value);
     const current = { ...formData };
 
     set(current, name, value);
     setFormData({ ...current });
-    console.log({ ...current });
   };
 
   const observeField = ({ event, value, name, component }) => {
     const resolver = dataResolvers[component];
+
+    console.log(event);
+    console.log(value);
+    console.log(name);
+    console.log(component);
 
     setValue({
       name,
