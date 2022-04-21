@@ -50,7 +50,7 @@ export default function BoulderForm({ defaults, fields, onSubmit }) {
                   event,
                   value,
                   name,
-                  component: Component.name,
+                  component: Component.typename,
                 });
               }}
             />

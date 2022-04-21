@@ -41,8 +41,6 @@ export default function useForm(defaults) {
   const observeField = ({ event, value, name, component }) => {
     const resolver = dataResolvers[component];
 
-    console.log(component);
-
     setValue({
       name,
       value: resolver ? resolver({ event, value }) : event.target.value,
