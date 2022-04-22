@@ -34,8 +34,7 @@ export default function useForm(defaults) {
   const setValue = ({ name, value }) => {
     const current = { ...formData };
 
-    set(current, name, value);
-    setFormData({ ...current });
+    setFormData(set(current, name, value));
   };
 
   const observeField = ({ event, value, name, component }) => {
@@ -87,7 +86,6 @@ export default function useForm(defaults) {
     submitting,
     setSubmitting,
     observeField,
-    setValue,
     resetForm,
     getFieldComponentProps,
   };
