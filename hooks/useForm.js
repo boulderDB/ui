@@ -31,21 +31,10 @@ export default function useForm(defaults) {
     setSubmitting(false);
   };
 
-  const setKeyValue = (key, value) => {
-    const current = { ...formData };
-
-    set(current, key, value);
-    setFormData({ ...current });
-  };
-
   const setValue = ({ name, value }) => {
     const current = { ...formData };
 
-    set(current, name, value);
-
-    console.log(current);
-
-    setFormData({ ...current });
+    setFormData(set(current, name, value));
   };
 
   const observeField = ({ event, value, name, component }) => {
@@ -74,7 +63,7 @@ export default function useForm(defaults) {
     }
 
     if (Component === Upload) {
-      componentProps.onSuccess = (value) => setKeyValue(name, value);
+      componentProps.onSuccess = (value) => setValue({ name, value });
     }
 
     return {
@@ -97,7 +86,6 @@ export default function useForm(defaults) {
     submitting,
     setSubmitting,
     observeField,
-    setValue,
     resetForm,
     getFieldComponentProps,
   };

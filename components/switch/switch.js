@@ -1,6 +1,7 @@
-import { FormControlLabel } from "@material-ui/core";
-import MUISwitch from "@material-ui/core/Switch";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import MUISwitch from "@mui/material/Switch";
 import React from "react";
+import EntitySelect from "../entitySelect/entitySelect";
 
 function Switch({ name, ...rest }) {
   return (
@@ -10,5 +11,7 @@ function Switch({ name, ...rest }) {
     />
   );
 }
+
+Switch.typename = "Switch";
 
 export default Switch;

@@ -1,13 +1,14 @@
 import sortItemsAlphabetically from "../../utilties/sortItemsAlphabetically";
 import { useCallback, useEffect, useState } from "react";
 import { useHttp } from "../../hooks/useHttp";
-import { TextField } from "@material-ui/core";
+import MUIAutocomplete from "@mui/material/Autocomplete";
 import Loader from "../loader/loader";
-import { Autocomplete } from "@material-ui/lab";
 import filterStyles from "../boulderTable/filter.module.css";
 import HoldType from "../holdType/holdType";
 import Grade from "../grade/grade";
 import AscentIcon from "../ascentIcon/ascentIcon";
+import TextField from "../textField/textField";
+import { Box } from "@mui/material";
 
 export const optionRenderers = {
   holdType: (option) => (
@@ -50,6 +51,7 @@ function EntitySelect({
   getComparisonProperty = (option) => option.id,
   fetchOnce = true,
   required,
+  renderOption,
   ...rest
 }) {
   const http = useHttp();
@@ -120,18 +122,27 @@ function EntitySelect({
 
   if (!resource) {
     return (
-      <Autocomplete
+      <MUIAutocomplete
         multiple={multiple}
         value={value}
         options={options}
         renderInput={renderInput}
+        renderOption={(props, option) => (
+          <Box
+            component="li"
+            sx={{ "& > img": { mr: 2, flexShrink: 0 } }}
+            {...props}
+          >
+            {renderOption(option)}
+          </Box>
+        )}
         {...rest}
       />
     );
   }
 
   return (
-    <Autocomplete
+    <MUIAutocomplete
       open={open}
       onOpen={() => {
         setOpen(true);
@@ -147,9 +158,20 @@ function EntitySelect({
       value={value}
       options={options}
       renderInput={renderInput}
+      renderOption={(props, option) => (
+        <Box
+          component="li"
+          sx={{ "& > img": { mr: 2, flexShrink: 0 } }}
+          {...props}
+        >
+          {renderOption(option)}
+        </Box>
+      )}
       {...rest}
     />
   );
 }
+
+EntitySelect.typename = "EntitySelect";
 
 export default EntitySelect;

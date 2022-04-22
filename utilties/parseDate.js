@@ -9,8 +9,8 @@ export function parseDate(string, withTime = false) {
 
   return {
     string: withTime
-      ? date.toFormat("dd.LL.yyyy T")
-      : date.toFormat("dd.LL.yyyy"),
+      ? date.toFormat("dd-LL-yyyy T")
+      : date.toFormat("dd-LL-yyyy"),
     timestamp: date.toMillis(),
   };
 }
