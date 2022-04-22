@@ -46,6 +46,12 @@ export default function BoulderForm({ defaults, fields, onSubmit }) {
     )?.external;
 
     if (!gradeId) {
+      observeField({
+        value: internalGrade,
+        name: "grade",
+        component: EntitySelect.typename,
+      });
+
       return;
     }
 
