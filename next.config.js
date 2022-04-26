@@ -3,6 +3,7 @@
 // https://nextjs.org/docs/api-reference/next.config.js/introduction
 // https://docs.sentry.io/platforms/javascript/guides/nextjs/
 
+const withPWA = require("next-pwa");
 const { withSentryConfig } = require("@sentry/nextjs");
 
 const moduleExports = {
@@ -28,6 +29,9 @@ const moduleExports = {
       },
     ];
   },
+  pwa: {
+    dest: "public",
+  },
 };
 
 const sentryWebpackPluginOptions = {
@@ -43,7 +47,10 @@ const sentryWebpackPluginOptions = {
 };
 
 if (process.env.NODE_ENV === "production") {
-  module.exports = withSentryConfig(moduleExports, sentryWebpackPluginOptions);
+  module.exports = withSentryConfig(
+    withPWA(moduleExports),
+    sentryWebpackPluginOptions
+  );
 } else {
   module.exports = moduleExports;
 }

@@ -1,6 +1,6 @@
 {
   "name": "boulder-ui-next",
-  "version": "2.10.0",
+  "version": "2.11.0",
   "private": true,
   "scripts": {
     "pre-build": "npm run css-exports",
@@ -20,6 +20,7 @@
     "lodash": "^4.17.21",
     "luxon": "^2.3.1",
     "next": "12.1.0",
+    "next-pwa": "^5.5.2",
     "postcss": "^8.3.6",
     "postcss-cli": "^8.3.1",
     "postcss-extend-rule": "^3.0.0",
