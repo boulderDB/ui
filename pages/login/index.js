@@ -12,6 +12,7 @@ import Form from "../../components/form/form";
 import styles from "./index.module.css";
 import Link from "next/link";
 import TextField from "../../components/textField/textField";
+import Banner from "../../components/banner/banner";
 
 export default function Index() {
   const router = useRouter();
@@ -75,6 +76,8 @@ export default function Index() {
   return (
     <Layout>
       <Meta title="Login" />
+
+      <Banner>Install me as an App for the best experience</Banner>
 
       <div className={layoutStyles.grid}>
         <h1 className={cn(typography.alpha700, layoutStyles.sideTitle)}>

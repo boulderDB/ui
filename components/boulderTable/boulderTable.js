@@ -279,11 +279,13 @@ export const filters = {
   },
   setter: {
     label: "Setter",
-    renderOption: (option) => option.username,
+    renderOption: (props, option) =>
+      optionRenderers.default(props, option.username),
     getOptionLabel: (option) => option.username,
   },
   wall: {
-    renderOption: (option) => option.name,
+    renderOption: (props, option) =>
+      optionRenderers.default(props, option.name),
     getOptionLabel: (option) => option.name,
   },
   ascent: {
@@ -294,7 +296,8 @@ export const filters = {
   },
   area: {
     label: "Area",
-    renderOption: (option) => option.name,
+    renderOption: (props, option) =>
+      optionRenderers.default(props, option.name),
     getOptionLabel: (option) => option.name,
   },
 };

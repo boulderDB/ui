@@ -11,34 +11,49 @@ import TextField from "../textField/textField";
 import { Box } from "@mui/material";
 
 export const optionRenderers = {
-  holdType: (option) => (
-    <div className={filterStyles.hasIconOption}>
-      <HoldType image={option.image} small={true} /> {option.name}
-    </div>
+  default: (props, label) => (
+    <Box component="li" sx={{ "& > img": { mr: 2, flexShrink: 0 } }} {...props}>
+      {label}
+    </Box>
   ),
-  grade: (option) => (
-    <Grade
-      color={option.color}
-      name={option.name}
-      internalName={option.internalName}
-    />
+  holdType: (props, option) => (
+    <Box component="li" sx={{ "& > img": { mr: 2, flexShrink: 0 } }} {...props}>
+      <div className={filterStyles.hasIconOption}>
+        <HoldType image={option.image} small={true} /> {option.name}
+      </div>
+    </Box>
   ),
-  internalGrade: (option) => (
-    <Grade
-      color={option.color}
-      name={option.name}
-      internalName={option.internalName}
-    />
+  grade: (props, option) => (
+    <Box component="li" sx={{ "& > img": { mr: 2, flexShrink: 0 } }} {...props}>
+      <Grade
+        color={option.color}
+        name={option.name}
+        internalName={option.internalName}
+      />
+    </Box>
   ),
-  ascent: (option) => (
-    <div className={filterStyles.hasIconOption}>
-      <AscentIcon type={option.name} fill={true} /> {option.name}
-    </div>
+  internalGrade: (props, option) => (
+    <Box component="li" sx={{ "& > img": { mr: 2, flexShrink: 0 } }} {...props}>
+      <Grade
+        color={option.color}
+        name={option.name}
+        internalName={option.internalName}
+      />
+    </Box>
   ),
-  tags: (option) => (
-    <div className={filterStyles.hasIconOption}>
-      {option.emoji} {option.name}
-    </div>
+  ascent: (props, option) => (
+    <Box component="li" sx={{ "& > img": { mr: 2, flexShrink: 0 } }} {...props}>
+      <div className={filterStyles.hasIconOption}>
+        <AscentIcon type={option.name} fill={true} /> {option.name}
+      </div>
+    </Box>
+  ),
+  tags: (props, option) => (
+    <Box component="li" sx={{ "& > img": { mr: 2, flexShrink: 0 } }} {...props}>
+      <div className={filterStyles.hasIconOption}>
+        {option.emoji} {option.name}
+      </div>
+    </Box>
   ),
 };
 

@@ -29,22 +29,18 @@ export default function Index() {
       return [];
     }
 
-    let items = data;
-
-    if (config.archive) {
-      items = data.items;
-    }
-
-    return items.map((item) => {
-      return {
-        ...item,
-        roles: item.roles
-          ?.filter((role) => role.includes(currentLocation.id))
-          .map((role) => extractRoleName(currentLocation.id, role)),
-        href: `/${currentLocation.url}/admin/${config.route}`,
-      };
-    });
-  }, [data]);
+    return [
+      ...data.map((item) => {
+        return {
+          ...item,
+          roles: item.roles
+            ?.filter((role) => role.includes(currentLocation.id))
+            .map((role) => extractRoleName(currentLocation.id, role)),
+          href: `/${currentLocation.url}/admin/${config.route}`,
+        };
+      }),
+    ];
+  }, [data, currentLocation]);
 
   const columns = useMemo(() => {
     return [

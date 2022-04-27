@@ -15,6 +15,7 @@ import toast from "../../../../../utilties/toast";
 import extractErrorMessage from "../../../../../utilties/extractErrorMessage";
 import Breadcrumbs from "../../../../../components/breadcrumbs/breadcrumbs";
 import { models } from "../../index";
+import { optionRenderers } from "../../../../../components/entitySelect/entitySelect";
 
 const roles = ["ADMIN", "SETTER"];
 
@@ -35,7 +36,11 @@ export default function Index() {
         componentProps: {
           multiple: true,
           options: roles.map((role) => `ROLE_${role}@${currentLocation.id}`),
-          renderOption: (option) => extractRoleName(currentLocation.id, option),
+          renderOption: (props, option) =>
+            optionRenderers.default(
+              props,
+              extractRoleName(currentLocation.id, option)
+            ),
           getOptionLabel: (option) =>
             extractRoleName(currentLocation.id, option),
         },
