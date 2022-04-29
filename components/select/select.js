@@ -1,6 +1,7 @@
 import MUIAutocomplete from "@mui/material/Autocomplete";
 import MUITextField from "@mui/material/TextField";
 import React from "react";
+import { Box } from "@mui/material";
 
 function Select({
   label,
@@ -8,6 +9,7 @@ function Select({
   value,
   options,
   required,
+  renderOption,
   ...rest
 }) {
   let isRequired = required;
@@ -32,6 +34,15 @@ function Select({
       openOnFocus
       multiple={multiple}
       {...rest}
+      renderOption={(props, option) => (
+        <Box
+          component="li"
+          sx={{ "& > img": { mr: 2, flexShrink: 0 } }}
+          {...props}
+        >
+          {renderOption(props, option)}
+        </Box>
+      )}
       renderInput={(params) => (
         <MUITextField
           variant={"standard"}

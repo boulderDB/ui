@@ -77,7 +77,7 @@ export default function Index() {
     <Layout>
       <Meta title="Login" />
 
-      {/* <Banner>Install me as an App for the best experience</Banner>*/}
+      <Banner>Install me as an App for the best experience</Banner>
 
       <div className={layoutStyles.grid}>
         <h1 className={cn(typography.alpha700, layoutStyles.sideTitle)}>

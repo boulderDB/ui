@@ -61,7 +61,7 @@ export default function useSchemaForm(name, action) {
           ? field.schema.labelProperty
           : name;
 
-        let renderOption = (option) => {
+        let renderOption = (props, option) => {
           if (!labelProperty || !option) {
             return "";
           }

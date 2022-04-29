@@ -17,43 +17,33 @@ export const optionRenderers = {
     </Box>
   ),
   holdType: (props, option) => (
-    <Box component="li" sx={{ "& > img": { mr: 2, flexShrink: 0 } }} {...props}>
-      <div className={filterStyles.hasIconOption}>
-        <HoldType image={option.image} small={true} /> {option.name}
-      </div>
-    </Box>
+    <div className={filterStyles.hasIconOption}>
+      <HoldType image={option.image} small={true} /> {option.name}
+    </div>
   ),
   grade: (props, option) => (
-    <Box component="li" sx={{ "& > img": { mr: 2, flexShrink: 0 } }} {...props}>
-      <Grade
-        color={option.color}
-        name={option.name}
-        internalName={option.internalName}
-      />
-    </Box>
+    <Grade
+      color={option.color}
+      name={option.name}
+      internalName={option.internalName}
+    />
   ),
   internalGrade: (props, option) => (
-    <Box component="li" sx={{ "& > img": { mr: 2, flexShrink: 0 } }} {...props}>
-      <Grade
-        color={option.color}
-        name={option.name}
-        internalName={option.internalName}
-      />
-    </Box>
+    <Grade
+      color={option.color}
+      name={option.name}
+      internalName={option.internalName}
+    />
   ),
   ascent: (props, option) => (
-    <Box component="li" sx={{ "& > img": { mr: 2, flexShrink: 0 } }} {...props}>
-      <div className={filterStyles.hasIconOption}>
-        <AscentIcon type={option.name} fill={true} /> {option.name}
-      </div>
-    </Box>
+    <div className={filterStyles.hasIconOption}>
+      <AscentIcon type={option.name} fill={true} /> {option.name}
+    </div>
   ),
   tags: (props, option) => (
-    <Box component="li" sx={{ "& > img": { mr: 2, flexShrink: 0 } }} {...props}>
-      <div className={filterStyles.hasIconOption}>
-        {option.emoji} {option.name}
-      </div>
-    </Box>
+    <div className={filterStyles.hasIconOption}>
+      {option.emoji} {option.name}
+    </div>
   ),
 };
 
@@ -179,7 +169,7 @@ function EntitySelect({
           sx={{ "& > img": { mr: 2, flexShrink: 0 } }}
           {...props}
         >
-          {renderOption(option)}
+          {renderOption(props, option)}
         </Box>
       )}
       {...rest}

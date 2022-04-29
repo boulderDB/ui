@@ -1,12 +1,5 @@
 import { useCallback, useState } from "react";
 
-export const defaultFilters = [
-  {
-    id: "ascent",
-    value: "todo",
-  },
-];
-
 export default function useBoulderFilters(initialFilters) {
   const [filters, setFilters] = useState(initialFilters);
 
