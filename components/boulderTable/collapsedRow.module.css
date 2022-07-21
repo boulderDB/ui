@@ -8,7 +8,7 @@
 
 .inner {
   display: grid;
-  grid-template-columns: 56px auto 60px;
+  grid-template-columns: 32px auto 24px;
   align-items: center;
   margin-left: 8px;
   margin-right: 8px;
@@ -31,7 +31,7 @@
 }
 
 .name {
-  display: inline-flex;
+  display: flex;
 }
 
 .ascents {

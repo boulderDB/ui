@@ -33,6 +33,7 @@ import Tooltip from "../tooltip/tooltip";
 import WallDetail from "../wallDetail/wallDetail";
 import useAddAscent from "../../hooks/useAddAscent";
 import useRemoveAscent from "../../hooks/useRemoveAscent";
+import usePersistentState from "../../hooks/usePersistentState";
 
 export default function BoulderView({
   boulders,
@@ -52,6 +53,10 @@ export default function BoulderView({
   const [selected, setSelected] = useState([]);
   const [globalFilter, setGlobalFilter] = useState("");
   const [matches, setMatches] = useState(0);
+  const [fixedView, setFixedView] = usePersistentState(
+    "fixedViewBoulderIndex",
+    false
+  );
 
   useEffect(() => {
     setOpen(!!detailWall);
@@ -250,6 +255,7 @@ export default function BoulderView({
   return (
     <>
       <div className={cn(typography.alpha700)}>Boulder ({matches})</div>
+
       <div className={styles.filters}>
         <Select
           {...boulderFilters.area}
@@ -321,6 +327,18 @@ export default function BoulderView({
         />
       </div>
 
+      <div className={styles.checkbox}>
+        <label htmlFor="fixedView" className={typography.epsilon}>
+          Show all columns
+        </label>
+        <input
+          type="checkbox"
+          id={"fixedView"}
+          checked={fixedView}
+          onChange={(event) => setFixedView(event.target.checked)}
+        />
+      </div>
+
       <GlobalFilter
         filters={filters}
         setFilters={setFilters}
@@ -332,6 +350,7 @@ export default function BoulderView({
         onFilter={(rows) => {
           setMatches(rows.length);
         }}
+        fixedColumns={fixedView}
         columns={tableColumns}
         data={boulders}
         filters={filters}
@@ -340,9 +359,13 @@ export default function BoulderView({
         isAdmin={isAdmin}
         headerClassName={cn(
           styles.tableHeader,
-          isAdmin ? styles.isAdminTableHeader : null
+          isAdmin ? styles.isAdminTableHeader : null,
+          fixedView ? styles.isFixedTableHeader : null
         )}
-        rowClassName={isAdmin ? styles.isAdminTableRow : styles.tableRow}
+        rowClassName={cn(
+          isAdmin ? styles.isAdminTableRow : styles.tableRow,
+          fixedView ? styles.isFixedTableRow : null
+        )}
         collapsedRowRenderer={(cells) => <CollapsedRow cells={cells} />}
       />
 

@@ -5,6 +5,16 @@
   margin-top: 32px;
 }
 
+.checkbox {
+  display: flex;
+  align-items: center;
+  margin-top: 32px;
+}
+
+.checkbox label + input {
+  margin-left: 4px;
+}
+
 .tableRow,
 .tableHeader {
   grid-template-columns: minmax(20px, 60px) 80px 60px minmax(60px, auto) 140px 140px 140px 100px 152px;
@@ -63,26 +73,26 @@
 }
 
 @media (max-width: 1280px) {
-  .tableRow,
-  .tableHeader {
+  .tableRow:not(.isFixedTableRow),
+  .tableHeader:not(.isFixedTableHeader) {
     grid-template-rows: 1fr 1fr;
     grid-template-columns: minmax(20px, 60px) 80px auto 100px 100px 152px;
   }
 
-  .isAdminTableRow,
-  .isAdminTableHeader {
+  .isAdminTableRow:not(.isFixedTableRow),
+  .isAdminTableHeader:not(.isFixedTableHeader) {
     grid-template-columns: 40px minmax(20px, 60px) 80px auto 100px 100px 152px;
   }
 
-  .pointsCell,
-  .endWallCell,
-  .setterCell {
+  .isAdminTableRow:not(.isFixedTableRow) .pointsCell,
+  .isAdminTableRow:not(.isFixedTableRow) .endWallCell,
+  .isAdminTableRow:not(.isFixedTableRow) .setterCell {
     display: none;
   }
 }
 
 @media (max-width: 768px) {
-  .tableHeader {
+  .tableHeader:not(.isFixedTableHeader) {
     display: none;
   }
 

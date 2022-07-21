@@ -42,6 +42,7 @@ export const ascentTypes = [
 
 export default function BoulderTable({
   columns,
+  fixedColumns = false,
   data,
   onSelectRows,
   onFilter = (rows) => null,
@@ -112,14 +113,21 @@ export default function BoulderTable({
 
   return (
     <>
-      <div className={cn(styles.root, typography.epsilon)} {...getTableProps()}>
+      <div
+        className={cn(
+          styles.root,
+          typography.epsilon,
+          fixedColumns ? styles.hasFixedColumns : null
+        )}
+        {...getTableProps()}
+      >
         <TableHeader className={headerClassName} headerGroups={headerGroups} />
 
         <div {...getTableBodyProps()}>
           {page.map((row, index) => {
             prepareRow(row);
 
-            if (isTabletOrMobile && collapsedRowRenderer) {
+            if (isTabletOrMobile && collapsedRowRenderer && !fixedColumns) {
               return collapsedRowRenderer(row.cells);
             }
 

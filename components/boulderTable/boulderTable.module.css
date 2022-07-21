@@ -3,6 +3,10 @@
   overflow: hidden;
 }
 
+.hasFixedColumns {
+  overflow-x: scroll;
+}
+
 .wallLink {
   cursor: pointer;
   text-decoration: underline;
