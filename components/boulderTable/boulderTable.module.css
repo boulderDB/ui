@@ -1,6 +1,12 @@
 .root {
   padding-top: calc(4 * var(--spacing-unit));
   overflow: hidden;
+  display: grid;
+}
+
+.root > div {
+  width: 100%;
+  display: grid;
 }
 
 .hasFixedColumns {
