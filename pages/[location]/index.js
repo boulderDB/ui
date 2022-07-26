@@ -2,7 +2,7 @@ import Layout from "../../components/layout/layout";
 import Meta from "../../components/meta/meta";
 import { layoutStyles, typography } from "../../styles/utilities";
 import cn from "classnames";
-import { useCallback, useContext } from "react";
+import { useCallback, useContext, useMemo } from "react";
 import { AppContext } from "../_app";
 import Link from "next/link";
 import styles from "./index.module.css";
@@ -12,6 +12,34 @@ import { parseDate } from "../../utilties/parseDate";
 import toast from "../../utilties/toast";
 import extractErrorMessage from "../../utilties/extractErrorMessage";
 import { mutate } from "swr";
+import { Chart } from "react-chartjs-2";
+import {
+  Chart as ChartJS,
+  RadialLinearScale,
+  PointElement,
+  LineElement,
+  Filler,
+  Tooltip,
+  Legend,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+} from "chart.js";
+import filterPresentOptions from "../../utilties/filterPresentOptions";
+import { ascentTypes } from "../../components/boulderTable/boulderTable";
+import { customProperties } from "../../styles/cssExports";
+
+ChartJS.register(
+  RadialLinearScale,
+  PointElement,
+  LineElement,
+  Filler,
+  Tooltip,
+  Legend,
+  CategoryScale,
+  LinearScale,
+  BarElement
+);
 
 function EventList({ title, items }) {
   const { currentLocation, dispatchMessage } = useContext(AppContext);
@@ -86,6 +114,7 @@ function EventList({ title, items }) {
 
 export default function Index() {
   const { tokenPayload, currentLocation } = useContext(AppContext);
+  const boulders = useCachedHttp(`/${currentLocation?.url}/boulders`);
 
   const upcoming = useCachedHttp(`/${currentLocation?.url}/events`, {
     filter: "upcoming",
@@ -95,12 +124,116 @@ export default function Index() {
     filter: "active",
   });
 
+  const tagChartData = useMemo(() => {
+    if (!boulders) {
+      return null;
+    }
+
+    let tags = filterPresentOptions(boulders, "tags").reduce(function (
+      accumulator,
+      currentValue
+    ) {
+      accumulator[currentValue.id] = { ...currentValue, total: 0, sent: 0 };
+      return accumulator;
+    },
+    {});
+
+    boulders.forEach((boulder) => {
+      boulder.tags.forEach((tag) => {
+        tags[tag.id].total++;
+
+        if (boulder.userAscent) {
+          tags[tag.id].sent++;
+        }
+      });
+    });
+
+    tags = Object.values(tags)
+      .map((tag) => {
+        return {
+          ...tag,
+          percentage: Math.round((tag.sent / tag.total) * 100),
+        };
+      })
+      .sort((a, b) => (a.id > b.id ? 1 : -1));
+
+    return {
+      labels: tags.map(({ emoji }) => emoji),
+      datasets: [
+        {
+          label: "Percentage of boulders sent for tag",
+          data: tags.map(({ percentage }) => percentage),
+          backgroundColor: "#cdcefe",
+          borderColor: "#5759fb",
+          borderWidth: 2,
+          pointStyle: "crossRot",
+          pointRadius: 5,
+          pointHoverRadius: 10,
+        },
+      ],
+    };
+  }, [boulders]);
+
+  const ascentChartData = useMemo(() => {
+    if (!boulders) {
+      return null;
+    }
+
+    let grades = filterPresentOptions(boulders, "grade").reduce(function (
+      accumulator,
+      currentValue
+    ) {
+      accumulator[currentValue.id] = {
+        ...currentValue,
+        ...ascentTypes.reduce((accumulator, current) => {
+          return { ...accumulator, [current.id]: 0 };
+        }, {}),
+        total: 0,
+      };
+      return accumulator;
+    },
+    {});
+
+    boulders.forEach((boulder) => {
+      grades[boulder.grade.id].total++;
+
+      if (boulder.userAscent) {
+        grades[boulder.grade.id][boulder.userAscent.type]++;
+      } else {
+        grades[boulder.grade.id]["todo"]++;
+      }
+    });
+
+    grades = Object.values(grades)
+      .map((grade) => {
+        return {
+          ...grade,
+        };
+      })
+      .sort((a, b) => (a.position > b.position ? 1 : -1));
+
+    return {
+      labels: grades.map((grade) => `Grade ${grade.name}`),
+      datasets: ascentTypes.map((ascentType) => {
+        console.log();
+
+        return {
+          label: ascentType.name,
+          data: grades.flatMap((grade) => {
+            return grade[ascentType.id];
+          }),
+          backgroundColor: ascentType.color,
+        };
+      }),
+    };
+  }, [boulders]);
+
   return (
     <Layout>
       <Meta title={"Account"} />
 
       <div className={layoutStyles.grid}>
-        <div className={layoutStyles.firstHalf}>
+        <div className={cn(layoutStyles.column, layoutStyles.leftColumn)}>
           <h1 className={cn(layoutStyles.sideTitle, typography.alpha700)}>
             Welcome back {tokenPayload?.user?.username} 👋
           </h1>
@@ -120,7 +253,7 @@ export default function Index() {
           </ul>
         </div>
 
-        <div className={cn(layoutStyles.secondHalf)}>
+        <div className={cn(layoutStyles.column, layoutStyles.rightColumn)}>
           {active && active.length > 0 && (
             <EventList items={active} title={"Current"} />
           )}
@@ -128,6 +261,62 @@ export default function Index() {
           {upcoming && upcoming.length > 0 && (
             <EventList items={upcoming} title={"Upcoming"} />
           )}
+        </div>
+
+        <h2 className={cn(layoutStyles.sideTitle, typography.alpha700)}>
+          Your statistics
+        </h2>
+
+        <div className={cn(layoutStyles.column, layoutStyles.leftColumn)}>
+          {tagChartData ? (
+            <Chart
+              data={tagChartData}
+              options={{
+                plugins: {
+                  legend: {
+                    position: "bottom",
+                  },
+                },
+                maintainAspectRatio: false,
+              }}
+              type={"radar"}
+            />
+          ) : null}
+        </div>
+
+        <div className={cn(layoutStyles.column, layoutStyles.rightColumn)}>
+          {ascentChartData ? (
+            <Chart
+              height={200}
+              data={ascentChartData}
+              options={{
+                backgroundColor: customProperties["--color-black"],
+                borderColor: customProperties["--color-black"],
+                color: customProperties["--color-black"],
+                indexAxis: "y",
+                scales: {
+                  x: {
+                    grid: {
+                      color: customProperties["--color-black"],
+                    },
+                    stacked: true,
+                  },
+                  y: {
+                    grid: {
+                      color: customProperties["--color-black"],
+                    },
+                    stacked: true,
+                  },
+                },
+                plugins: {
+                  legend: {
+                    position: "bottom",
+                  },
+                },
+              }}
+              type={"bar"}
+            />
+          ) : null}
         </div>
       </div>
     </Layout>

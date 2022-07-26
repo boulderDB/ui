@@ -27,16 +27,20 @@
   grid-column: 1 / span 12;
 }
 
-.firstHalf {
-  grid-column: 1 / span 6;
+.column {
+  margin-bottom: 60px;
+}
+
+.leftColumn {
+  grid-column: 1 / span 5;
 
   @media (--s) {
     grid-column: 1 / span 12;
   }
 }
 
-.secondHalf {
-  grid-column: 7 / span 6;
+.rightColumn {
+  grid-column: 7 / span 5;
 
   @media (--m-to-s) {
     grid-column: 1 / span 12;

@@ -25,18 +25,22 @@ export const ascentTypes = [
   {
     id: "todo",
     name: "Todo",
+    color: "#f2f2f2",
   },
   {
     id: "flash",
     name: "Flash",
+    color: "#1687ff",
   },
   {
     id: "top",
     name: "Top",
+    color: "#02deaf",
   },
   {
     id: "resignation",
     name: "Resignation",
+    color: "#ff5d5f",
   },
 ];
 
