@@ -12,7 +12,6 @@ import { parseDate } from "../../utilties/parseDate";
 import toast from "../../utilties/toast";
 import extractErrorMessage from "../../utilties/extractErrorMessage";
 import { mutate } from "swr";
-import { Chart } from "react-chartjs-2";
 import {
   Chart as ChartJS,
   RadialLinearScale,
@@ -25,6 +24,7 @@ import {
   LinearScale,
   BarElement,
 } from "chart.js";
+import { Radar, Bar } from "react-chartjs-2";
 import filterPresentOptions from "../../utilties/filterPresentOptions";
 import { ascentTypes } from "../../components/boulderTable/boulderTable";
 import { customProperties } from "../../styles/cssExports";
@@ -269,7 +269,7 @@ export default function Index() {
 
         <div className={cn(layoutStyles.column, layoutStyles.leftColumn)}>
           {tagChartData ? (
-            <Chart
+            <Radar
               data={tagChartData}
               options={{
                 plugins: {
@@ -279,14 +279,13 @@ export default function Index() {
                 },
                 maintainAspectRatio: false,
               }}
-              type={"radar"}
             />
           ) : null}
         </div>
 
         <div className={cn(layoutStyles.column, layoutStyles.rightColumn)}>
           {ascentChartData ? (
-            <Chart
+            <Bar
               height={200}
               data={ascentChartData}
               options={{
