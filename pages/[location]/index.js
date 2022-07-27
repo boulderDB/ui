@@ -85,7 +85,7 @@ function EventList({ title, items }) {
     <div className={styles.eventList}>
       <h2 className={typography.alpha700}>{title} Events</h2>
 
-      <ul className={styles.links}>
+      <ul className={styles.area}>
         {items.map((event) => (
           <li className={styles.link}>
             <div>
@@ -124,9 +124,9 @@ export default function Index() {
     filter: "active",
   });
 
-  const tagChartData = useMemo(() => {
+  const [tagChartData, tags] = useMemo(() => {
     if (!boulders) {
-      return null;
+      return [null, null];
     }
 
     let tags = filterPresentOptions(boulders, "tags").reduce(function (
@@ -157,21 +157,24 @@ export default function Index() {
       })
       .sort((a, b) => (a.id > b.id ? 1 : -1));
 
-    return {
-      labels: tags.map(({ emoji }) => emoji),
-      datasets: [
-        {
-          label: "Percentage of boulders sent for tag",
-          data: tags.map(({ percentage }) => percentage),
-          backgroundColor: "#cdcefe",
-          borderColor: "#5759fb",
-          borderWidth: 2,
-          pointStyle: "crossRot",
-          pointRadius: 5,
-          pointHoverRadius: 10,
-        },
-      ],
-    };
+    return [
+      {
+        labels: tags.map(({ emoji }) => emoji),
+        datasets: [
+          {
+            label: "Percentage of boulders sent for tag",
+            data: tags.map(({ percentage }) => percentage),
+            backgroundColor: "#cdcefe",
+            borderColor: "#5759fb",
+            borderWidth: 2,
+            pointStyle: "crossRot",
+            pointRadius: 5,
+            pointHoverRadius: 10,
+          },
+        ],
+      },
+      tags,
+    ];
   }, [boulders]);
 
   const ascentChartData = useMemo(() => {
@@ -238,7 +241,7 @@ export default function Index() {
             Welcome back {tokenPayload?.user?.username} 👋
           </h1>
 
-          <ul className={styles.links}>
+          <ul className={styles.area}>
             <li className={styles.link}>
               <Link href={`/${currentLocation?.url}/boulder`}>
                 <a className={cn(typography.gamma)}>Boulder</a>
@@ -267,23 +270,46 @@ export default function Index() {
           Your statistics
         </h2>
 
-        <div className={cn(layoutStyles.column, layoutStyles.leftColumn)}>
-          {tagChartData ? (
-            <Radar
-              data={tagChartData}
-              options={{
-                plugins: {
-                  legend: {
-                    position: "bottom",
+        <div
+          className={cn(
+            layoutStyles.column,
+            layoutStyles.leftColumn,
+            styles.area
+          )}
+        >
+          <div>
+            {tagChartData ? (
+              <Radar
+                height={400}
+                data={tagChartData}
+                options={{
+                  plugins: {
+                    legend: {
+                      display: false,
+                    },
                   },
-                },
-                maintainAspectRatio: false,
-              }}
-            />
-          ) : null}
+                  maintainAspectRatio: false,
+                }}
+              />
+            ) : null}
+          </div>
+
+          <ul>
+            {tags?.map((tag) => (
+              <li>
+                {tag.emoji} <span className={typography.delta}>{tag.name}</span>
+              </li>
+            ))}
+          </ul>
         </div>
 
-        <div className={cn(layoutStyles.column, layoutStyles.rightColumn)}>
+        <div
+          className={cn(
+            layoutStyles.column,
+            layoutStyles.rightColumn,
+            styles.area
+          )}
+        >
           {ascentChartData ? (
             <Bar
               height={200}
