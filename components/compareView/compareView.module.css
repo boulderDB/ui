@@ -17,12 +17,12 @@
 
 .tableRow,
 .tableHeader {
-  grid-template-columns: 20px 80px 60px minmax(60px, auto) 140px 140px 140px 100px 152px;
+  grid-template-columns: minmax(20px, 60px) 80px 60px minmax(60px, auto) 140px 140px 140px 100px 152px;
 }
 
 .isAdminTableRow,
 .isAdminTableHeader {
-  grid-template-columns: 40px 20px 80px 60px minmax(60px, auto) 140px 140px 140px 100px 152px;
+  grid-template-columns: 40px minmax(20px, 60px) 80px 60px minmax(60px, auto) 140px 140px 140px 100px 152px;
 }
 
 .setterCell > span {
@@ -75,23 +75,18 @@
 @media (max-width: 1280px) {
   .tableRow:not(.isFixedTableRow),
   .tableHeader:not(.isFixedTableHeader) {
-    grid-template-columns: 20px 80px 60px minmax(60px, auto) 140px 140px 152px;
+    grid-template-rows: 1fr 1fr;
+    grid-template-columns: minmax(20px, 60px) 80px auto 100px 100px 152px;
   }
 
   .isAdminTableRow:not(.isFixedTableRow),
   .isAdminTableHeader:not(.isFixedTableHeader) {
-    grid-template-columns: 40px 20px 80px 60px minmax(60px, auto) 140px 140px 152px;
+    grid-template-columns: 40px minmax(20px, 60px) 80px auto 100px 100px 152px;
   }
 
-  .tableRow:not(.isFixedTableRow) .pointsCell.pointsCell,
-  .tableRow:not(.isFixedTableRow) .endWallCell.endWallCell,
-  .tableRow:not(.isFixedTableRow) .setterCell.setterCell {
-    display: none;
-  }
-
-  .tableHeader:not(.isFixedTableHeader) .pointsCell.pointsCell,
-  .tableHeader:not(.isFixedTableHeader) .endWallCell.endWallCell,
-  .tableHeader:not(.isFixedTableHeader) .setterCell.setterCell {
+  .isAdminTableRow:not(.isFixedTableRow) .pointsCell,
+  .isAdminTableRow:not(.isFixedTableRow) .endWallCell,
+  .isAdminTableRow:not(.isFixedTableRow) .setterCell {
     display: none;
   }
 }

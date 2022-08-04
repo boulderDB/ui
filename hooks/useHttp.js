@@ -28,8 +28,6 @@ export function useCachedHttp(
     key += `?` + new URLSearchParams(params).toString();
   }
 
-  console.debug(`Key: ${key}`);
-
   const { data, error } = useSWR(
     key,
     async () => await fetcher(resource, params),

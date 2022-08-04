@@ -28,7 +28,11 @@ export default function Current() {
         </h1>
 
         <div className={layoutStyles.sideContent}>
-          <RankingView ranking={ranking} boulderCount={boulderCount} />
+          <RankingView
+            ranking={ranking}
+            boulderCount={boulderCount}
+            userComparison={true}
+          />
         </div>
       </div>
     </Layout>

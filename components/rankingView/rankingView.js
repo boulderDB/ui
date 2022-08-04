@@ -10,8 +10,12 @@ import cn from "classnames";
 import { colors, typography } from "../../styles/utilities";
 import { AppContext } from "../../pages/_app";
 
-export default function RankingView({ ranking, boulderCount }) {
-  const { tokenPayload } = useContext(AppContext);
+export default function RankingView({
+  ranking,
+  boulderCount,
+  userComparison = false,
+}) {
+  const { tokenPayload, currentLocation } = useContext(AppContext);
   const user = tokenPayload?.user;
 
   const columns = useMemo(() => {
@@ -19,6 +23,7 @@ export default function RankingView({ ranking, boulderCount }) {
       {
         Header: "Rank",
         accessor: "rank",
+        className: styles.rankCell,
         Cell: ({ value }) => {
           return <strong>{value}</strong>;
         },
@@ -26,6 +31,7 @@ export default function RankingView({ ranking, boulderCount }) {
       {
         Header: "User",
         accessor: "user.username",
+        className: styles.nameCell,
         Cell: ({ cell, row }) => (
           <UserRank
             username={cell.value}
@@ -54,11 +60,6 @@ export default function RankingView({ ranking, boulderCount }) {
         Header: "Points",
         accessor: "points",
         className: styles.pointsCell,
-      },
-      {
-        Header: "Advance",
-        accessor: "advance",
-        className: styles.advanceCell,
       },
       {
         Header: "Boulders",
@@ -90,26 +91,30 @@ export default function RankingView({ ranking, boulderCount }) {
         },
       },
       {
-        Header: "",
+        Header: "Compare",
         id: "user.id",
         accessor: "user.id",
         className: styles.compareCell,
         Cell: ({ cell }) => {
+          if (!userComparison) {
+            return null;
+          }
+
           if (parseInt(cell.value) === parseInt(user?.id)) {
             return null;
           }
 
-          return null;
-
           return (
-            <Link href={`/compare/${user?.id}/to/${cell.value}/at/current`}>
+            <Link
+              href={`/${currentLocation?.url}/boulder/compare/${user?.id}/to/${cell.value}/at/current`}
+            >
               <a className={cn(typography.delta700, colors.lila)}>Compare</a>
             </Link>
           );
         },
       },
     ];
-  }, [boulderCount, user]);
+  }, [boulderCount, user, userComparison, currentLocation]);
 
   return (
     <RankingTable

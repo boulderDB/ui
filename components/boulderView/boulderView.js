@@ -10,6 +10,7 @@ import BoulderTable, {
   ascentTypes,
   columns,
   filters as boulderFilters,
+  resolveFilterValue,
 } from "../boulderTable/boulderTable";
 import HoldType from "../holdType/holdType";
 import Grade from "../grade/grade";
@@ -21,7 +22,6 @@ import Link from "next/link";
 import cn from "classnames";
 import { typography } from "../../styles/utilities";
 import toast from "../../utilties/toast";
-import Loader from "../loader/loader";
 import Select from "../select/select";
 import GlobalFilter from "../boulderTable/globalFilter";
 import CollapsedRow from "../boulderTable/collapsedRow";
@@ -35,28 +35,13 @@ import useAddAscent from "../../hooks/useAddAscent";
 import useRemoveAscent from "../../hooks/useRemoveAscent";
 import usePersistentState from "../../hooks/usePersistentState";
 
-export default function BoulderView({
-  boulders,
-  event,
-  initialFilters = [],
-  forUser = null,
-}) {
-  const http = useHttp();
+export function useBoulderView({ event, forUser }) {
   const { setOpen } = useDrawer();
-  const { mutate } = useSWRConfig();
-
-  const { currentLocation, dispatchMessage, roles } = useContext(AppContext);
+  const { roles } = useContext(AppContext);
   const isAdmin = roles?.includes("admin");
 
   const [detailWall, setDetailWall] = useState(null);
   const [detailBoulder, setDetailBoulder] = useState(null);
-  const [selected, setSelected] = useState([]);
-  const [globalFilter, setGlobalFilter] = useState("");
-  const [matches, setMatches] = useState(0);
-  const [fixedView, setFixedView] = usePersistentState(
-    "fixedViewBoulderIndex",
-    false
-  );
 
   useEffect(() => {
     setOpen(!!detailWall);
@@ -66,151 +51,182 @@ export default function BoulderView({
     setOpen(!!detailBoulder);
   }, [detailBoulder]);
 
+  return useMemo(() => {
+    return {
+      defaultColumns: [
+        {
+          ...columns.holdType,
+          Cell: ({ value, row }) => (
+            <Tooltip title={row.original.holdType.name}>
+              <HoldType image={value.image} />
+            </Tooltip>
+          ),
+        },
+        {
+          ...columns.grade,
+          Cell: ({ value }) => {
+            if (isAdmin && value.internal) {
+              return (
+                <Grade
+                  name={value.name}
+                  color={value.color}
+                  internalName={value.internal.name}
+                  internalColor={value.internal.color}
+                />
+              );
+            }
+
+            return <Grade name={value.name} color={value.color} />;
+          },
+        },
+        {
+          ...columns.points,
+          Cell: ({ value }) => `${value} pts`,
+        },
+        {
+          ...columns.name,
+          Cell: ({ value, row }) => {
+            const boulderId = row.original.id;
+
+            return (
+              <DetailButton
+                active={detailBoulder === boulderId}
+                onClick={() => {
+                  setDetailBoulder(boulderId);
+                }}
+              >
+                {value}
+              </DetailButton>
+            );
+          },
+        },
+        {
+          ...columns.startWall,
+          className: styles.startWallCell,
+          Cell: ({ value, row }) => (
+            <span
+              onClick={() => {
+                setDetailWall(row.original.startWall.id);
+              }}
+            >
+              {value.name}
+            </span>
+          ),
+        },
+        {
+          ...columns.endWall,
+          className: styles.endWallCell,
+          Cell: ({ value, row }) => (
+            <span
+              onClick={() => {
+                setDetailWall(row.original.endWall?.id);
+              }}
+            >
+              {value.name}
+            </span>
+          ),
+        },
+        {
+          ...columns.setters,
+          className: styles.setterCell,
+          Cell: ({ value }) => <span>{value}</span>,
+        },
+        {
+          ...columns.date,
+        },
+        {
+          ...columns.ascent,
+          Cell: ({ row }) => (
+            <Ascents
+              onAdd={useAddAscent(event, forUser)}
+              onRemove={useRemoveAscent(event, forUser)}
+              boulder={row.original}
+            />
+          ),
+        },
+        {
+          ...columns.area,
+          Cell: ({}) => null,
+        },
+      ],
+      detailWall,
+      setDetailWall,
+      detailBoulder,
+      setDetailBoulder,
+    };
+  }, [event, forUser, detailBoulder, detailWall]);
+}
+
+export function useBoulderViewFilterOptions(boulders) {
+  return useMemo(() => {
+    return {
+      grades: filterPresentOptions(boulders, "grade", "id").sort((a, b) =>
+        a.name > b.name ? 1 : -1
+      ),
+      holdTypes: sortItemsAlphabetically(
+        filterPresentOptions(boulders, "holdType"),
+        "name"
+      ),
+      walls: sortItemsAlphabetically(
+        filterPresentOptions(boulders, "startWall"),
+        "name"
+      ),
+      setters: sortItemsAlphabetically(
+        filterPresentOptions(boulders, "setters"),
+        "username"
+      ),
+      areas: sortItemsAlphabetically(
+        filterPresentOptions(boulders, "areas"),
+        "name"
+      ),
+    };
+  }, [boulders]);
+}
+
+export default function BoulderView({
+  boulders,
+  event,
+  initialFilters = [],
+  forUser = null,
+}) {
+  const http = useHttp();
+  const { mutate } = useSWRConfig();
+
+  const { currentLocation, dispatchMessage, roles } = useContext(AppContext);
+  const isAdmin = roles?.includes("admin");
+
+  const [selected, setSelected] = useState([]);
+  const [globalFilter, setGlobalFilter] = useState("");
+  const [matches, setMatches] = useState(0);
+  const [fixedView, setFixedView] = usePersistentState(
+    "fixedViewBoulderIndex",
+    false
+  );
+
   const { filters, setFilters, applyFilter } = useBoulderFilters(
     initialFilters
   );
 
-  const grades = useMemo(
-    () =>
-      filterPresentOptions(boulders, "grade", "id").sort((a, b) =>
-        a.name > b.name ? 1 : -1
-      ),
-    [boulders]
-  );
+  const {
+    grades,
+    holdTypes,
+    walls,
+    setters,
+    areas,
+  } = useBoulderViewFilterOptions(boulders);
 
-  const holdTypes = useMemo(
-    () =>
-      sortItemsAlphabetically(
-        filterPresentOptions(boulders, "holdType"),
-        "name"
-      ),
-    [boulders]
-  );
-
-  const walls = useMemo(
-    () =>
-      sortItemsAlphabetically(
-        filterPresentOptions(boulders, "startWall"),
-        "name"
-      ),
-    [boulders]
-  );
-
-  const setters = useMemo(
-    () =>
-      sortItemsAlphabetically(
-        filterPresentOptions(boulders, "setters"),
-        "username"
-      ),
-    [boulders]
-  );
-
-  const areas = useMemo(
-    () =>
-      sortItemsAlphabetically(filterPresentOptions(boulders, "areas"), "name"),
-    [boulders]
-  );
+  const {
+    defaultColumns,
+    detailWall,
+    setDetailWall,
+    detailBoulder,
+    setDetailBoulder,
+  } = useBoulderView({
+    event,
+    forUser,
+  });
 
   const tableColumns = useMemo(() => {
-    const defaultColumns = [
-      {
-        ...columns.holdType,
-        Cell: ({ value, row }) => (
-          <Tooltip title={row.original.holdType.name}>
-            <HoldType image={value.image} />
-          </Tooltip>
-        ),
-      },
-      {
-        ...columns.grade,
-        Cell: ({ value }) => {
-          if (isAdmin && value.internal) {
-            return (
-              <Grade
-                name={value.name}
-                color={value.color}
-                internalName={value.internal.name}
-                internalColor={value.internal.color}
-              />
-            );
-          }
-
-          return <Grade name={value.name} color={value.color} />;
-        },
-      },
-      {
-        ...columns.points,
-        className: styles.pointsCell,
-        Cell: ({ value }) => `${value} pts`,
-      },
-      {
-        ...columns.name,
-        className: styles.nameCell,
-        Cell: ({ value, row }) => {
-          const boulderId = row.original.id;
-
-          return (
-            <DetailButton
-              active={detailBoulder === boulderId}
-              onClick={() => {
-                setDetailBoulder(boulderId);
-              }}
-            >
-              {value}
-            </DetailButton>
-          );
-        },
-      },
-      {
-        ...columns.startWall,
-        className: styles.startWallCell,
-        Cell: ({ value, row }) => (
-          <span
-            onClick={() => {
-              setDetailWall(row.original.startWall.id);
-            }}
-          >
-            {value.name}
-          </span>
-        ),
-      },
-      {
-        ...columns.endWall,
-        className: styles.endWallCell,
-        Cell: ({ value, row }) => (
-          <span
-            onClick={() => {
-              setDetailWall(row.original.endWall?.id);
-            }}
-          >
-            {value.name}
-          </span>
-        ),
-      },
-      {
-        ...columns.setters,
-        className: styles.setterCell,
-        Cell: ({ value }) => <span>{value}</span>,
-      },
-      {
-        ...columns.date,
-      },
-      {
-        ...columns.ascent,
-        Cell: ({ row }) => (
-          <Ascents
-            onAdd={addHandler}
-            onRemove={removeHandler}
-            boulder={row.original}
-          />
-        ),
-      },
-      {
-        ...columns.area,
-        Cell: ({ value, row }) => null,
-      },
-    ];
-
     if (isAdmin) {
       defaultColumns.unshift({
         ...columns.selection,
@@ -229,28 +245,7 @@ export default function BoulderView({
     }
 
     return defaultColumns;
-  }, [isAdmin, detailBoulder]);
-
-  const addHandler = useAddAscent(event, forUser);
-  const removeHandler = useRemoveAscent(event, forUser);
-
-  const resolveFilterValue = (id, options, property = "name") => {
-    if (!filters) {
-      return null;
-    }
-
-    const filter = filters.find((filter) => filter.id === id);
-
-    if (!filter) {
-      return null;
-    }
-
-    return options.find((option) => option[property] === filter.value);
-  };
-
-  if (!boulders) {
-    return <Loader />;
-  }
+  }, [isAdmin, defaultColumns]);
 
   return (
     <>
@@ -259,7 +254,7 @@ export default function BoulderView({
       <div className={styles.filters}>
         <Select
           {...boulderFilters.area}
-          value={resolveFilterValue("area", areas)}
+          value={resolveFilterValue(filters, "area", areas)}
           options={areas}
           onChange={(event, newValue) => {
             applyFilter("area", newValue ? newValue.name : null);
@@ -269,7 +264,7 @@ export default function BoulderView({
 
         <Select
           {...boulderFilters.holdType}
-          value={resolveFilterValue("holdType", holdTypes)}
+          value={resolveFilterValue(filters, "holdType", holdTypes)}
           options={holdTypes}
           onChange={(event, newValue) =>
             applyFilter("holdType", newValue ? newValue.name : null)
@@ -279,7 +274,7 @@ export default function BoulderView({
 
         <Select
           {...boulderFilters.grade}
-          value={resolveFilterValue("grade", grades)}
+          value={resolveFilterValue(filters, "grade", grades)}
           options={grades}
           onChange={(event, newValue) =>
             applyFilter("grade", newValue ? newValue.name : null)
@@ -289,7 +284,7 @@ export default function BoulderView({
 
         <Select
           {...boulderFilters.wall}
-          value={resolveFilterValue("start", walls)}
+          value={resolveFilterValue(filters, "start", walls)}
           options={walls}
           label={"Start"}
           onChange={(event, newValue) =>
@@ -301,7 +296,7 @@ export default function BoulderView({
         <Select
           {...boulderFilters.wall}
           label={"End"}
-          value={resolveFilterValue("end", walls)}
+          value={resolveFilterValue(filters, "end", walls)}
           options={walls}
           onChange={(event, newValue) =>
             applyFilter("end", newValue ? newValue.name : null)
@@ -311,7 +306,7 @@ export default function BoulderView({
 
         <Select
           {...boulderFilters.setter}
-          value={resolveFilterValue("setter", setters, "username")}
+          value={resolveFilterValue(filters, "setter", setters, "username")}
           options={setters}
           onChange={(event, newValue) => {
             applyFilter("setter", newValue ? newValue.username : null);
@@ -320,7 +315,7 @@ export default function BoulderView({
 
         <Select
           {...boulderFilters.ascent}
-          value={resolveFilterValue("ascent", ascentTypes, "id")}
+          value={resolveFilterValue(filters, "ascent", ascentTypes, "id")}
           onChange={(event, newValue) => {
             applyFilter("ascent", newValue ? newValue.id : null);
           }}
@@ -331,6 +326,7 @@ export default function BoulderView({
         <label htmlFor="fixedView" className={typography.epsilon}>
           Show all columns
         </label>
+
         <input
           type="checkbox"
           id={"fixedView"}

@@ -68,7 +68,7 @@ export default function AdminTable({
                 showMobileLabel={true}
                 className={styles.row}
                 cells={row.cells}
-                key={`row-${index}`}
+                key={row.original.id}
                 style={{
                   gridTemplateColumns: `repeat(${columns.length}, 1fr)`,
                 }}

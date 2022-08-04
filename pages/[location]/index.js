@@ -296,7 +296,7 @@ export default function Index() {
 
           <ul>
             {tags?.map((tag) => (
-              <li>
+              <li key={tag.id}>
                 {tag.emoji} <span className={typography.delta}>{tag.name}</span>
               </li>
             ))}

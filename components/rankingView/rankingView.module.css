@@ -1,11 +1,6 @@
 .tableRow,
 .tableHeader {
-  grid-template-columns: 60px minmax(100px, auto) 80px 100px 100px 110px 100px 100px 100px;
-}
-
-.compareCell {
-  display: flex;
-  justify-content: flex-end;
+  grid-template-columns: 40px minmax(100px, 150px) 60px 60px auto 80px 80px 100px 100px;
 }
 
 .nameCell {
@@ -13,35 +8,37 @@
 }
 
 @media (--m) {
-  .pointsCell,
-  .advanceCell,
-  .genderCell,
-  .lastActivityCell {
+  .bouldersCell.bouldersCell,
+  .genderCell.genderCell,
+  .lastActivityCell.lastActivityCell {
     display: none;
   }
 
   .tableRow,
   .tableHeader {
-    grid-template-columns: 60px 200px 200px 140px 140px auto;
+    grid-template-columns: 40px auto 60px 60px 80px 100px;
   }
 }
 
 @media (--s) {
-  .pointsCell,
-  .advanceCell,
-  .bouldersCell,
-  .flashedCell,
-  .toppedCell,
-  .genderCell,
-  .lastActivityCell {
+  .bouldersCell.bouldersCell,
+  .flashedCell.flashedCell,
+  .toppedCell.toppedCell,
+  .genderCell.genderCell,
+  .lastActivityCell.lastActivityCell,
+  .rankCell.rankCell {
     display: none;
   }
 
   .tableRow {
-    grid-template-columns: 10px minmax(70px, auto) auto;
+    grid-template-columns: 40px 100px auto;
   }
 
   .tableHeader {
     display: none;
+  }
+
+  .compareCell {
+    justify-content: flex-end;
   }
 }

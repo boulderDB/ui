@@ -139,7 +139,7 @@ export default function BoulderTable({
               <TableRow
                 className={rowClassName}
                 cells={row.cells}
-                key={`row-${index}`}
+                key={row.original.id}
               />
             );
           })}
@@ -247,7 +247,11 @@ export const columns = {
     id: "date",
     accessor: "createdAt",
     Header: "Date",
-    sortType: (a, b) => (new Date(a) > new Date(b) ? -1 : 1),
+    sortType: (a, b) => {
+      console.log(new Date(a.values.date));
+
+      return new Date(a.values.date) - new Date(b.values.date);
+    },
     Cell: ({ value }) => parseDate(value)?.string,
   },
   ascent: {
@@ -310,3 +314,17 @@ export const filters = {
     getOptionLabel: (option) => option.name,
   },
 };
+
+export function resolveFilterValue(filters, id, options, property = "name") {
+  if (!filters) {
+    return null;
+  }
+
+  const filter = filters.find((filter) => filter.id === id);
+
+  if (!filter) {
+    return null;
+  }
+
+  return options.find((option) => option[property] === filter.value);
+}
