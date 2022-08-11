@@ -20,6 +20,10 @@
   justify-content: space-between;
 }
 
+.isHidden {
+  display: none;
+}
+
 .cell:first-child {
   margin-left: 8px;
 }

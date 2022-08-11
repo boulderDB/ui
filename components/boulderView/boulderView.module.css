@@ -73,31 +73,29 @@
 }
 
 @media (max-width: 1280px) {
-  .tableRow:not(.isFixedTableRow),
-  .tableHeader:not(.isFixedTableHeader) {
+  .isFluidTableRow,
+  .isFluidTableHeader {
     grid-template-columns: 20px 80px 60px minmax(60px, auto) 140px 140px 152px;
   }
 
-  .isAdminTableRow:not(.isFixedTableRow),
-  .isAdminTableHeader:not(.isFixedTableHeader) {
+  .isFluidTableRow.isAdminTableRow,
+  .isFluidTableRow.isAdminTableHeader {
     grid-template-columns: 40px 20px 80px 60px minmax(60px, auto) 140px 140px 152px;
   }
 
-  .tableRow:not(.isFixedTableRow) .pointsCell.pointsCell,
-  .tableRow:not(.isFixedTableRow) .endWallCell.endWallCell,
-  .tableRow:not(.isFixedTableRow) .setterCell.setterCell {
+  .isFluidTableRow .endWallCell,
+  .isFluidTableRow .setterCell {
     display: none;
   }
 
-  .tableHeader:not(.isFixedTableHeader) .pointsCell.pointsCell,
-  .tableHeader:not(.isFixedTableHeader) .endWallCell.endWallCell,
-  .tableHeader:not(.isFixedTableHeader) .setterCell.setterCell {
+  .isFluidTableHeader .endWallCell,
+  .isFluidTableHeader .setterCell {
     display: none;
   }
 }
 
 @media (max-width: 768px) {
-  .tableHeader:not(.isFixedTableHeader) {
+  .isFluidTableHeader {
     display: none;
   }
 

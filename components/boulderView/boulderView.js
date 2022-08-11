@@ -81,6 +81,7 @@ export function useBoulderView({ event, forUser }) {
         },
         {
           ...columns.points,
+          className: styles.pointsCell,
           Cell: ({ value }) => `${value} pts`,
         },
         {
@@ -354,13 +355,12 @@ export default function BoulderView({
         onSelectRows={(ids) => setSelected(ids)}
         isAdmin={isAdmin}
         headerClassName={cn(
-          styles.tableHeader,
-          isAdmin ? styles.isAdminTableHeader : null,
-          fixedView ? styles.isFixedTableHeader : null
+          isAdmin ? styles.isAdminTableHeader : styles.tableHeader,
+          fixedView ? styles.isFixedTableHeader : styles.isFluidTableHeader
         )}
         rowClassName={cn(
           isAdmin ? styles.isAdminTableRow : styles.tableRow,
-          fixedView ? styles.isFixedTableRow : null
+          fixedView ? styles.isFixedTableRow : styles.isFluidTableRow
         )}
         collapsedRowRenderer={(cells) => <CollapsedRow cells={cells} />}
       />

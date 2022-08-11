@@ -15,8 +15,8 @@
   margin-left: 4px;
 }
 
-.tableRow,
-.tableHeader {
+.isFluidTableRow,
+.isFluidTableHeader {
   grid-template-columns: minmax(20px, 60px) 80px 60px minmax(60px, auto) 140px 140px 140px 100px 152px;
 }
 
@@ -73,8 +73,8 @@
 }
 
 @media (max-width: 1280px) {
-  .tableRow:not(.isFixedTableRow),
-  .tableHeader:not(.isFixedTableHeader) {
+  .isFluidTableRow:not(.isFixedTableRow),
+  .isFluidTableHeader:not(.isFixedTableHeader) {
     grid-template-rows: 1fr 1fr;
     grid-template-columns: minmax(20px, 60px) 80px auto 100px 100px 152px;
   }
@@ -92,7 +92,7 @@
 }
 
 @media (max-width: 768px) {
-  .tableHeader:not(.isFixedTableHeader) {
+  .isFluidTableHeader:not(.isFixedTableHeader) {
     display: none;
   }
 

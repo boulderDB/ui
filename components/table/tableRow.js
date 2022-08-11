@@ -11,6 +11,7 @@ export default function TableRow({ cells, className, showMobileLabel, style }) {
             className={cn(
               styles.cell,
               showMobileLabel ? styles.cellWithLabel : null,
+              cell.column.hidden ? styles.isHidden : null,
               cell.column.className
             )}
             key={`cell-${cellIndex}`}
