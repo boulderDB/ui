@@ -317,7 +317,7 @@ export const models = [
         accessor: ({ startDate }) =>
           startDate ? parseDate(startDate, true)?.string : null,
         sortType: (a, b) => {
-          return new Date(a.values.date) - new Date(b.values.date);
+          return new Date(a.values.startDate) - new Date(b.values.startDate);
         },
       },
       {
@@ -325,7 +325,7 @@ export const models = [
         accessor: ({ endDate }) =>
           endDate ? parseDate(endDate, true)?.string : null,
         sortType: (a, b) => {
-          return new Date(a.values.date) - new Date(b.values.date);
+          return new Date(a.values.endDate) - new Date(b.values.endDate);
         },
       },
       {
