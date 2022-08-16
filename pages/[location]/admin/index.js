@@ -316,11 +316,17 @@ export const models = [
         Header: "Start date",
         accessor: ({ startDate }) =>
           startDate ? parseDate(startDate, true)?.string : null,
+        sortType: (a, b) => {
+          return new Date(a.values.date) - new Date(b.values.date);
+        },
       },
       {
         Header: "End date",
         accessor: ({ endDate }) =>
           endDate ? parseDate(endDate, true)?.string : null,
+        sortType: (a, b) => {
+          return new Date(a.values.date) - new Date(b.values.date);
+        },
       },
       {
         id: "href",

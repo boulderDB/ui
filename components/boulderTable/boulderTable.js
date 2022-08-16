@@ -248,8 +248,6 @@ export const columns = {
     accessor: "createdAt",
     Header: "Date",
     sortType: (a, b) => {
-      console.log(new Date(a.values.date));
-
       return new Date(a.values.date) - new Date(b.values.date);
     },
     Cell: ({ value }) => parseDate(value)?.string,
