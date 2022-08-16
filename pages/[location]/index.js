@@ -218,8 +218,6 @@ export default function Index() {
     return {
       labels: grades.map((grade) => `Grade ${grade.name}`),
       datasets: ascentTypes.map((ascentType) => {
-        console.log();
-
         return {
           label: ascentType.name,
           data: grades.flatMap((grade) => {

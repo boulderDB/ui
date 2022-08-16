@@ -2,7 +2,6 @@ import { useRouter } from "next/router";
 import {
   fetchOnceConfig,
   useCachedHttp,
-  useHttp,
 } from "../../../../../../hooks/useHttp";
 import React, { useContext, useMemo } from "react";
 import { AppContext } from "../../../../../_app";
@@ -58,7 +57,7 @@ export default function Index() {
 
   return (
     <Layout>
-      <Meta title={`Admin / Events / ${event.name}`} />
+      <Meta title={`Admin / Events / ${event.name} / Participants`} />
 
       <div className={layoutStyles.grid}>
         <h1 className={cn(layoutStyles.sideTitle, typography.alpha700)}>

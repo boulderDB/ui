@@ -314,16 +314,16 @@ export const models = [
       },
       {
         Header: "Start date",
-        accessor: ({ startDate }) =>
-          startDate ? parseDate(startDate, true)?.string : null,
+        accessor: "startDate",
+        Cell: ({ value }) => (value ? parseDate(value, true)?.string : null),
         sortType: (a, b) => {
           return new Date(a.values.startDate) - new Date(b.values.startDate);
         },
       },
       {
         Header: "End date",
-        accessor: ({ endDate }) =>
-          endDate ? parseDate(endDate, true)?.string : null,
+        accessor: "endDate",
+        Cell: ({ value }) => (value ? parseDate(value, true)?.string : null),
         sortType: (a, b) => {
           return new Date(a.values.endDate) - new Date(b.values.endDate);
         },
