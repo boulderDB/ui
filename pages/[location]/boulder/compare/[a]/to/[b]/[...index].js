@@ -13,9 +13,7 @@ export default function Index() {
     query: { a, b },
   } = useRouter();
 
-  const comparisons = useCachedHttp(
-    `/${currentLocation?.url}/compare/${a}/to/${b}/at/current`
-  );
+  const comparisons = useCachedHttp(`/${currentLocation?.url}/compare/${a}/to/${b}/at/current`);
 
   if (!comparisons) {
     return <Loader />;
