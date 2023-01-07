@@ -60,6 +60,9 @@ export default function RankingView({
         Header: "Points",
         accessor: "points",
         className: styles.pointsCell,
+        sortType: (a, b) => {
+          return a.values.points - b.values.points;
+        },
       },
       {
         Header: "Boulders",
@@ -105,7 +108,7 @@ export default function RankingView({
           }
 
           return null;
-          
+
           return (
             <Link
               href={`/${currentLocation?.url}/boulder/compare/${user?.id}/to/${cell.value}/at/current`}
