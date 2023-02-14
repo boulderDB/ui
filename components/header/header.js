@@ -28,29 +28,16 @@ export default function Header() {
     disableOnMount: false,
   });
 
-  const upcomingEvents = useCachedHttp(
+  const events = useCachedHttp(
     isAuthenticated && currentLocation
-      ? `/${currentLocation?.url}/events`
+      ? `/${currentLocation?.url}/events?filter=active`
       : null,
-    { filter: "upcoming" },
+    null,
     null,
     false,
     true,
     []
   );
-
-  const activeEvents = useCachedHttp(
-    isAuthenticated && currentLocation
-      ? `/${currentLocation?.url}/events`
-      : null,
-    { filter: "active" },
-    null,
-    false,
-    true,
-    []
-  );
-
-  const events = [...upcomingEvents, ...activeEvents];
 
   useEffect(() => {
     setMobileNavOverlayVisible(false);
