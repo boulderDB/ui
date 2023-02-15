@@ -41,7 +41,7 @@ ChartJS.register(
   BarElement
 );
 
-function EventList({ title, items }) {
+function EventList({ title, items, label = "Register" }) {
   const { currentLocation, dispatchMessage } = useContext(AppContext);
   const http = useHttp();
 
@@ -103,7 +103,7 @@ function EventList({ title, items }) {
               inverted={true}
               onClick={async () => await registrationHandler(event)}
             >
-              {event.isParticipant ? "Unregister" : "Register"}
+              {event.isParticipant ? "Unregister" : label}
             </Button>
           </li>
         ))}
@@ -235,6 +235,16 @@ export default function Index() {
 
       <div className={layoutStyles.grid}>
         <div className={cn(layoutStyles.column, layoutStyles.leftColumn)}>
+          <div className={styles.activeEvents}>
+            {active && active.length > 0 && (
+              <EventList items={active} title={"Active"} />
+            )}
+          </div>
+        </div>
+      </div>
+
+      <div className={layoutStyles.grid}>
+        <div className={cn(layoutStyles.column, layoutStyles.leftColumn)}>
           <h1 className={cn(layoutStyles.sideTitle, typography.alpha700)}>
             Welcome back {tokenPayload?.user?.username} 👋
           </h1>
@@ -255,12 +265,12 @@ export default function Index() {
         </div>
 
         <div className={cn(layoutStyles.column, layoutStyles.rightColumn)}>
-          {active && active.length > 0 && (
-            <EventList items={active} title={"Active"} />
-          )}
-
           {upcoming && upcoming.length > 0 && (
-            <EventList items={upcoming} title={"Upcoming"} />
+            <EventList
+              items={upcoming}
+              title={"Upcoming"}
+              label={"Pre-register"}
+            />
           )}
         </div>
 
