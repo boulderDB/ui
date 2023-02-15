@@ -30,7 +30,7 @@ export default function Header() {
 
   const events = useCachedHttp(
     isAuthenticated && currentLocation
-      ? `/${currentLocation?.url}/events?filter=upcoming`
+      ? `/${currentLocation?.url}/events`
       : null,
     null,
     null,

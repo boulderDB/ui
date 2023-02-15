@@ -256,7 +256,7 @@ export default function Index() {
 
         <div className={cn(layoutStyles.column, layoutStyles.rightColumn)}>
           {active && active.length > 0 && (
-            <EventList items={active} title={"Current"} />
+            <EventList items={active} title={"Active"} />
           )}
 
           {upcoming && upcoming.length > 0 && (
