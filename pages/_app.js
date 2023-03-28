@@ -106,14 +106,14 @@ function MyApp({ Component, pageProps, locations }) {
     }
   }, [isOpen]);
 
-  useEffect(() => {
-    if (
-      !isAuthenticated &&
-      !loginRedirectExclusions.includes(router.pathname)
-    ) {
-      return router.push(`/login`);
-    }
-  }, [isAuthenticated, loginRedirectExclusions]);
+  // useEffect(() => {
+  //   if (
+  //     !isAuthenticated &&
+  //     !loginRedirectExclusions.includes(router.pathname)
+  //   ) {
+  //     return router.push(`/login`);
+  //   }
+  // }, [isAuthenticated, loginRedirectExclusions]);
 
   return (
     <>

@@ -204,17 +204,11 @@ export default function BoulderView({
     false
   );
 
-  const { filters, setFilters, applyFilter } = useBoulderFilters(
-    initialFilters
-  );
+  const { filters, setFilters, applyFilter } =
+    useBoulderFilters(initialFilters);
 
-  const {
-    grades,
-    holdTypes,
-    walls,
-    setters,
-    areas,
-  } = useBoulderViewFilterOptions(boulders);
+  const { grades, holdTypes, walls, setters, areas } =
+    useBoulderViewFilterOptions(boulders);
 
   const {
     defaultColumns,
@@ -237,8 +231,9 @@ export default function BoulderView({
 
             <Link
               href={`/${currentLocation?.url}/admin/boulders/${row.original.id}`}
+              className={cn(typography.eta, styles.editLink)}
             >
-              <a className={cn(typography.eta, styles.editLink)}>✏️</a>
+              ✏️
             </Link>
           </div>
         ),

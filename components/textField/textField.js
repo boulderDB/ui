@@ -1,3 +1,5 @@
+"use client";
+
 import MUITextField from "@mui/material/TextField";
 import styles from "./textField.module.css";
 import cn from "classnames";

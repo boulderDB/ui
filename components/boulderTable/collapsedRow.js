@@ -34,9 +34,10 @@ export default function CollapsedRow({ cells }) {
           <div className={cn(styles.name, styles.metaItem)}>
             {isAdmin && (
               <Link
+                className={styles.editLink}
                 href={`/${currentLocation?.url}/admin/boulders/${boulderId}`}
               >
-                <a className={styles.editLink}>✏️</a>
+                ✏️
               </Link>
             )}
 

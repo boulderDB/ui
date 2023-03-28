@@ -1,0 +1,31 @@
+.row {
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 8px;
+  margin-top: 50px;
+}
+
+.input {
+  margin-top: 12px;
+}
+
+.description,
+.error {
+  margin-top: 4px;
+}
+
+.button {
+  margin-top: 50px;
+}
+
+.responseError {
+  display: inline-flex;
+  background-color: var(--color-red);
+  color: var(--color-white);
+  padding: 20px;
+  margin-top: 20px;
+}
+
+.error {
+  margin-top: 8px;
+}

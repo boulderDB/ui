@@ -27,18 +27,17 @@ export default function NavItem({
   }
 
   return (
-    <Link href={href}>
-      <a
-        className={cn(
-          styles.root,
-          typography.delta,
-          asPath === href ? typography.delta700 : null,
-          className
-        )}
-        {...rest}
-      >
-        {children}
-      </a>
+    <Link
+      href={href}
+      className={cn(
+        styles.root,
+        typography.delta,
+        asPath === href ? typography.delta700 : null,
+        className
+      )}
+      {...rest}
+    >
+      {children}
     </Link>
   );
 }

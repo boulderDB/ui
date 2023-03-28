@@ -67,12 +67,18 @@ export default function Index() {
           />
 
           <div className={styles.links}>
-            <Link href={"/sign-up"}>
-              <a className={cn(typography.epsilon, colors.black)}>Sign up</a>
+            <Link
+              href={"/sign-up"}
+              className={cn(typography.epsilon, colors.black)}
+            >
+              Sign up
             </Link>
 
-            <Link href={"/login"}>
-              <a className={cn(typography.epsilon, colors.black)}>Login</a>
+            <Link
+              href={"/login"}
+              className={cn(typography.epsilon, colors.black)}
+            >
+              Login
             </Link>
           </div>
         </div>

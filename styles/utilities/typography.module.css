@@ -22,6 +22,11 @@
   line-height: 22px;
 }
 
+.gamma700 {
+  @extend .gamma;
+  font-weight: bold;
+}
+
 .delta {
   font-family: var(--font-family-sans);
   font-style: normal;

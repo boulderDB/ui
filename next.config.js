@@ -21,16 +21,13 @@ const moduleExports = {
     return entries;
   },
   async redirects() {
-    return [
-      {
-        source: "/",
-        destination: "/login",
-        permanent: true,
-      },
-    ];
+    return [];
   },
   pwa: {
     dest: "public",
+  },
+  experimental: {
+    appDir: true,
   },
 };
 

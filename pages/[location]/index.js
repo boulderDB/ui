@@ -251,14 +251,20 @@ export default function Index() {
 
           <ul className={styles.area}>
             <li className={styles.link}>
-              <Link href={`/${currentLocation?.url}/boulder`}>
-                <a className={cn(typography.gamma)}>Boulder</a>
+              <Link
+                href={`/${currentLocation?.url}/boulder`}
+                className={cn(typography.gamma)}
+              >
+                Boulder
               </Link>
             </li>
 
             <li className={styles.link}>
-              <Link href={`/${currentLocation?.url}/rankings/current`}>
-                <a className={cn(typography.gamma)}>Ranking</a>
+              <Link
+                href={`/${currentLocation?.url}/rankings/current`}
+                className={cn(typography.gamma)}
+              >
+                Ranking
               </Link>
             </li>
           </ul>

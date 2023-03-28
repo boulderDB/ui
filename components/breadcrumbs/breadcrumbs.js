@@ -13,8 +13,8 @@ export default function Breadcrumbs({ items }) {
           <Fragment key={index}>
             <li>
               {isNotLastItem ? (
-                <Link href={item.href}>
-                  <a className={colors.lila}>{item.title}</a>
+                <Link href={item.href} className={colors.lila}>
+                  {item.title}
                 </Link>
               ) : (
                 <span>{item.title}</span>

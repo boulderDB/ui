@@ -108,14 +108,6 @@ export default function RankingView({
           }
 
           return null;
-
-          return (
-            <Link
-              href={`/${currentLocation?.url}/boulder/compare/${user?.id}/to/${cell.value}/at/current`}
-            >
-              <a className={cn(typography.delta700, colors.lila)}>Compare</a>
-            </Link>
-          );
         },
       },
     ];

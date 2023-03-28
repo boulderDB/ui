@@ -1,4 +1,4 @@
-import { useLayoutEffect, useRef } from "react";
+import { useEffect, useLayoutEffect, useRef } from "react";
 
 const maybeDocument = typeof document !== "undefined" ? document : {};
 
@@ -39,7 +39,7 @@ export default function useDocumentScrollLock({
     isLockedRef.current = false;
   };
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     disableOnMount && disableScroll();
     return () => reEnableOnUnmount && enableScroll();
   }, []);

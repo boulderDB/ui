@@ -1,0 +1,30 @@
+.root {
+  background-color: var(--color-lila);
+  height: 32px;
+  width: 64px;
+  border-radius: 20px;
+  display: inline-flex;
+  position: relative;
+}
+
+.label {
+  position: absolute;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+.indicator {
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 0.2s;
+  border-radius: 100%;
+  width: 32px;
+  border: 2px solid var(--color-lila);
+  height: 32px;
+  background-color: var(--color-white);
+  left: 0;
+}

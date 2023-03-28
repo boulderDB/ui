@@ -490,7 +490,7 @@ export default function Index() {
             {models.map((model, index) => (
               <li key={index}>
                 <Link href={`/${currentLocation?.url}/admin/${model.route}`}>
-                  <a>{model.title}</a>
+                  {model.title}
                 </Link>
               </li>
             ))}

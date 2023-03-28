@@ -1,0 +1,18 @@
+.root {
+  height: 50px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+  background-color: var(--color-lila);
+  color: var(--color-white);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  width: 100%;
+  padding: 0 18px;
+  text-align: center;
+}
+
+.isDanger {
+  background-color: var(--color-red);
+}

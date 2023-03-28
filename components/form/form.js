@@ -1,3 +1,5 @@
+"use client";
+
 import useForm from "../../hooks/useForm";
 import styles from "./form.module.css";
 import Button from "../button/button";
@@ -5,12 +7,8 @@ import cn from "classnames";
 import { colors, typography } from "../../styles/utilities";
 
 function Form({ defaults, fields, onSubmit, submitLabel }) {
-  const {
-    handleSubmit,
-    submitting,
-    observeField,
-    getFieldComponentProps,
-  } = useForm(defaults);
+  const { handleSubmit, submitting, observeField, getFieldComponentProps } =
+    useForm(defaults);
 
   return (
     <form
@@ -20,14 +18,8 @@ function Form({ defaults, fields, onSubmit, submitLabel }) {
       }}
     >
       {fields.map((field, index) => {
-        const {
-          Component,
-          name,
-          label,
-          value,
-          componentProps,
-          description,
-        } = getFieldComponentProps(field);
+        const { Component, name, label, value, componentProps, description } =
+          getFieldComponentProps(field);
 
         return (
           <div className={styles.row} key={index}>

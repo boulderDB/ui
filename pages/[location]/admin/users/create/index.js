@@ -61,8 +61,11 @@ export default function Index() {
               return data;
             }}
             renderMatch={(match) => (
-              <Link href={`/${currentLocation?.url}/admin/users/${match.id}`}>
-                <a className={colors.lila}>{match.username}</a>
+              <Link
+                href={`/${currentLocation?.url}/admin/users/${match.id}`}
+                className={colors.lila}
+              >
+                {match.username}
               </Link>
             )}
           />

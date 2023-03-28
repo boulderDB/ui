@@ -48,11 +48,7 @@ function Button({
   }
 
   if (href) {
-    return (
-      <Link href={href}>
-        <a {...props} />
-      </Link>
-    );
+    return <Link href={href} {...props} />;
   }
 
   return <button onClick={onClick} {...props} />;
