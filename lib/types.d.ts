@@ -4,11 +4,31 @@ export type Location = {
   url: string;
 };
 
-export type TokenPayload = {
-  iat: number;
-  exp: number;
+export type Notification = {
+  id: number;
+  type: "doubt";
+  location: Location;
+};
+
+export type User = {
+  email: string;
+  firstName: string;
+  lastName: string;
+  gender: string;
+  id: number;
+  image: string;
+  lastActivity: string;
+  notifications: Notification[];
   roles: string[];
   username: string;
+  visible: boolean;
+};
+
+export type TokenPayload = {
+  expiration: number;
+  lastVisitedLocation: Location;
+  target: string | null;
+  user: User;
 };
 
 export type Gender = {

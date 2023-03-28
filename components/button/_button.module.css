@@ -1,3 +1,12 @@
+@keyframes shimmer {
+  0% {
+    background-position: -468px 0;
+  }
+  100% {
+    background-position: 468px 0;
+  }
+}
+
 .root {
   height: 50px;
   display: inline-flex;
@@ -11,6 +20,17 @@
   width: 100%;
   padding: 0 18px;
   text-align: center;
+
+  animation-duration: 1.25s;
+  animation-fill-mode: forwards;
+  animation-iteration-count: infinite;
+  animation-name: shimmer;
+  animation-timing-function: linear;
+  background-size: 100% 50px;
+}
+
+.isLoading {
+  background: linear-gradient(to right, var(--color-lila) 10%, var(--color-white) 18%, var(--color-lila) 33%);
 }
 
 .isDanger {

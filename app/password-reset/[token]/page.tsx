@@ -1,13 +1,19 @@
 import cx from "classix";
-import Link from "next/link";
-import styles from "../../styles/utilities/frontPage.module.css";
+import styles from "../../../styles/utilities/frontPage.module.css";
 import utilities from "../../../styles/utilities/utilities";
+import { PasswordResetForm } from "./components/passwordResetForm";
 
 export const metadata = {
   title: "BoulderDB | Password reset",
 };
 
-export default function Page() {
+export default function Page({
+  params,
+}: {
+  params: {
+    token: string;
+  };
+}) {
   return (
     <div className={styles.root}>
       <h1
@@ -16,7 +22,7 @@ export default function Page() {
         Choose your new password
       </h1>
 
-      {/* <PasswordResetForm /> */}
+      <PasswordResetForm token={params.token} />
     </div>
   );
 }

@@ -4,13 +4,28 @@ import { z } from "zod";
 import { Form } from "../../../components/form/_form";
 import { post } from "../../../lib/http";
 import { Input } from "../../../components/input/input";
+import cookies from "js-cookie";
+import { TokenPayload } from "../../../lib/types";
+import { redirect } from "next/navigation";
 
 export function LoginForm() {
   return (
     <Form
       submitLabel={"Login"}
       onSubmit={async (values) => {
-        await post("/login", values);
+        const tokenPayload = await post<TokenPayload>("/login", values);
+
+        cookies.set("authenticated", true, {
+          expires: tokenPayload.expiration - Math.floor(Date.now() / 1000),
+        });
+
+        console.log(`/${tokenPayload.lastVisitedLocation.url}`);
+
+        redirect(
+          tokenPayload.lastVisitedLocation
+            ? `/${tokenPayload.lastVisitedLocation.url}`
+            : "foo"
+        );
       }}
       fields={[
         {

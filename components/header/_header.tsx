@@ -2,15 +2,13 @@
 
 import { useState } from "react";
 import styles from "./_header.module.css";
-import { cx } from "classix";
 import utilities from "../../styles/utilities/utilities";
-import { Icon } from "../icon/_icon";
 import Link from "next/link";
 import { Location, TokenPayload } from "../../lib/types";
 
 type HeaderProps = {
   authenticated: boolean;
-  tokenPayload: TokenPayload;
+  tokenPayload: TokenPayload | null;
   currentLocation?: Location;
   backlink: string;
   locations: Location[];
@@ -40,7 +38,7 @@ export function Header({
         </div>
 
         <div className={styles.secondary}>
-          {authenticated ? (
+          {authenticated && tokenPayload ? (
             <Link href={"/account"}>[{tokenPayload.username}]</Link>
           ) : null}
         </div>

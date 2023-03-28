@@ -5,18 +5,16 @@ import { Form } from "../../../../components/form/_form";
 import { post } from "../../../../lib/http";
 import { Input } from "../../../../components/input/input";
 
-export function PasswordResetForm({
-  params,
-}: {
-  params: {
-    token: string;
-  };
-}) {
+type PasswordResetFormProps = {
+  token: string;
+};
+
+export function PasswordResetForm({ token }: PasswordResetFormProps) {
   return (
     <Form
       submitLabel={"Reset"}
       onSubmit={async (values) => {
-        await post(`/password-reset/${params.token}`, values);
+        await post(`/password-reset/${token}`, values);
       }}
       fields={[
         {

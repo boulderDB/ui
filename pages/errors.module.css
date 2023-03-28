@@ -1,8 +1,0 @@
-.img {
-  margin-top: 40px;
-  width: 50%;
-
-  @media (--s) {
-    width: 100%;
-  }
-}

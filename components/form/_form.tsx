@@ -143,10 +143,7 @@ export function Form<TValues>({
                             className={cx(styles.input)}
                             value={value}
                             onBlur={onBlur}
-                            onChange={(value: any) => {
-                              setValue(value);
-                              console.log(value);
-                            }}
+                            onChange={(value: any) => setValue(value)}
                           />
 
                           {description ? (
@@ -181,7 +178,8 @@ export function Form<TValues>({
             )}
 
             <Button
-              disabled={!isValid || submitting}
+              loading={submitting}
+              disabled={!isValid}
               type="submit"
               className={styles.button}
             >

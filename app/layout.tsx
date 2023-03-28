@@ -5,6 +5,7 @@ import { Header } from "../components/header/_header";
 import { get } from "../lib/http";
 import { Location } from "../lib/types";
 import { redirect } from "next/navigation";
+import { Footer } from "../components/footer/footer";
 
 export default async function RootLayout({ children }) {
   const authenticated = isAuthenticated();
@@ -19,14 +20,18 @@ export default async function RootLayout({ children }) {
   return (
     <html lang="en">
       <body>
-        <Header
-          tokenPayload={tokenPayload}
-          authenticated={authenticated}
-          locations={locations}
-          backlink={authenticated ? "/" : "/login"}
-        />
+        <div className={styles.root}>
+          <Header
+            tokenPayload={tokenPayload}
+            authenticated={authenticated}
+            locations={locations}
+            backlink={authenticated ? "/" : "/login"}
+          />
 
-        <main className={styles.main}>{children}</main>
+          <main className={styles.main}>{children}</main>
+
+          <Footer />
+        </div>
       </body>
     </html>
   );
