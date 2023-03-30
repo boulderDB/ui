@@ -15,11 +15,8 @@ import { Button } from "../button/_button";
 import { UploadProps } from "../upload/_upload";
 import { SelectProps } from "../select/_select";
 import { HTTPError } from "../../lib/http";
-import {
-  ErrorReponse,
-  FormErrorResponse,
-  ServerErrorResponse,
-} from "../../lib/types";
+import { FormErrorResponse, ServerErrorResponse } from "../../lib/types";
+import { SwitchProps } from "../switch/_switch";
 
 export type PrimitiveInput = number | string | boolean | null;
 
@@ -33,7 +30,7 @@ export type FormFieldProps<ComplexInput = void> = {
   hasError?: boolean;
 };
 
-type ComponentProps = InputProps | UploadProps | SelectProps<any>;
+type ComponentProps = InputProps | UploadProps | SelectProps<any> | SwitchProps;
 
 type FormField = {
   placeholder?: string;
@@ -45,7 +42,12 @@ type FormField = {
   ComponentProps;
 
 type FormProps<TValues> = {
-  onSubmit: (values: TValues, form: FormInstance<TValues>) => Promise<void>;
+  data?: TValues;
+  onSubmit: (
+    values: TValues,
+    form: FormInstance<TValues>,
+    setSuccess: (message: string) => void
+  ) => Promise<void>;
   submitLabel: string;
   fields: FormField[];
 };
@@ -57,18 +59,26 @@ function isFormErrorResponse(
 }
 
 export function Form<TValues>({
+  data,
   onSubmit,
   submitLabel,
   fields,
 }: FormProps<TValues>) {
   const [submitting, setSubmitting] = useState<boolean>(false);
   const [error, setError] = useState<string>();
+  const [success, setSuccess] = useState<string>();
 
   return (
     <div>
       {error ? (
-        <div className={styles.responseError}>
+        <div className={cx(styles.notice, styles.isErrorNotice)}>
           <p className={utilities.typograpy.delta700}>{error}</p>
+        </div>
+      ) : null}
+
+      {success ? (
+        <div className={cx(styles.notice, styles.isSuccessNotice)}>
+          <p className={utilities.typograpy.delta700}>{success}</p>
         </div>
       ) : null}
 
@@ -77,7 +87,7 @@ export function Form<TValues>({
           setSubmitting(true);
 
           try {
-            await onSubmit(values, form);
+            await onSubmit(values, form, setSuccess);
           } catch (error) {
             if (error instanceof HTTPError) {
               if (!isFormErrorResponse(error.response)) {
@@ -122,12 +132,13 @@ export function Form<TValues>({
                     onBlurValidate={onBlurValidate}
                     onChangeValidate={onChangeValidate}
                     onSubmitValidate={onSubmitValidate}
-                    initialValue={initialValue}
+                    initialValue={data ? data[name] : initialValue}
                   >
                     {({ value, setValue, onBlur, errors }) => {
                       return (
                         <div className={styles.row} key={name}>
                           <label
+                            htmlFor={name}
                             className={cx(
                               utilities.typograpy.epsilon,
                               styles.label
@@ -138,6 +149,8 @@ export function Form<TValues>({
 
                           <InputComponent
                             {...rest}
+                            id={name}
+                            label={label}
                             name={name}
                             hasError={errors.length > 0}
                             className={cx(styles.input)}

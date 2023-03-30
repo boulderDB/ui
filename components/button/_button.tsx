@@ -4,7 +4,7 @@ import { capitalize } from "../../lib/capitalize";
 import utilities from "../../styles/utilities/utilities";
 
 type ButtonProps = {
-  loading: boolean;
+  loading?: boolean;
   variant?: "danger";
 } & React.ButtonHTMLAttributes<HTMLButtonElement>;
 

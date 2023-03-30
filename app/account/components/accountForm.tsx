@@ -1,16 +1,20 @@
 "use client";
 
-import { z } from "zod";
 import { Form } from "../../../components/form/_form";
-import { post } from "../../../lib/http";
-import { Input } from "../../../components/input/input";
-import { UploadRequest } from "../../../components/upload/_upload";
 import { Switch } from "../../../components/switch/_switch";
+import { z } from "zod";
+import { Upload } from "../../../components/upload/_upload";
+import { Input } from "../../../components/input/input";
+import { ShowMeResponse } from "../../../types/GetMeResponse";
 
-export function AccountForm() {
+type AccountFormProps = {
+  data: ShowMeResponse;
+};
+export function AccountForm({ data }: AccountFormProps) {
   return (
     <Form
-      submitLabel={"Update"}
+      data={data}
+      submitLabel={"Update account"}
       onSubmit={async (values) => {
         console.log(values);
       }}
@@ -19,6 +23,7 @@ export function AccountForm() {
           name: "image",
           label: "Image",
           type: "text",
+          onBlurValidate: z.string().url(),
           component: Upload,
         },
         {
@@ -27,6 +32,21 @@ export function AccountForm() {
           description:
             "Please note that if you choose not to be visible, you will not be able to participate in events or see rankings.",
           component: Switch,
+        },
+        {
+          name: "username",
+          label: "Username",
+          description:
+            "After updating your username, you will be redirected to the login page.",
+          onBlurValidate: z.string().min(4),
+          component: Input,
+        },
+        {
+          name: "email",
+          label: "E-Mail",
+          type: "email",
+          onBlurValidate: z.string().email(),
+          component: Input,
         },
       ]}
     />

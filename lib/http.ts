@@ -9,18 +9,28 @@ export class HTTPError extends Error {
   }
 }
 
-export async function post<T>(path: string, data: any): Promise<T> {
+export async function api<T>(
+  path: string,
+  method: "GET" | "POST" | "PUT" | "DELETE" = "GET",
+  data?: any
+): Promise<T> {
+  const options: RequestInit = {
+    method,
+    credentials: "include",
+    mode: "cors",
+    headers: {
+      accept: "application/json",
+      "content-type": "application/json",
+    },
+  };
+
+  if (method === "POST" || method === "PUT" || method === "DELETE") {
+    options.body = JSON.stringify(data);
+  }
+
   const response = await fetch(
     `${process.env.NEXT_PUBLIC_API_HOST}/api${path}`,
-    {
-      method: "POST",
-      mode: "cors",
-      body: JSON.stringify(data),
-      headers: {
-        accept: "application/json",
-        "content-type": "application/json",
-      },
-    }
+    options
   );
 
   if (!response.ok) {
@@ -28,17 +38,4 @@ export async function post<T>(path: string, data: any): Promise<T> {
   }
 
   return await response.json();
-}
-
-export async function get<T>(path: string): Promise<T> {
-  const response = await fetch(
-    `${process.env.NEXT_PUBLIC_API_HOST}/api${path}`
-  );
-
-  if (!response.ok) {
-    console.error(response);
-    throw new Error("Failed to fetch data");
-  }
-
-  return response.json();
 }

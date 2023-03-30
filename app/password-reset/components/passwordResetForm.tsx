@@ -2,7 +2,7 @@
 
 import { z } from "zod";
 import { Form } from "../../../components/form/_form";
-import { post } from "../../../lib/http";
+import { api } from "../../../lib/http";
 import { Input } from "../../../components/input/input";
 
 export function PasswordResetForm() {
@@ -10,7 +10,7 @@ export function PasswordResetForm() {
     <Form
       submitLabel={"Request reset"}
       onSubmit={async (values) => {
-        await post("/password-reset", values);
+        await api("/password-reset", "POST", values);
       }}
       fields={[
         {
@@ -19,7 +19,7 @@ export function PasswordResetForm() {
           type: "email",
           onBlurValidate: z.string().email(),
           component: Input,
-        }
+        },
       ]}
     />
   );

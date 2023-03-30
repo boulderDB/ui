@@ -25,11 +25,21 @@ export type User = {
 };
 
 export type TokenPayload = {
+  exp: number;
+  roles: string[];
+  username: string;
+};
+
+export type LoginResponse = {
   expiration: number;
   lastVisitedLocation: Location;
   target: string | null;
   user: User;
 };
+
+export type AccountResponse ={
+  
+}
 
 export type Gender = {
   id: string;

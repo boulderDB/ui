@@ -2,7 +2,7 @@
 
 import { z } from "zod";
 import { Form } from "../../../components/form/_form";
-import { post } from "../../../lib/http";
+import { api } from "../../../lib/http";
 import { Input } from "../../../components/input/input";
 import { Select } from "../../../components/select/_select";
 
@@ -20,7 +20,7 @@ export function SignUpForm() {
     }>
       submitLabel={"Register"}
       onSubmit={async (values) => {
-        await post("/register", {
+        await api("/register", "POST", {
           ...values,
           gender: values.gender.id,
         });

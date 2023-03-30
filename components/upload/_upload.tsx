@@ -2,6 +2,7 @@ import { ChangeEventHandler, useState } from "react";
 import { UploadRequest } from "../../lib/types";
 import Loader from "../loader/loader";
 import styles from "./upload.module.css";
+import { Icon } from "../icon/_icon";
 
 export type UploadProps = {
   name: string;
@@ -31,17 +32,10 @@ export function Upload({
         />
       )}
 
-      <div>
-        <label htmlFor={name} className={styles.label}>
-          {label}
-        </label>
-
+      <label className={styles.label}>
         <input
           type="file"
-          style={{
-            display: "none",
-          }}
-          id={name}
+          className={styles.input}
           name={name}
           onChange={async (event) => {
             try {
@@ -63,7 +57,11 @@ export function Upload({
             }
           }}
         />
-      </div>
+
+        <div className={styles.icon}>
+          <Icon name="plus" />
+        </div>
+      </label>
     </div>
   );
 }

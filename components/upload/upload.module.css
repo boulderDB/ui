@@ -1,6 +1,7 @@
 .root {
   display: inline-flex;
   align-items: center;
+  margin-top: 12px;
 }
 
 .root .loader {
@@ -8,18 +9,46 @@
 }
 
 .preview {
-  width: 80px;
-  height: 80px;
+  width: 64px;
+  height: 64px;
   background-size: cover;
   background-repeat: no-repeat;
+  margin-right: 16px;
 }
 
-.label {
-  background-color: var(--color-lila);
-  color: var(--color-white);
-  display: inline-flex;
+.label:focus-within {
+  outline: 5px auto Highlight;
+  outline: 5px auto -webkit-focus-ring-color;
+}
+
+.input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  clip-path: inset(50%);
+  border: 0;
+}
+
+.icon {
+  width: 32px;
+  height: 32px;
+  box-sizing: border-box;
+  border: 1px solid var(--color-black);
+  display: flex;
   align-items: center;
-  padding: 8px 16px;
-  margin-left: 16px;
+}
+
+.icon:hover svg {
   cursor: pointer;
+  transform: scale(1.2);
+}
+
+.icon svg {
+  margin: 0 auto;
+  align-items: center;
+  transition: transform 80ms ease-in-out;
 }

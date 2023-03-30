@@ -1,32 +1,48 @@
-import { Switch as HeadlessUISwitch } from "@headlessui/react";
-import { useEffect, useState } from "react";
+import {
+  Switch as HeadlessUISwitch,
+  SwitchProps as HeadlessUISwitchProps,
+} from "@headlessui/react";
+import { useEffect, useRef, useState } from "react";
 import styles from "./switch.module.css";
-import { ChangeHandler } from "../form/_form";
+import { FormFieldProps } from "../form/_form";
+import cx from "classix";
 
-export type SwitchProps = {
-  label: string;
-  onChange?: ChangeHandler;
-  initial?: boolean;
-};
+export type SwitchProps = FormFieldProps &
+  Omit<HeadlessUISwitchProps<"div">, "value"> & {
+    label: string;
+    value?: boolean;
+  };
 
 export function Switch({
+  name,
   label,
-  initial = false,
+  value = false,
   onChange,
+  ...rest
 }: SwitchProps) {
-  const [checked, setChecked] = useState<boolean>(initial);
+  const [checked, setChecked] = useState<boolean>(value);
+  const isInitial = useRef<boolean>(true);
 
   useEffect(() => {
-    onChange(checked);
+    if (isInitial.current) {
+      isInitial.current = false;
+      return;
+    }
+
+    if (typeof onChange === "function") {
+      onChange(checked);
+    }
   }, [checked]);
 
   return (
     <HeadlessUISwitch
+      {...rest}
+      name={name}
       checked={checked}
       onChange={setChecked}
-      className={styles.root}
+      className={cx(styles.root, checked ? styles.isChecked : null)}
     >
-      <span className={styles.label}>{label}</span>
+      <span className={styles.hiddenLabel}>{label}</span>
 
       <span
         aria-hidden="true"

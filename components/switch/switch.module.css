@@ -1,13 +1,26 @@
 .root {
-  background-color: var(--color-lila);
+  background-color: var(--color-lightgrey);
   height: 32px;
   width: 64px;
   border-radius: 20px;
   display: inline-flex;
   position: relative;
+  margin-top: 12px;
+  transition-property: background-color;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 0.2s;
 }
 
-.label {
+.isChecked {
+  background-color: var(--color-lila);
+  height: 32px;
+}
+
+.isChecked .indicator {
+  border-color: var(--color-lila);
+}
+
+.hiddenLabel {
   position: absolute;
   height: 1px;
   padding: 0;
@@ -23,8 +36,10 @@
   transition-duration: 0.2s;
   border-radius: 100%;
   width: 32px;
-  border: 2px solid var(--color-lila);
   height: 32px;
   background-color: var(--color-white);
+  border-color: var(--color-lightgrey);
+  border-width: 2px;
+  border-style: solid;
   left: 0;
 }

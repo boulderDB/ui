@@ -3,50 +3,37 @@ import utilities from "../../styles/utilities/utilities";
 import { AccountForm } from "./components/accountForm";
 import { PasswordForm } from "./components/passwordForm";
 import { Button } from "../../components/button/_button";
+import styles from "./page.module.css";
+import axios from "axios";
+import { cookies } from "next/headers";
 
 export const metadata = {
   title: "BoulderDB | Account",
 };
 
-export default function Page() {
+export default async function Page() {
+  const { data } = await axios.get(`https://boulderdb.de/api/me`, {
+    headers: {
+      Authorization: `Bearer ${cookies().get("BEARER")?.value as string}`,
+    },
+  });
+
   return (
     <>
-      <div className={utilities.layout.grid}>
-        <h1
-          className={cx(
-            utilities.layout.sideTitle,
-            utilities.typograpy.alpha700
-          )}
-        >
-          Account
-        </h1>
+      <div className={styles.root}>
+        <span className={cx(utilities.typograpy.alpha700)}>Account</span>
 
-        <div className={utilities.layout.sideContent}>
-          <AccountForm />
-        </div>
-      </div>
+        <AccountForm data={data} />
 
-      <div className={utilities.layout.grid}>
-        <h1
-          className={cx(
-            utilities.layout.sideTitle,
-            utilities.typograpy.alpha700
-          )}
-        >
+        <div className={cx(styles.title, utilities.typograpy.alpha700)}>
           Password
-        </h1>
+        </div>
 
-        <div className={utilities.layout.sideContent}>
-          <PasswordForm />
-        </div>
-      </div>
-      
-      <div className={cx(utilities.layout.grid)}>
-        <div>
-          <Button variant={"danger"} className={utilities.layout.full}>
-            Delete account
-          </Button>
-        </div>
+        <PasswordForm />
+
+        <Button variant={"danger"} className={styles.deleteButton}>
+          Delete account
+        </Button>
       </div>
     </>
   );

@@ -1,11 +1,10 @@
 .root {
-    max-width: 600px;
-    margin: 0 auto;
-  }
-  
-  .links {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 40px;
-  }
-  
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.links {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 40px;
+}

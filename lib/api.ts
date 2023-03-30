@@ -3,13 +3,7 @@ import decode from "jwt-decode";
 import { TokenPayload } from "./types";
 
 export function isAuthenticated(): boolean {
-  const payload = getTokenPayload();
-
-  if (!payload) {
-    return false;
-  }
-
-  return new Date().getTime() / 1000 <= payload.exp;
+  return cookies().get("authenticated") !== undefined;
 }
 
 export function getTokenPayload(): TokenPayload | null {

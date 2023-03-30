@@ -2,7 +2,7 @@
 
 import { z } from "zod";
 import { Form } from "../../../../components/form/_form";
-import { post } from "../../../../lib/http";
+import { api } from "../../../../lib/http";
 import { Input } from "../../../../components/input/input";
 
 type PasswordResetFormProps = {
@@ -14,7 +14,7 @@ export function PasswordResetForm({ token }: PasswordResetFormProps) {
     <Form
       submitLabel={"Reset"}
       onSubmit={async (values) => {
-        await post(`/password-reset/${token}`, values);
+        await api(`/password-reset/${token}`, "POST", values);
       }}
       fields={[
         {

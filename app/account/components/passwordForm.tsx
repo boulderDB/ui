@@ -2,27 +2,29 @@
 
 import { z } from "zod";
 import { Form } from "../../../components/form/_form";
-import { post } from "../../../lib/http";
+import { api } from "../../../lib/http";
 import { Input } from "../../../components/input/input";
 
 export function PasswordForm() {
   return (
     <Form
-      submitLabel={"Login"}
-      onSubmit={async (values) => {
-        await post("/login", values);
+      submitLabel={"Update password"}
+      onSubmit={async (values, form, setSuccess) => {
+        await api("/me/password", "PUT", values);
+
+        setSuccess("Password updated sucessfully");
       }}
       fields={[
         {
-          name: "username",
-          label: "Username / E-Mail",
-          type: "text",
-          onBlurValidate: z.string().min(4),
+          name: "currentPassword",
+          label: "Current password",
+          type: "password",
+          onBlurValidate: z.string().nonempty(),
           component: Input,
         },
         {
-          name: "password",
-          label: "Password",
+          name: "newPassword",
+          label: "New password",
           type: "password",
           onBlurValidate: z.string().min(4),
           component: Input,

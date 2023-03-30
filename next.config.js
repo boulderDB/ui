@@ -7,22 +7,6 @@ const withPWA = require("next-pwa");
 const { withSentryConfig } = require("@sentry/nextjs");
 
 const moduleExports = {
-  async rewrites() {
-    const entries = [];
-
-    if (process.env.NEXT_PUBLIC_API_PROXY) {
-      entries.push({
-        source: "/api/:path*",
-        destination: `${process.env.NEXT_PUBLIC_API_PROXY}/api/:path*`,
-        basePath: false,
-      });
-    }
-
-    return entries;
-  },
-  async redirects() {
-    return [];
-  },
   pwa: {
     dest: "public",
   },

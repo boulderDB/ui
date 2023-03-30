@@ -2,10 +2,10 @@
 
 import { z } from "zod";
 import { Form } from "../../../components/form/_form";
-import { post } from "../../../lib/http";
+import { api } from "../../../lib/http";
 import { Input } from "../../../components/input/input";
 import cookies from "js-cookie";
-import { TokenPayload } from "../../../lib/types";
+import { LoginResponse } from "../../../lib/types";
 import { redirect } from "next/navigation";
 
 export function LoginForm() {
@@ -13,18 +13,16 @@ export function LoginForm() {
     <Form
       submitLabel={"Login"}
       onSubmit={async (values) => {
-        const tokenPayload = await post<TokenPayload>("/login", values);
+        const response = await api<LoginResponse>("/login", "POST", values);
 
         cookies.set("authenticated", true, {
-          expires: tokenPayload.expiration - Math.floor(Date.now() / 1000),
+          expires: response.expiration - Math.floor(Date.now() / 1000),
         });
 
-        console.log(`/${tokenPayload.lastVisitedLocation.url}`);
-
         redirect(
-          tokenPayload.lastVisitedLocation
-            ? `/${tokenPayload.lastVisitedLocation.url}`
-            : "foo"
+          response.lastVisitedLocation
+            ? `/${response.lastVisitedLocation.url}`
+            : "/setup"
         );
       }}
       fields={[

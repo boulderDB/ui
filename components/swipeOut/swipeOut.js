@@ -42,7 +42,6 @@ function SwipeOut({ children, hiddenChildren, className }) {
 
   useEffect(() => {
     if (contentRef.current) {
-      console.log(contentRef.current.offsetWidth)
       setWidth(contentRef.current.offsetWidth);
     }
   }, [contentRef]);
