@@ -10,6 +10,7 @@
 .info {
   margin-left: auto;
   margin-right: calc(2 * var(--spacing-unit));
+  color: var(--color-black);
 }
 
 .button {

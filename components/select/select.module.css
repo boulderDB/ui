@@ -1,13 +1,13 @@
 .root {
-  border-bottom: 1px solid var(--color-black);
+  box-shadow: 0px 1px 0px 0px var(--color-black);
   padding-bottom: 8px;
-  margin-bottom: 1px;
   outline: none;
   display: flex;
+  width: 100%;
+  position: relative;
 
   &:focus {
-    border-bottom-width: 2px;
-    margin-bottom: 0px;
+    box-shadow: 0px 2px 0px 0px var(--color-black);
   }
 }
 
@@ -18,11 +18,26 @@
 .value {
   flex: 1;
   text-align: left;
+  color: var(--color-black);
+}
+
+.options {
+  min-width: 100%;
+  z-index: 800;
+  background-color: var(--color-white);
+  max-height: 200px;
+  overflow: scroll;
+  position: absolute;
+  border: 1px solid var(--color-black);
 }
 
 .option {
-  padding: 8px 0;
+  padding: 8px 8px 8px 0;
   border-bottom: 1px solid var(--color-black);
+  display: flex;
+  overflow-x: hidden;
+  white-space: nowrap;
+  color: var(--color-black);
 }
 
 .isActiveOption {
@@ -36,4 +51,10 @@
 
 .isSelectedOption .checkIcon {
   opacity: 1;
+}
+
+.optionLabel {
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  width: 100%;
 }

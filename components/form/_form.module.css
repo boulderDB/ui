@@ -1,8 +1,16 @@
+.root {
+  opacity: 1;
+
+  &.isSubmitting {
+    opacity: 0.5;
+  }
+}
+
 .row {
   display: flex;
   flex-direction: column;
   padding-bottom: 8px;
-  margin-top: 50px;
+  margin-top: 25px;
 }
 
 .input {
@@ -19,7 +27,7 @@
 }
 
 .notice {
-  display: inline-flex;
+  display: flex;
   padding: 20px;
   margin-top: 20px;
 }

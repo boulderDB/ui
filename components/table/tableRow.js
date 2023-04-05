@@ -5,7 +5,7 @@ import { typography } from "../../styles/utilities";
 export default function TableRow({ cells, className, showMobileLabel, style }) {
   return (
     <div className={cn(styles.root, className)} style={style}>
-      {cells.map((cell, cellIndex) => {
+      {cells.map((cell) => {
         return (
           <div
             className={cn(
@@ -14,7 +14,6 @@ export default function TableRow({ cells, className, showMobileLabel, style }) {
               cell.column.hidden ? styles.isHidden : null,
               cell.column.className
             )}
-            key={`cell-${cellIndex}`}
             {...cell.getCellProps()}
           >
             {showMobileLabel && (

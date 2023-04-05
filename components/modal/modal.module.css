@@ -1,0 +1,44 @@
+.dialog {
+  position: relative;
+  z-index: 1000;
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.overlayEnter {
+  transition-duration: 300ms;
+  transition-timing-function: cubic-bezier(0, 0, 0.2, 1);
+}
+
+.overlayEnterFrom {
+  opacity: 0;
+}
+
+.overlayEnterTo {
+  opacity: 100;
+}
+
+.overlayLeave {
+  transition-duration: 200ms;
+  transition-timing-function: cubic-bezier(0.4, 0, 1, 1);
+}
+
+.overlayLeaveFrom {
+  opacity: 100;
+}
+
+.overlayLeaveTo {
+  opacity: 0;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+}

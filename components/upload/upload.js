@@ -18,7 +18,6 @@ function defaultValueRenderer(value) {
 function Upload({
   name,
   value,
-  label,
   renderValue = defaultValueRenderer,
   onSuccess,
 }) {

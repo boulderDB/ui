@@ -1,4 +1,4 @@
-amodule.exports = {
+module.exports = {
   plugins: {
     "postcss-import": {},
     "postcss-normalize": {},

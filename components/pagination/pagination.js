@@ -2,6 +2,8 @@ import React from "react";
 import styles from "./pagination.module.css";
 import cn from "classnames";
 import { Backward, Forward } from "../icon/icon";
+import utilities from "../../styles/utilities/utilities";
+import { cx } from "classix";
 
 export default function Pagination({
   pageIndex,
@@ -34,15 +36,15 @@ export default function Pagination({
     }
 
     return (
-      <span {...props}>
+      <button {...props}>
         {direction === "forward" ? <Forward /> : <Backward />}
-      </span>
+      </button>
     );
   };
 
   return (
     <div className={styles.root}>
-      <span className={styles.info}>
+      <span className={cx(styles.info, utilities.typograpy.delta)}>
         {pageIndex * pageSize} - {(pageIndex + 1) * pageSize} of{" "}
         {pageCount * pageSize}
       </span>

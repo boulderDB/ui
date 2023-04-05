@@ -21,6 +21,11 @@ export type UpdateMeRequest = {
   notifications?: Notification[];
 };
 
+export type ChangePasswordRequest = {
+  oldPassword: string;
+  newPassword: string;
+};
+
 export type Notification = {
   id: number;
   type: string;

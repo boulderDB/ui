@@ -1,5 +1,5 @@
-import { useEffect, useRef, useState } from "react";
-import { ChangeHandler, FormFieldProps } from "../form/_form";
+import { ReactNode, useEffect, useRef, useState } from "react";
+import { FormFieldProps } from "../form/_form";
 import { Listbox } from "@headlessui/react";
 import { Icon } from "../icon/_icon";
 import styles from "./select.module.css";
@@ -12,24 +12,24 @@ export type Option = {
 };
 
 export type SelectProps<TOption extends Option> = {
-  label: string;
   options: TOption[];
-  getOptionLabel: (option: TOption) => string;
-  initial?: TOption | null;
+  getOptionLabel: (option: TOption) => string | ReactNode;
+  value?: TOption | null;
   className?: string;
 } & FormFieldProps<TOption>;
 
 export function Select<TOption extends Option>({
-  label,
   options,
   getOptionLabel,
-  initial = null,
+  value = null,
   hasError,
   onChange,
   className,
 }: SelectProps<TOption>) {
-  const [selected, setSelected] = useState<TOption | null>(initial);
+  const [selected, setSelected] = useState<TOption | null>(value);
   const isInitial = useRef<boolean>(true);
+
+  console.log(value);
 
   useEffect(() => {
     if (isInitial.current) {
@@ -52,10 +52,10 @@ export function Select<TOption extends Option>({
         )}
       >
         <span className={cx(styles.value, utilities.typograpy.gamma700)}>
-          {selected ? getOptionLabel(selected) : label}
+          {selected ? getOptionLabel(selected) : "—"}
         </span>
 
-        {hasError ? <Icon name="error" /> : <Icon name="down" />}
+        {hasError ? <Icon name="info" /> : <Icon name="down" />}
       </Listbox.Button>
 
       <Listbox.Options className={styles.options}>
@@ -74,7 +74,7 @@ export function Select<TOption extends Option>({
             disabled={option.disabled}
           >
             <Icon name="top" className={styles.checkIcon} />{" "}
-            {getOptionLabel(option)}
+            <span className={styles.optionLabel}>{getOptionLabel(option)}</span>
           </Listbox.Option>
         ))}
       </Listbox.Options>

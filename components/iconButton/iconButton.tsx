@@ -4,11 +4,20 @@ import { Icon, IconName } from "../icon/_icon";
 
 type IconButtonProps = {
   icon: IconName;
+  outline?: boolean;
 } & React.ButtonHTMLAttributes<HTMLButtonElement>;
 
-export function Button({ icon, className, ...rest }: IconButtonProps) {
+export function IconButton({
+  icon,
+  outline = true,
+  className,
+  ...rest
+}: IconButtonProps) {
   return (
-    <button {...rest} className={cx(styles.root, className)}>
+    <button
+      {...rest}
+      className={cx(styles.root, outline ? styles.withOutline : null, className)}
+    >
       <Icon name={icon} />
     </button>
   );

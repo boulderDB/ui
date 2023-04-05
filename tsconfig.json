@@ -29,7 +29,7 @@
     ".next/types/**/*.ts",
     "**/*.ts",
     "**/*.tsx"
-  ],
+, "components/rankingTable/rankingTable.js"  ],
   "exclude": [
     "node_modules"
   ]

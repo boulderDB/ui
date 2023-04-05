@@ -1,36 +1,24 @@
-import { ChangeEventHandler, useState } from "react";
-import { UploadRequest } from "../../lib/types";
+import { useState } from "react";
 import Loader from "../loader/loader";
 import styles from "./upload.module.css";
 import { Icon } from "../icon/_icon";
+import { FormFieldProps } from "../form/_form";
+import cx from "classix";
 
-export type UploadProps = {
-  name: string;
+export type UploadProps = FormFieldProps & {
   value: string;
-  label: string;
-  onChange: ChangeEventHandler;
-  handleUpload: (formData: FormData) => Promise<UploadRequest>;
+  onUpload: (formData: FormData) => Promise<string>;
 };
 
-export function Upload({
-  name,
-  value,
-  label = "Upload",
-  onChange,
-  handleUpload,
-}: UploadProps) {
+export function Upload({ name, value, onChange, onUpload }: UploadProps) {
   const [loading, setLoading] = useState<boolean>(false);
 
   return (
-    <div className={styles.root}>
-      {loading ? (
-        <Loader />
-      ) : (
-        <div
-          className={styles.preview}
-          style={{ backgroundImage: `url(${value})` }}
-        />
-      )}
+    <div className={cx(styles.root, loading ? styles.isLoading : null)}>
+      <div
+        className={styles.preview}
+        style={{ backgroundImage: `url(${value})` }}
+      />
 
       <label className={styles.label}>
         <input
@@ -45,11 +33,11 @@ export function Upload({
                 const formData = new FormData();
                 formData.append("file", event.target.files[0]);
 
-                const data = await handleUpload(formData);
+                const file = await onUpload(formData);
 
-                event.target.value = data.file;
-
-                await onChange(event);
+                if (typeof onChange === "function") {
+                  onChange(file);
+                }
               }
             } catch (error) {
             } finally {

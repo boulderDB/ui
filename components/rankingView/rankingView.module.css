@@ -1,14 +1,17 @@
 .tableRow,
 .tableHeader {
-  grid-template-columns: 40px minmax(100px, 150px) 60px 60px auto 80px 80px 100px 100px;
+  grid-template-columns: 40px minmax(100px, 150px) 60px 60px auto 80px 80px 100px;
 }
 
 .nameCell {
   overflow-x: hidden;
 }
 
+.expanderCell.expanderCell {
+  display: none;
+}
+
 @media (--m) {
-  .bouldersCell.bouldersCell,
   .genderCell.genderCell,
   .lastActivityCell.lastActivityCell {
     display: none;
@@ -16,7 +19,7 @@
 
   .tableRow,
   .tableHeader {
-    grid-template-columns: 40px auto 60px 60px 80px 100px;
+    grid-template-columns: 40px minmax(100px, 150px) 60px auto 80px 80px;
   }
 }
 
@@ -25,20 +28,21 @@
   .flashedCell.flashedCell,
   .toppedCell.toppedCell,
   .genderCell.genderCell,
-  .lastActivityCell.lastActivityCell,
-  .rankCell.rankCell {
+  .pointsCell.pointsCell,
+  .lastActivityCell.lastActivityCell {
     display: none;
   }
 
   .tableRow {
-    grid-template-columns: 40px 100px auto;
+    grid-template-columns: 40px auto 60px;
   }
 
   .tableHeader {
     display: none;
   }
 
-  .compareCell {
+  .expanderCell.expanderCell {
+    display: block;
     justify-content: flex-end;
   }
 }

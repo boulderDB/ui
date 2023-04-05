@@ -1,0 +1,11 @@
+.root {
+    flex: 1 0 auto;
+    padding: 48px 16px;
+    min-height: calc(100vh - 50px - 50px);
+    overflow-x: hidden;
+
+    @media (--s) {
+      padding: 32px 16px;
+    }
+  }
+  

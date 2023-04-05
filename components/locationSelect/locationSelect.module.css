@@ -1,0 +1,61 @@
+.root {
+  position: relative;
+  z-index: 1000;
+}
+
+.items {
+  border: 1px solid var(--color-black);
+  background-color: var(--color-white);
+  position: absolute;
+  white-space: nowrap;
+  display: flex;
+  flex-direction: column;
+}
+
+.item {
+  border-bottom: 1px solid var(--color-black);
+  padding: 8px;
+}
+
+.item:last-child {
+  border-bottom: none;
+}
+
+.isActiveItem {
+  background-color: var(--color-lila);
+  color: var(--color-white);
+}
+
+.container {
+  transition: opacity 200ms ease-in-out;
+}
+
+.enter {
+  transition-timing-function: ease-out;
+  transition-duration: 100ms;
+}
+
+.enterFrom {
+  opacity: 0;
+  transform: scale(0.95);
+}
+
+.enterTo {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.leave {
+  transition-timing-function: ease-in;
+  transition-duration: 75ms;
+}
+
+.leaveFrom {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.leaveTo {
+  opacity: 0;
+  transform: scale(0.95);
+}

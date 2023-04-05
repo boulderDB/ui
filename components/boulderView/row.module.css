@@ -1,0 +1,62 @@
+.root {
+  display: grid;
+  align-items: center;
+  border-bottom: 1px solid var(--color-black);
+  padding: 8px 0;
+  grid-template-columns: 20px 1fr 60px;
+  grid-column-gap: 8px;
+
+  @media (--xl-to-l) {
+    grid-column-gap: 16px;
+    grid-template-columns: 20px 20px 80px 60px minmax(60px, auto) 200px 140px 140px 100px 152px;
+  }
+}
+
+.cell {
+  white-space: nowrap;
+  position: relative;
+  overflow: hidden;
+
+  @media (--xl-to-l) {
+    &.isAscentCell {
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    &.isExpanderCell {
+      display: none;
+    }
+
+    &.isNameCell {
+      display: flex;
+    }
+  }
+}
+
+.name {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.walls {
+  display: flex;
+  align-items: center;
+  color: var(--color-black);
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.header {
+  display: inline-flex;
+  align-items: center;
+}
+
+.name {
+  margin-left: 8px;
+}
+
+.container {
+  overflow: hidden;
+}

@@ -37,7 +37,6 @@ Wrap these usages of :hover pseudo class with this media query:
 @custom-media --hover (any-hover: hover) and (pointer: fine);
 
 :root {
-  /* Colors */
   --color-black: #333333;
   --color-migrey: #a2a2a2;
   --color-light: #fff;
@@ -69,6 +68,13 @@ Wrap these usages of :hover pseudo class with this media query:
   --spacing-unit: 8px;
   --content-max-width: 1200px;
 }
+
+/* @media (prefers-color-scheme: dark) {
+  :root {
+    --color-black: #ffffff;
+    --color-white: #000000;
+  }
+} */
 
 /* Environment specific variables */
 

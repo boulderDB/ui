@@ -1,9 +1,0 @@
-.main {
-  flex: 1 0 auto;
-  padding: 50px 16px;
-  min-height: calc(100vh - 50px - 50px);
-
-  @media (--s) {
-    margin-top: 50px;
-  }
-}

@@ -29,10 +29,6 @@
   background-size: 100% 50px;
 }
 
-.isLoading {
-  background: linear-gradient(to right, var(--color-lila) 10%, var(--color-white) 18%, var(--color-lila) 33%);
-}
-
 .isDanger {
   background-color: var(--color-red);
 }

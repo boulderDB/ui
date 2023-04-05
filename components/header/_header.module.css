@@ -6,6 +6,8 @@
   padding: 0 16px;
   height: 50px;
   border-bottom: 1px solid var(--color-black);
+  color: var(--color-black);
+  background-color: var(--color-white);
 }
 
 .nav {
@@ -18,42 +20,12 @@
   }
 }
 
-.mobileNav {
-  flex: 1;
-  justify-content: space-between;
-  display: none;
+.primary,
+.secondary {
+  display: flex;
   align-items: center;
-
-  @media (--m-to-s) {
-    display: flex;
-  }
 }
 
-.mobileNavIcon {
-  cursor: pointer;
-}
-
-.mobileNavOverlay {
-  background: var(--color-white);
-  width: 100vw;
-  height: calc(100vh - 60px);
-  position: fixed;
-  z-index: 10;
-  top: 60px;
-  left: 0;
-  display: none;
-  padding: 16px;
-}
-
-.isVisibleMobileNavOverlay {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-}
-
-.mobileNavItem {
-  margin-top: 16px;
-}
-
-.mobileNavItem:first-child {
-  margin-top: 0;
+.primary .navItem {
+  margin-left: 16px;
 }

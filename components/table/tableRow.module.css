@@ -30,6 +30,7 @@
 
 .cell:last-child {
   margin-right: 8px;
+  align-items: flex-end;
 }
 
 .rowLink:hover {

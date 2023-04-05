@@ -9,33 +9,15 @@ export class HTTPError extends Error {
   }
 }
 
-export async function api<T>(
-  path: string,
-  method: "GET" | "POST" | "PUT" | "DELETE" = "GET",
-  data?: any
-): Promise<T> {
-  const options: RequestInit = {
-    method,
-    credentials: "include",
-    mode: "cors",
-    headers: {
-      accept: "application/json",
-      "content-type": "application/json",
-    },
-  };
-
-  if (method === "POST" || method === "PUT" || method === "DELETE") {
-    options.body = JSON.stringify(data);
-  }
-
-  const response = await fetch(
-    `${process.env.NEXT_PUBLIC_API_HOST}/api${path}`,
-    options
-  );
+export const fetcher = async (url: string) => {
+  const response = await fetch(url);
+  const data = await response.json();
 
   if (!response.ok) {
-    throw new HTTPError(await response.json());
+    const error = new HTTPError(data);
+
+    throw error;
   }
 
-  return await response.json();
-}
+  return data;
+};

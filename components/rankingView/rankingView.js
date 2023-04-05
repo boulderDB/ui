@@ -1,23 +1,15 @@
+"use client";
+
 import styles from "./rankingView.module.css";
 import { RankingTable, UserRank } from "../rankingTable/rankingTable";
-import { useContext, useMemo } from "react";
+import { useMemo } from "react";
 import { Female, Male } from "../icon/icon";
 import { Progress } from "../progress/progress";
 import calculatePercentage from "../../utilties/calculatePercentage";
 import { parseDate } from "../../utilties/parseDate";
-import Link from "next/link";
-import cn from "classnames";
-import { colors, typography } from "../../styles/utilities";
-import { AppContext } from "../../pages/_app";
+import { IconButton } from "../iconButton/iconButton";
 
-export default function RankingView({
-  ranking,
-  boulderCount,
-  userComparison = false,
-}) {
-  const { tokenPayload, currentLocation } = useContext(AppContext);
-  const user = tokenPayload?.user;
-
+export default function RankingView({ ranking, boulderCount }) {
   const columns = useMemo(() => {
     return [
       {
@@ -94,24 +86,19 @@ export default function RankingView({
         },
       },
       {
-        Header: "Compare",
-        id: "user.id",
-        accessor: "user.id",
-        className: styles.compareCell,
-        Cell: ({ cell }) => {
-          if (!userComparison) {
-            return null;
-          }
-
-          if (parseInt(cell.value) === parseInt(user?.id)) {
-            return null;
-          }
-
-          return null;
-        },
+        Header: () => null,
+        id: "expander",
+        className: styles.expanderCell,
+        Cell: ({ row }) => (
+          <IconButton
+            icon={row.isExpanded ? "close" : "plus"}
+            outline={false}
+            {...row.getToggleRowExpandedProps()}
+          />
+        ),
       },
     ];
-  }, [boulderCount, user, userComparison, currentLocation]);
+  }, [boulderCount]);
 
   return (
     <RankingTable

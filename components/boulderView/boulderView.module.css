@@ -1,109 +1,66 @@
+.refine {
+  margin-top: 48px;
+  padding-top: 16px;
+  position: sticky;
+  top: 0;
+  background-color: var(--color-white);
+  z-index: 600;
+}
+
 .filters {
   display: grid;
-  grid-template-columns: repeat(7, 1fr);
+  grid-template-columns: repeat(2, 1fr);
   grid-column-gap: 16px;
-  margin-top: 32px;
+  grid-row-gap: 16px;
+
+  @media (--xl-to-l) {
+    grid-template-columns: repeat(7, 1fr);
+    grid-column-gap: 32px;
+  }
 }
 
-.checkbox {
-  display: flex;
-  align-items: center;
-  margin-top: 32px;
+.select {
+  margin-top: 12px;
 }
 
-.checkbox label + input {
-  margin-left: 4px;
-}
-
-.tableRow,
-.tableHeader {
-  grid-template-columns: 20px 80px 60px minmax(60px, auto) 140px 140px 140px 100px 152px;
-}
-
-.isAdminTableRow,
-.isAdminTableHeader {
-  grid-template-columns: 40px 20px 80px 60px minmax(60px, auto) 140px 140px 140px 100px 152px;
-}
-
-.setterCell > span {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.rating {
+.holdTypeOption {
   display: flex;
   align-items: center;
 }
 
-.barButtons > *:last-child {
-  margin-left: 16px;
+.search {
+  margin-top: 48px;
 }
 
-.editCell {
+.table {
+  margin-top: 48px;
+}
+
+.header {
+  border-bottom: 1px solid var(--color-black);
+  padding: 8px 0;
+  display: none;
+
+  @media (--xl-to-l) {
+    display: grid;
+    grid-column-gap: 16px;
+    grid-template-columns: 20px 20px 80px 60px minmax(60px, auto) 200px 140px 140px 100px 152px;
+  }
+}
+
+.isExpanderHeaderCell {
+  @media (--xl-to-l) {
+    display: none;
+  }
+}
+
+.name {
+  width: 100%;
   display: flex;
   align-items: center;
-  justify-content: space-around;
+  justify-content: space-between;
 }
 
-.editLink {
-  margin-left: 8px;
-}
-
-.startWallCell,
-.endWallCell {
-  overflow: hidden;
-  text-decoration: underline;
-  cursor: pointer;
-}
-
-.banner {
-  margin-bottom: 32px;
-}
-
-/* small desktop to ipad */
-@media (max-width: 1280px) and (min-width: 768px) {
-  .filters {
-    grid-template-columns: repeat(3, 1fr);
-  }
-
-  .filters > * {
-    margin-bottom: 16px;
-  }
-}
-
-@media (max-width: 1280px) {
-  .isFluidTableRow,
-  .isFluidTableHeader {
-    grid-template-columns: 20px 80px 60px minmax(60px, auto) 140px 140px 152px;
-  }
-
-  .isFluidTableRow.isAdminTableRow,
-  .isFluidTableRow.isAdminTableHeader {
-    grid-template-columns: 40px 20px 80px 60px minmax(60px, auto) 140px 140px 152px;
-  }
-
-  .isFluidTableRow .endWallCell,
-  .isFluidTableRow .setterCell {
-    display: none;
-  }
-
-  .isFluidTableHeader .endWallCell,
-  .isFluidTableHeader .setterCell {
-    display: none;
-  }
-}
-
-@media (max-width: 768px) {
-  .isFluidTableHeader {
-    display: none;
-  }
-
-  .filters {
-    grid-template-columns: 1fr;
-  }
-
-  .filters > * {
-    margin-bottom: 16px;
-  }
+.editButton {
+  margin-right: 8px;
 }

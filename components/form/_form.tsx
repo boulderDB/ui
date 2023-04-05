@@ -14,9 +14,9 @@ import { InputProps } from "../input/input";
 import { Button } from "../button/_button";
 import { UploadProps } from "../upload/_upload";
 import { SelectProps } from "../select/_select";
-import { HTTPError } from "../../lib/http";
 import { FormErrorResponse, ServerErrorResponse } from "../../lib/types";
 import { SwitchProps } from "../switch/_switch";
+import { Label } from "../label/_label";
 
 export type PrimitiveInput = number | string | boolean | null;
 
@@ -25,6 +25,7 @@ export type ChangeHandler<ComplexInput = void> = (
 ) => void;
 
 export type FormFieldProps<ComplexInput = void> = {
+  id?: string;
   name: string;
   onChange?: ChangeHandler<ComplexInput>;
   hasError?: boolean;
@@ -69,7 +70,7 @@ export function Form<TValues>({
   const [success, setSuccess] = useState<string>();
 
   return (
-    <div>
+    <div className={cx(styles.root, submitting ? styles.isSubmitting : null)}>
       {error ? (
         <div className={cx(styles.notice, styles.isErrorNotice)}>
           <p className={utilities.typograpy.delta700}>{error}</p>
@@ -89,15 +90,13 @@ export function Form<TValues>({
           try {
             await onSubmit(values, form, setSuccess);
           } catch (error) {
-            if (error instanceof HTTPError) {
-              if (!isFormErrorResponse(error.response)) {
-                setError(error.response.message);
-              } else {
-                for (const field of Object.keys(error.response.errors)) {
-                  form
-                    .getFieldValue(field)
-                    ?.setErrors(error.response.errors[field]);
-                }
+            if (!isFormErrorResponse(error.response.data)) {
+              setError(error.response.data.message);
+            } else {
+              for (const field of Object.keys(error.response.data.errors)) {
+                form
+                  .getFieldValue(field)
+                  ?.setErrors(error.response.data.errors[field]);
               }
             }
           } finally {
@@ -137,15 +136,7 @@ export function Form<TValues>({
                     {({ value, setValue, onBlur, errors }) => {
                       return (
                         <div className={styles.row} key={name}>
-                          <label
-                            htmlFor={name}
-                            className={cx(
-                              utilities.typograpy.epsilon,
-                              styles.label
-                            )}
-                          >
-                            {label}
-                          </label>
+                          <Label htmlFor={name}>{label}</Label>
 
                           <InputComponent
                             {...rest}
@@ -191,8 +182,7 @@ export function Form<TValues>({
             )}
 
             <Button
-              loading={submitting}
-              disabled={!isValid}
+              disabled={!isValid || submitting}
               type="submit"
               className={styles.button}
             >

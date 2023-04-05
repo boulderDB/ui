@@ -45,7 +45,7 @@ export default function CollapsedRow({ cells }) {
           </div>
 
           <div className={cn(styles.wallNames, styles.metaItem)}>
-            {starWallCell.render("Cell")} > {endWallCell.render("Cell")}
+            {starWallCell.render("Cell")} {" > "} {endWallCell.render("Cell")}
           </div>
 
           <div className={cn(styles.metaItem)}>{gradeCell.render("Cell")}</div>

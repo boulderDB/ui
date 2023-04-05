@@ -1,16 +1,69 @@
-import { useTable, useGlobalFilter, useSortBy } from "react-table";
-import TextField from "../textField/textField";
+import { useTable, useGlobalFilter, useSortBy, useExpanded } from "react-table";
 import Avatar from "../avatar/avatar";
 import styles from "./rankingTable.module.css";
 import TableHeader from "../table/tableHeader";
 import TableRow from "../table/tableRow";
+import { Input } from "../input/input";
+import utilities from "../../styles/utilities/utilities";
+import { Fragment } from "react";
 
 export function UserRank({ image, username, sentAllBoulders = false }) {
   return (
     <div className={styles.rank}>
       <Avatar image={image} />
+
       <span className={styles.rankUsername}>{username}</span>
+
       {sentAllBoulders && <span className={styles.rankBadge}>🥋</span>}
+    </div>
+  );
+}
+
+const subRows = [
+  {
+    id: "total.count",
+    label: "Boulder",
+  },
+  {
+    id: "points",
+    label: "Points",
+  },
+  {
+    id: "flash.count",
+    label: "Flashed",
+  },
+  {
+    id: "top.count",
+    label: "Topped",
+  },
+  {
+    id: "user.gender",
+    label: "Gender",
+  },
+  {
+    id: "user.lastActivity",
+    label: "Last activity",
+  },
+];
+
+function Sub({ isExpanded, row }) {
+  if (!isExpanded) {
+    return null;
+  }
+
+  return (
+    <div className={styles.sub}>
+      {subRows.map((subRow) => (
+        <div key={row.id} className={styles.subRow}>
+          <span className={utilities.typograpy.delta700}>{subRow.label}:</span>
+
+          <span className={utilities.typograpy.delta}>
+            {row.cells
+              .find((cell) => cell.column.id === subRow.id)
+              .render("Cell")}
+          </span>
+        </div>
+      ))}
     </div>
   );
 }
@@ -35,17 +88,17 @@ export function RankingTable({
       data,
     },
     useGlobalFilter,
-    useSortBy
+    useSortBy,
+    useExpanded
   );
 
   return (
     <div className={className}>
-      <div>
-        <TextField
-          onChange={(event) => setGlobalFilter(event.target.value)}
-          placeholder={"search"}
-        />
-      </div>
+      <Input
+        className={styles.search}
+        placeholder="Search"
+        onChange={(value) => setGlobalFilter(value)}
+      />
 
       <div {...getTableProps()} className={styles.table}>
         <TableHeader className={headerClassName} headerGroups={headerGroups} />
@@ -55,11 +108,15 @@ export function RankingTable({
             prepareRow(row);
 
             return (
-              <TableRow
-                className={rowClassName}
-                cells={row.cells}
-                key={`row-${index}`}
-              />
+              <Fragment key={index}>
+                <TableRow
+                  className={rowClassName}
+                  cells={row.cells}
+                  key={`row-${index}`}
+                />
+
+                <Sub isExpanded={row.isExpanded} row={row} />
+              </Fragment>
             );
           })}
         </div>

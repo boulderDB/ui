@@ -1,3 +1,5 @@
+"use client";
+
 import { useHttp } from "../../hooks/useHttp";
 import useDrawer from "../../hooks/useDrawer";
 import { useSWRConfig } from "swr";
