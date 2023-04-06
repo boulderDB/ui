@@ -11,24 +11,27 @@ export type Option = {
   disabled?: boolean;
 };
 
-export type SelectProps<TOption extends Option> = {
+export type MultiSelectProps<TOption extends Option> = {
   options: TOption[];
   getOptionLabel: (option: TOption) => string | ReactNode;
-  value?: TOption | null;
+  value?: TOption[];
   className?: string;
-  clearable: boolean;
 } & FormFieldProps<TOption>;
 
-export function Select<TOption extends Option>({
+export function MultiSelect<TOption extends Option>({
   options,
   getOptionLabel,
-  value = null,
+  value = [],
   hasError,
   onChange,
-  clearable = false,
   className,
-}: SelectProps<TOption>) {
-  const [selected, setSelected] = useState<TOption | null>(value);
+}: MultiSelectProps<TOption>) {
+  const [selected, setSelected] = useState<TOption[]>(
+    options.filter((option) =>
+      value.map((value) => value.id).includes(option.id)
+    )
+  );
+
   const isInitial = useRef<boolean>(true);
 
   useEffect(() => {
@@ -43,7 +46,7 @@ export function Select<TOption extends Option>({
   }, [selected]);
 
   return (
-    <Listbox value={selected} onChange={setSelected}>
+    <Listbox value={selected} onChange={setSelected} multiple>
       <Listbox.Button
         className={cx(
           styles.root,
@@ -52,12 +55,17 @@ export function Select<TOption extends Option>({
         )}
       >
         <span className={cx(styles.value, utilities.typograpy.gamma700)}>
-          {selected ? getOptionLabel(selected) : "—"}
+          {selected
+            ? selected.map((entry) => (
+                <div className={styles.tag} key={entry.id}>
+                  {getOptionLabel(entry)}
+                </div>
+              ))
+            : "—"}
         </span>
 
         {hasError ? <Icon name="error" /> : <Icon name="down" />}
       </Listbox.Button>
-      
 
       <Listbox.Options className={styles.options}>
         {options.map((option) => (

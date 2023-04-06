@@ -1,3 +1,5 @@
+export type Role = "ROLE_ADMIN" | "ROLE_SETTER" | "ROLE_SUPER_ADMIN";
+
 export type Boulder = {
   group: any;
   id: number;
@@ -11,13 +13,43 @@ export type Boulder = {
   points: number;
   ascents: Ascent[];
   comments: any[];
-  tags: HoldType[];
+  tags: Tag[];
   setters: Setter[];
   readableIdentifier: null;
   userAscent: Ascent | null;
   currentPoints: number;
   createdAt: Date;
-  areas: HoldType[];
+  areas: Area[];
+};
+
+export type Rank = {
+  user: User;
+  top: {
+    count: number;
+    rate: number;
+  };
+  flash: {
+    count: number;
+    rate: number;
+  };
+  total: {
+    count: number;
+    rate: number;
+  };
+  points: number;
+};
+
+export type Area = {
+  id: number;
+  name: string;
+  active: boolean;
+};
+
+export type Tag = {
+  id: number;
+  emoji: string;
+  name: string;
+  active: boolean;
 };
 
 export type HoldType = {
@@ -82,7 +114,7 @@ export type Notification = {
 export type User = {
   id: number;
   username: string;
-  gender: string;
+  gender: "male" | "female" | "neutral";
   roles: string[];
   visible: boolean;
   image: null | string;

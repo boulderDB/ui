@@ -3,7 +3,7 @@ import { z } from "zod";
 export function selectValidation() {
   return z.object(
     {
-      id: z.string(),
+      id: z.union([z.number(), z.string()]),
     },
     {
       errorMap: () => ({

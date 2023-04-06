@@ -1,48 +1,30 @@
-.tableRow,
-.tableHeader {
-  grid-template-columns: 40px minmax(100px, 150px) 60px 60px auto 80px 80px 100px;
+.search {
+  margin-top: 48px;
+  padding-top: 16px;
+  position: sticky;
+  top: 0;
+  background-color: var(--color-white);
+  z-index: 600;
 }
 
-.nameCell {
-  overflow-x: hidden;
+.table {
+  margin-top: 48px;
 }
 
-.expanderCell.expanderCell {
+.header {
+  border-bottom: 1px solid var(--color-black);
+  padding: 8px 0;
   display: none;
-}
 
-@media (--m) {
-  .genderCell.genderCell,
-  .lastActivityCell.lastActivityCell {
-    display: none;
-  }
-
-  .tableRow,
-  .tableHeader {
-    grid-template-columns: 40px minmax(100px, 150px) 60px auto 80px 80px;
+  @media (--xl-to-l) {
+    display: grid;
+    grid-column-gap: 16px;
+    grid-template-columns: 40px minmax(100px, 150px) 60px 60px auto 80px 80px 100px;
   }
 }
 
-@media (--s) {
-  .bouldersCell.bouldersCell,
-  .flashedCell.flashedCell,
-  .toppedCell.toppedCell,
-  .genderCell.genderCell,
-  .pointsCell.pointsCell,
-  .lastActivityCell.lastActivityCell {
+.headerCell.isExpanderHeaderCell {
+  @media (--xl-to-l) {
     display: none;
-  }
-
-  .tableRow {
-    grid-template-columns: 40px auto 60px;
-  }
-
-  .tableHeader {
-    display: none;
-  }
-
-  .expanderCell.expanderCell {
-    display: block;
-    justify-content: flex-end;
   }
 }

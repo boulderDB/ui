@@ -48,7 +48,7 @@
   }
 }
 
-.isExpanderHeaderCell {
+.headerCell.isExpanderHeaderCell {
   @media (--xl-to-l) {
     display: none;
   }

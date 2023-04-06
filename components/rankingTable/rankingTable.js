@@ -1,4 +1,3 @@
-import { useTable, useGlobalFilter, useSortBy, useExpanded } from "react-table";
 import Avatar from "../avatar/avatar";
 import styles from "./rankingTable.module.css";
 import TableHeader from "../table/tableHeader";

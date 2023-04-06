@@ -1,4 +1,5 @@
 import {
+  Area,
   AscentType,
   Boulder,
   Grade,
@@ -21,7 +22,6 @@ import {
   Row,
   SortingState,
   createColumnHelper,
-  flexRender,
   getCoreRowModel,
   getExpandedRowModel,
   getFilteredRowModel,
@@ -37,55 +37,39 @@ import { Row as RowComponent } from "./row";
 import { SubRow } from "./subRow";
 import { Ascents } from "./ascents";
 import { typography } from "../../styles/utilities";
-import { IndeterminateCheckbox } from "./indeterminateCheckbox";
 import { capitalize } from "../../lib/capitalize";
 import { parseDate } from "../../utilties/parseDate";
 import { Modal } from "../modal/modal";
 import { EditBoulderForm } from "./editBoulderForm";
-
-type Filter = {
-  id: string;
-  value: string;
-};
+import axios from "axios";
+import { useAppContext } from "../../pages/_app";
+import { useSWRConfig } from "swr";
+import { selectOptionLabels } from "../../lib/selectOptionLabels";
+import { ascents } from "../../lib/globals";
+import { IndeterminateCheckbox } from "../table/indeterminateCheckbox";
+import { TableHeaderCell } from "../table/tableHeaderCell";
 
 type BoulderViewProps = {
   data: Boulder[];
-  initialFilters: Filter[];
+  initialFilters?: ColumnFiltersState;
 };
 
-export const ascentTypes: AscentType[] = [
-  {
-    id: "todo",
-    name: "Todo",
-    color: "#f2f2f2",
-  },
-  {
-    id: "flash",
-    name: "Flash",
-    color: "#1687ff",
-  },
-  {
-    id: "top",
-    name: "Top",
-    color: "#02deaf",
-  },
-  {
-    id: "resignation",
-    name: "Resignation",
-    color: "#ff5d5f",
-  },
-];
+export function BoulderView({ data, initialFilters = [] }: BoulderViewProps) {
+  const { mutate } = useSWRConfig();
+  const columnHelper = createColumnHelper<Boulder>();
 
-export function BoulderView({ data, initialFilters }: BoulderViewProps) {
   const [rowSelection, setRowSelection] = useState({});
   const [globalFilter, setGlobalFilter] = useState("");
-  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+  const [columnFilters, setColumnFilters] =
+    useState<ColumnFiltersState>(initialFilters);
   const [sorting, setSorting] = useState<SortingState>([]);
+
+  const { currentLocation, hasRole } = useAppContext();
 
   const filters = useMemo(
     () => [
       {
-        id: "area",
+        id: "areas",
         label: "Area",
         options: uniqBy(
           data.flatMap((boulder) => boulder.areas),
@@ -100,12 +84,8 @@ export function BoulderView({ data, initialFilters }: BoulderViewProps) {
           data.flatMap((boulder) => boulder.holdType),
           "id"
         ),
-        getOptionLabel: (option: HoldType) => (
-          <span className={styles.holdTypeOption}>
-            <HoldTypeComponent image={option.image} />
-            {option.name}
-          </span>
-        ),
+        getOptionLabel: selectOptionLabels.holdType,
+        getValue: (option: HoldType) => option.name,
       },
       {
         id: "grade",
@@ -114,12 +94,10 @@ export function BoulderView({ data, initialFilters }: BoulderViewProps) {
           data.flatMap((boulder) => boulder.grade),
           "id"
         ),
-        getOptionLabel: (option: Grade) => (
-          <span style={{ color: option.color }}>Grade {option.name}</span>
-        ),
+        getOptionLabel: selectOptionLabels.grade,
       },
       {
-        id: "start",
+        id: "startWall",
         label: "Start",
         options: uniqBy(
           data.flatMap((boulder) => boulder.startWall),
@@ -128,7 +106,7 @@ export function BoulderView({ data, initialFilters }: BoulderViewProps) {
         getOptionLabel: (option: Wall) => option.name,
       },
       {
-        id: "end",
+        id: "endWall",
         label: "End",
         options: uniqBy(
           data.flatMap((boulder) => boulder.endWall),
@@ -137,7 +115,7 @@ export function BoulderView({ data, initialFilters }: BoulderViewProps) {
         getOptionLabel: (option: Wall) => option.name,
       },
       {
-        id: "setter",
+        id: "setters",
         label: "Setter",
         options: uniqBy(
           data.flatMap((boulder) => boulder.setters),
@@ -148,7 +126,7 @@ export function BoulderView({ data, initialFilters }: BoulderViewProps) {
       {
         id: "ascent",
         label: "Ascent",
-        options: ascentTypes,
+        options: ascents,
         getOptionLabel: (option: AscentType) => (
           <span>
             <Icon name={option.id} /> {option.name}
@@ -159,137 +137,190 @@ export function BoulderView({ data, initialFilters }: BoulderViewProps) {
     [data]
   );
 
-  const columnHelper = createColumnHelper<Boulder>();
-
-  const columns = [
-    columnHelper.display({
-      id: "select",
-      header: ({ table }) => (
-        <IndeterminateCheckbox
-          {...{
-            checked: table.getIsAllRowsSelected(),
-            indeterminate: table.getIsSomeRowsSelected(),
-            onChange: table.getToggleAllRowsSelectedHandler(),
-          }}
-        />
-      ),
-      cell: ({ row }) => (
-        <IndeterminateCheckbox
-          {...{
-            checked: row.getIsSelected(),
-            disabled: !row.getCanSelect(),
-            indeterminate: row.getIsSomeSelected(),
-            onChange: row.getToggleSelectedHandler(),
-          }}
-        />
-      ),
-    }),
-    columnHelper.accessor("holdType", {
-      header: () => "Hold",
-      cell: (props) => {
-        const { image } = props.getValue();
-
-        return <HoldTypeComponent image={image} size="small" />;
-      },
-    }),
-    columnHelper.accessor("grade", {
-      header: () => "Grade",
-      cell: (props) => {
-        const { color, name } = props.getValue();
-
-        return (
-          <GradeComponent
-            color={color}
-            name={name}
-            className={utilities.typograpy.delta}
-          />
-        );
-      },
-    }),
-    columnHelper.accessor("points", {
-      header: () => "Points",
-      cell: (props) => `${props.getValue()}`,
-    }),
-    columnHelper.accessor("name", {
-      header: () => "Name",
-      cell: (props) => (
-        <>
-          <Modal
-            label="✏️"
-            title={`Edit boulder ${props.row.original.name}`}
-            className={styles.editButton}
-          >
-            <EditBoulderForm id={props.row.original.id} />
-          </Modal>
-
-          <button
-            onClick={() => alert("b21b1")}
-            className={cx(
-              styles.name,
-              typography.delta700,
-              utilities.colors.lila
-            )}
-          >
-            <span>{props.getValue()}</span>
-            <Icon name="plus" />
-          </button>
-        </>
-      ),
-    }),
-    columnHelper.accessor("startWall.name", {
-      id: "startWall",
-      header: () => "Start",
-      cell: (props) => (
-        <div className={utilities.typograpy.delta}>{props.renderValue()}</div>
-      ),
-    }),
-    columnHelper.accessor("endWall.name", {
-      id: "endWall",
-      header: () => "End",
-      cell: (props) => (
-        <div className={utilities.typograpy.delta}>{props.renderValue()}</div>
-      ),
-    }),
-    columnHelper.accessor("setters", {
-      header: () => "Setter",
-      cell: (props) =>
-        props
-          .getValue()
-          .map((setter) => setter.username)
-          .join(",  "),
-    }),
-    columnHelper.accessor("createdAt", {
-      header: () => "Date",
-      cell: (props) => parseDate(props.getValue()).string,
-    }),
-    columnHelper.accessor("userAscent", {
-      id: "ascent",
-      header: () => "",
-      cell: (props) => <Ascents userAscent={props.getValue()} />,
-    }),
-    columnHelper.display({
-      id: "expander",
-      header: () => null,
-      cell: ({ row }) => {
-        return row.getCanExpand() ? (
-          <button
+  const columns = useMemo(
+    () => [
+      columnHelper.accessor("areas", {
+        header: () => null,
+        cell: ({ row }) => null,
+        filterFn: (row, columnId, filterValue: Area) =>
+          row.original.areas.some((area) => area.id === filterValue.id),
+      }),
+      columnHelper.display({
+        id: "select",
+        header: ({ table }) => (
+          <IndeterminateCheckbox
             {...{
-              onClick: row.getToggleExpandedHandler(),
-              style: { cursor: "pointer" },
+              checked: table.getIsAllRowsSelected(),
+              indeterminate: table.getIsSomeRowsSelected(),
+              onChange: table.getToggleAllRowsSelectedHandler(),
             }}
-          >
-            {row.getIsExpanded() ? (
-              <Icon name="close" />
-            ) : (
-              <span className={cx(typography.delta700, utilities.colors.lila)}>
-                Add
-              </span>
-            )}
-          </button>
-        ) : null;
-      },
-    }),
-  ];
+          />
+        ),
+        cell: ({ row }) => (
+          <IndeterminateCheckbox
+            {...{
+              checked: row.getIsSelected(),
+              disabled: !row.getCanSelect(),
+              indeterminate: row.getIsSomeSelected(),
+              onChange: row.getToggleSelectedHandler(),
+            }}
+          />
+        ),
+      }),
+      columnHelper.accessor("holdType", {
+        header: () => "Hold",
+        cell: ({ row }) => {
+          const { image } = row.original.holdType;
+
+          return <HoldTypeComponent image={image} size="small" />;
+        },
+        filterFn: (row, columnId, filterValue: HoldType) =>
+          row.original.holdType.id === filterValue.id,
+      }),
+      columnHelper.accessor("grade", {
+        header: () => "Grade",
+        enableColumnFilter: true,
+        cell: (props) => {
+          const { color, name } = props.getValue();
+
+          return (
+            <GradeComponent
+              color={color}
+              name={name}
+              className={utilities.typograpy.delta}
+            />
+          );
+        },
+        filterFn: (row, columnId, filterValue: Grade) => {
+          return row.original.grade.id === filterValue.id;
+        },
+      }),
+      columnHelper.accessor("points", {
+        header: () => "Points",
+        cell: (props) => `${props.getValue()}`,
+      }),
+      columnHelper.accessor("name", {
+        header: () => "Name",
+        cell: (props) => (
+          <>
+            <Modal
+              label="✏️"
+              title={`Edit boulder ${props.row.original.name}`}
+              className={styles.editButton}
+            >
+              <EditBoulderForm id={props.row.original.id} />
+            </Modal>
+
+            <button
+              onClick={() => alert("b21b1")}
+              className={cx(
+                styles.name,
+                typography.delta700,
+                utilities.colors.lila
+              )}
+            >
+              <span>{props.getValue()}</span>
+              <Icon name="plus" />
+            </button>
+          </>
+        ),
+      }),
+      columnHelper.accessor("startWall", {
+        header: () => "Start",
+        cell: ({ row }) => (
+          <div className={utilities.typograpy.delta}>
+            {row.original.startWall.name}
+          </div>
+        ),
+        filterFn: (row, columnId, filterValue: Wall) =>
+          row.original.startWall.id === filterValue.id,
+      }),
+      columnHelper.accessor("endWall", {
+        header: () => "End",
+        cell: ({ row }) => (
+          <div className={utilities.typograpy.delta}>
+            {row.original.endWall.name}
+          </div>
+        ),
+        filterFn: (row, columnId, filterValue: Wall) =>
+          row.original.endWall.id === filterValue.id,
+      }),
+      columnHelper.accessor("setters", {
+        header: () => "Setter",
+        cell: (props) =>
+          props
+            .getValue()
+            .map((setter) => setter.username)
+            .join(",  "),
+        filterFn: (row, columnId, filterValue: Setter) =>
+          row.original.setters.some((setter) => setter.id === filterValue.id),
+      }),
+      columnHelper.accessor("createdAt", {
+        header: () => "Date",
+        cell: (props) => parseDate(props.getValue()).string,
+      }),
+      columnHelper.accessor("userAscent", {
+        id: "ascent",
+        header: () => "",
+        cell: ({ getValue, row }) => {
+          const ascent = getValue();
+
+          return (
+            <Ascents
+              userAscent={ascent}
+              onCheck={async (type) => {
+                await axios.post(`/api/${currentLocation?.url}/ascents`, {
+                  boulder: row.original.id,
+                  type,
+                });
+
+                await mutate(`/api/${currentLocation?.url}/boulders`);
+              }}
+              onUncheck={async (type) => {
+                await axios.delete(
+                  `/api/${currentLocation?.url}/ascents/${ascent?.id}`
+                );
+
+                await mutate(`/api/${currentLocation?.url}/boulders`);
+              }}
+            />
+          );
+        },
+        filterFn: (row, columnId, filterValue: AscentType) => {
+          if (filterValue.id === "todo") {
+            return row.original.userAscent === null;
+          }
+
+          return row.original.userAscent?.type === filterValue.id;
+        },
+      }),
+      columnHelper.display({
+        id: "expander",
+        header: () => null,
+        cell: ({ row }) => {
+          return row.getCanExpand() ? (
+            <button
+              {...{
+                onClick: row.getToggleExpandedHandler(),
+                style: { cursor: "pointer" },
+              }}
+            >
+              {row.getIsExpanded() ? (
+                <Icon name="close" />
+              ) : (
+                <span
+                  className={cx(typography.delta700, utilities.colors.lila)}
+                >
+                  Add
+                </span>
+              )}
+            </button>
+          ) : null;
+        },
+      }),
+    ],
+    [currentLocation]
+  );
 
   const table = useReactTable({
     data,
@@ -300,6 +331,10 @@ export function BoulderView({ data, initialFilters }: BoulderViewProps) {
       globalFilter,
       columnFilters,
       sorting,
+      columnVisibility: {
+        areas: false,
+        select: hasRole("ROLE_ADMIN") || hasRole("ROLE_SETTER"),
+      },
     },
     onColumnFiltersChange: setColumnFilters,
     onGlobalFilterChange: setGlobalFilter,
@@ -326,21 +361,25 @@ export function BoulderView({ data, initialFilters }: BoulderViewProps) {
           {filters.map((filter) => (
             <div className={styles.filter} key={filter.id}>
               <Label htmlFor={filter.id}>{filter.label}</Label>
+
               <Select
+                value={columnFilters.find(
+                  (columnFilter) => columnFilter.id === filter.id
+                )}
                 options={filter.options}
                 getOptionLabel={filter.getOptionLabel}
                 name={filter.id}
                 id={filter.id}
                 className={styles.select}
-                onChange={(value) =>
+                onChange={(value) => {
                   setColumnFilters([
                     ...columnFilters,
                     {
                       id: filter.id,
                       value,
                     },
-                  ])
-                }
+                  ]);
+                }}
               />
             </div>
           ))}
@@ -356,60 +395,38 @@ export function BoulderView({ data, initialFilters }: BoulderViewProps) {
       </div>
 
       <div className={styles.table}>
-        <div>
-          {table.getHeaderGroups().map((headerGroup) => (
-            <div key={headerGroup.id} className={styles.header}>
-              {headerGroup.headers.map((header) => {
-                return (
-                  <div
-                    key={header.id}
-                    className={cx(
-                      styles.headerCell,
-                      styles[`is${capitalize(header.column.id)}HeaderCell`]
-                    )}
-                  >
-                    {header.isPlaceholder ? null : (
-                      <>
-                        <button
-                          {...{
-                            className: cx(utilities.typograpy.delta700),
-                            onClick: header.column.getToggleSortingHandler(),
-                          }}
-                        >
-                          {flexRender(
-                            header.column.columnDef.header,
-                            header.getContext()
-                          )}
+        {table.getHeaderGroups().map((headerGroup) => (
+          <div key={headerGroup.id} className={styles.header}>
+            {headerGroup.headers.map((header) => (
+              <div
+                key={header.id}
+                className={cx(
+                  styles.headerCell,
+                  styles[`is${capitalize(header.column.id)}HeaderCell`]
+                )}
+              >
+                <TableHeaderCell header={header} />
+              </div>
+            ))}
+          </div>
+        ))}
 
-                          {{
-                            asc: <Icon name="chevronUp" />,
-                            desc: <Icon name="chevronDown" />,
-                          }[header.column.getIsSorted() as string] ?? null}
-                        </button>
-                      </>
-                    )}
-                  </div>
-                );
-              })}
-            </div>
-          ))}
-        </div>
+        {table.getRowModel().rows.map((row) => {
+          return (
+            <>
+              <RowComponent collapsed={collapsed} {...row} />
 
-        <div className={styles.content}>
-          {table.getRowModel().rows.map((row) => {
-            return (
-              <>
-                <RowComponent collapsed={collapsed} {...row} />
-                {row.getIsExpanded() ? <SubRow {...row} /> : null}
-              </>
-            );
-          })}
-        </div>
+              {row.getIsExpanded() ? (
+                <SubRow {...row} onClose={() => row.toggleExpanded()} />
+              ) : null}
+            </>
+          );
+        })}
       </div>
 
       <Pagination
-        pageIndex={table.getState().pagination.pageIndex + 1}
-        pageSize={10}
+        pageIndex={table.getState().pagination.pageIndex}
+        pageSize={20}
         pageCount={table.getPageCount()}
         canPreviousPage={table.getCanPreviousPage()}
         canNextPage={table.getCanNextPage()}

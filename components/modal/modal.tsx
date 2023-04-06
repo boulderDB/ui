@@ -23,8 +23,6 @@ export function Modal({
 
   return (
     <>
-      {isOpen}
-
       <button {...rest} type="button" onClick={() => setIsOpen(true)}>
         {label}
       </button>
@@ -72,12 +70,12 @@ export function Modal({
             >
               <Transition.Child
                 as={Fragment}
-                enter="ease-out duration-300"
-                enterFrom="opacity-0 scale-95"
-                enterTo="opacity-100 scale-100"
-                leave="ease-in duration-200"
-                leaveFrom="opacity-100 scale-100"
-                leaveTo="opacity-0 scale-95"
+                enter={styles.modalEnter}
+                enterFrom={styles.isHiddenModal}
+                enterTo={styles.isVisibleModal}
+                leave={styles.modalLeave}
+                leaveFrom={styles.isVisibleModal}
+                leaveTo={styles.isHiddenModal}
               >
                 <Dialog.Panel
                   style={{
@@ -89,13 +87,13 @@ export function Modal({
                     verticalAlign: "middle",
                     width: "100%",
                     maxWidth: "800px",
-                    borderRadius: "1rem",
+                    minHeight: 400,
                     boxShadow:
                       "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)",
                   }}
                 >
                   <div className={styles.header}>
-                    <Dialog.Title as="h3" className={utilities.typograpy.alpha}>
+                    <Dialog.Title as="h3" className={utilities.typograpy.alpha700}>
                       {title}
                     </Dialog.Title>
 

@@ -3,7 +3,7 @@ import App from "next/app";
 import { Footer } from "../components/footer/footer";
 import axios from "axios";
 import styles from "../styles/pages/app.module.css";
-import { Location, TokenPayload } from "../lib/types";
+import { Location, Role, TokenPayload } from "../lib/types";
 import { Header } from "../components/header/_header";
 import decode from "jwt-decode";
 import { createContext, useContext, useMemo, useState } from "react";
@@ -23,12 +23,16 @@ type Context = {
   currentLocation: Location | null;
   authenticated: boolean;
   tokenPayload: TokenPayload | null;
+  roles: Role[];
+  hasRole: (role: Role) => boolean;
 };
 
 const AppContext = createContext<Context>({
   currentLocation: null,
   authenticated: false,
   tokenPayload: null,
+  roles: [],
+  hasRole: () => false,
 });
 
 export const useAppContext = () => {
@@ -43,7 +47,7 @@ export default function MyApp({
   tokenPayload: intialTokenPayload,
 }: MyAppProps) {
   const router = useRouter();
-  
+
   const [tokenPayload, setTokenPayload] = useState<TokenPayload | null>(
     intialTokenPayload
   );
@@ -57,6 +61,12 @@ export default function MyApp({
       null,
     [router.query.location]
   );
+
+  const roles = currentLocation
+    ? (tokenPayload?.user.roles
+        .filter((role) => role.endsWith(currentLocation?.id.toString()))
+        .map((role) => role.replace(`@${currentLocation.id}`, "")) as Role[])
+    : [];
 
   return (
     <SWRConfig
@@ -75,6 +85,8 @@ export default function MyApp({
           currentLocation,
           authenticated,
           tokenPayload,
+          roles,
+          hasRole: (role) => roles.includes(role),
         }}
       >
         <Header locations={locations} />

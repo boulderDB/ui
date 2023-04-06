@@ -8,7 +8,7 @@ import { fetcher } from "../../../lib/http";
 export default function Page() {
   const { currentLocation } = useAppContext();
 
-  const { data: ranking } = useSWR(
+  const { data } = useSWR(
     `/api/${currentLocation?.url}/rankings/current`,
     fetcher
   );
@@ -18,14 +18,14 @@ export default function Page() {
     fetcher
   );
 
-  if (!ranking || !boulderCount) {
+  if (!data || !boulderCount) {
     return <Loader />;
   }
 
   return (
     <>
       <h1 className={utilities.typograpy.alpha700}>Ranking</h1>
-      <RankingView ranking={ranking} boulderCount={boulderCount} />
+      <RankingView data={data} boulderCount={boulderCount} />
     </>
   );
 }

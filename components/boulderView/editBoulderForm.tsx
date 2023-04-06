@@ -1,5 +1,5 @@
 import { fetcher } from "../../lib/http";
-import { Boulder, Grade, HoldType, Wall } from "../../lib/types";
+import { Boulder, Grade, HoldType, Setter, Tag, Wall } from "../../lib/types";
 import { useAppContext } from "../../pages/_app";
 import useSWR, { useSWRConfig } from "swr";
 import Loader from "../loader/loader";
@@ -10,6 +10,8 @@ import { Input } from "../input/input";
 import { Select } from "../select/_select";
 import { HoldType as HoldTypeComponent } from "../holdType/holdType";
 import { selectValidation } from "../../lib/selectValidation";
+import { MultiSelect } from "../select/multiSelect";
+import { selectOptionLabels } from "../../lib/selectOptionLabels";
 
 type EditBoulderFormProps = {
   id: number;
@@ -17,6 +19,7 @@ type EditBoulderFormProps = {
 
 export function EditBoulderForm({ id }: EditBoulderFormProps) {
   const { currentLocation } = useAppContext();
+
   const { data } = useSWR<Boulder[]>(
     `/api/${currentLocation?.url}/boulders/${id}`,
     fetcher
@@ -37,9 +40,19 @@ export function EditBoulderForm({ id }: EditBoulderFormProps) {
     fetcher
   );
 
+  const { data: tags } = useSWR<Tag[]>(
+    `/api/${currentLocation?.url}/boulder-tags`,
+    fetcher
+  );
+
+  const { data: setters } = useSWR<Setter[]>(
+    `/api/${currentLocation?.url}/setters`,
+    fetcher
+  );
+
   const { mutate } = useSWRConfig();
 
-  if (!data || !walls || !grades || !holdTypes) {
+  if (!data || !walls || !grades || !holdTypes || !tags || !setters) {
     return <Loader />;
   }
 
@@ -81,7 +94,7 @@ export function EditBoulderForm({ id }: EditBoulderFormProps) {
           name: "grade",
           label: "Grade",
           onChangeValidate: selectValidation(),
-          getOptionLabel: (option: Grade) => option.name,
+          getOptionLabel: selectOptionLabels.grade,
           options: grades,
           component: Select,
         },
@@ -89,20 +102,23 @@ export function EditBoulderForm({ id }: EditBoulderFormProps) {
           name: "holdType",
           label: "Hold type",
           onChangeValidate: selectValidation(),
-          getOptionLabel: (option: HoldType) => (
-            <div style={{ display: "flex", alignItems: "center" }}>
-              <HoldTypeComponent image={option.image} />
-              <span
-                style={{
-                  marginLeft: 8,
-                }}
-              >
-                {option.name}
-              </span>
-            </div>
-          ),
+          getOptionLabel: selectOptionLabels.holdType,
           options: holdTypes,
           component: Select,
+        },
+        {
+          name: "tags",
+          label: "Tags",
+          getOptionLabel: selectOptionLabels.tag,
+          options: tags,
+          component: MultiSelect,
+        },
+        {
+          name: "setters",
+          label: "Setters",
+          getOptionLabel: (option: Setter) => option.username,
+          options: setters,
+          component: MultiSelect,
         },
         {
           name: "points",

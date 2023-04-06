@@ -38,6 +38,26 @@
   opacity: 0;
 }
 
+.modalEnter {
+  transition-duration: 300ms;
+  transition-timing-function: cubic-bezier(0, 0, 0.2, 1);
+}
+
+.modalLeave {
+  transition-duration: 200ms;
+  transition-timing-function: cubic-bezier(0, 0, 0.2, 1);
+}
+
+.isVisibleModal {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.isHiddenModal {
+  opacity: 0;
+  transform: scale(0.95);
+}
+
 .header {
   display: flex;
   justify-content: space-between;

@@ -23,12 +23,6 @@ export default function Page() {
 
       <BoulderView
         data={data}
-        initialFilters={[
-          {
-            id: "ascent",
-            value: "todo",
-          },
-        ]}
       />
     </>
   );

@@ -50,6 +50,7 @@ export function Row({ collapsed, id, getVisibleCells }: RowProps) {
     (cell) => cell.column.id === "expander"
   );
 
+
   return (
     <div key={id} className={cx(styles.root)}>
       {holdTypeCell

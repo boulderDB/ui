@@ -13,6 +13,7 @@
 
 .hasError {
   border-bottom-color: var(--color-red);
+  color: var(--color-red);
 }
 
 .value {
@@ -38,15 +39,25 @@
   overflow-x: hidden;
   white-space: nowrap;
   color: var(--color-black);
+
+  &:last-child {
+    border-bottom: none;
+  }
 }
 
 .isActiveOption {
-  background-color: var(--color-lila);
-  color: var(--color-white);
+  background-color: var(--color-lila-400);
+  color: var(--color-black);
 }
 
 .checkIcon {
+  margin: 0 4px;
   opacity: 0;
+}
+
+.isSelectedOption {
+  color: var(--color-white);
+  background-color: var(--color-lila);
 }
 
 .isSelectedOption .checkIcon {
@@ -57,4 +68,14 @@
   white-space: nowrap;
   text-overflow: ellipsis;
   width: 100%;
+}
+
+.tag {
+  display: flex;
+  margin-top: 8px;
+  white-space: nowrap;
+
+  &:first-child {
+    margin-top: 0;
+  }
 }
