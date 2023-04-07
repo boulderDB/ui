@@ -11,7 +11,7 @@
   }
 
   @media (--m) {
-    grid-template-columns: 40px minmax(100px, 150px) 60px auto 80px 80px;
+    grid-template-columns: 40px auto 60px 80px 80px;
   }
 
   @media (--xl-to-l) {
@@ -25,29 +25,38 @@
   position: relative;
   overflow: hidden;
 
-  &.bouldersCell,
-  &.flashedCell,
-  &.toppedCell,
-  &.genderCell,
-  &.pointsCell,
-  &.lastActivityCell {
+  &.isBouldersCell,
+  &.isFlashedCell,
+  &.isToppedCell,
+  &.isGenderCell,
+  &.isPointsCell,
+  &.isLastActivityCell,
+  &.isExpanderCell {
     display: none;
   }
 
+  @media (--s) {
+    &.isExpanderCell {
+      display: flex;
+      justify-content: flex-end;
+    }
+  }
+
   @media (--m) {
-    &.genderCell,
-    &.lastActivityCell {
+    &.isToppedCell,
+    &.isFlashedCell,
+    &.isPointsCell {
       display: flex;
     }
   }
 
   @media (--xl-to-l) {
-    &.bouldersCell,
-    &.flashedCell,
-    &.toppedCell,
-    &.genderCell,
-    &.pointsCell,
-    &.lastActivityCell {
+    &.isBouldersCell,
+    &.isFlashedCell,
+    &.isToppedCell,
+    &.isGenderCell,
+    &.isPointsCell,
+    &.isLastActivityCell {
       display: flex;
     }
 

@@ -11,7 +11,7 @@ import { UploadResponse } from "../lib/types";
 import axios from "axios";
 import { fetcher } from "../lib/http";
 import { useSWRConfig } from "swr";
-import { Button } from "../components/button/_button";
+import { Button } from "../components/button/button";
 import useSWR from "swr";
 import Loader from "../components/loader/loader";
 

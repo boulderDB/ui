@@ -11,12 +11,13 @@ import { useState } from "react";
 import utilities from "../../styles/utilities/utilities";
 import cx from "classix";
 import { InputProps } from "../input/input";
-import { Button } from "../button/_button";
+import { Button } from "../button/button";
 import { UploadProps } from "../upload/_upload";
 import { SelectProps } from "../select/_select";
 import { FormErrorResponse, ServerErrorResponse } from "../../lib/types";
 import { SwitchProps } from "../switch/_switch";
 import { Label } from "../label/_label";
+import { Notice } from "../notice/notice";
 
 export type PrimitiveInput = number | string | boolean | null;
 
@@ -72,15 +73,15 @@ export function Form<TValues>({
   return (
     <div className={cx(styles.root, submitting ? styles.isSubmitting : null)}>
       {error ? (
-        <div className={cx(styles.notice, styles.isErrorNotice)}>
+        <Notice type="error">
           <p className={utilities.typograpy.delta700}>{error}</p>
-        </div>
+        </Notice>
       ) : null}
 
       {success ? (
-        <div className={cx(styles.notice, styles.isSuccessNotice)}>
+        <Notice type="success">
           <p className={utilities.typograpy.delta700}>{success}</p>
-        </div>
+        </Notice>
       ) : null}
 
       <HouseForm<TValues>

@@ -5,7 +5,7 @@ import styles from "./modal.module.css";
 import utilities from "../../styles/utilities/utilities";
 
 type ModalProps = {
-  label: string;
+  label: string | React.ReactNode;
   title: string;
 } & React.ButtonHTMLAttributes<HTMLButtonElement>;
 
@@ -93,7 +93,10 @@ export function Modal({
                   }}
                 >
                   <div className={styles.header}>
-                    <Dialog.Title as="h3" className={utilities.typograpy.alpha700}>
+                    <Dialog.Title
+                      as="h3"
+                      className={utilities.typograpy.alpha700}
+                    >
                       {title}
                     </Dialog.Title>
 

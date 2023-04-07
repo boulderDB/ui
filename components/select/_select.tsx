@@ -16,7 +16,7 @@ export type SelectProps<TOption extends Option> = {
   getOptionLabel: (option: TOption) => string | ReactNode;
   value?: TOption | null;
   className?: string;
-  clearable: boolean;
+  emptyOptionLabel?: string;
 } & FormFieldProps<TOption>;
 
 export function Select<TOption extends Option>({
@@ -25,7 +25,7 @@ export function Select<TOption extends Option>({
   value = null,
   hasError,
   onChange,
-  clearable = false,
+  emptyOptionLabel = "—",
   className,
 }: SelectProps<TOption>) {
   const [selected, setSelected] = useState<TOption | null>(value);
@@ -52,14 +52,28 @@ export function Select<TOption extends Option>({
         )}
       >
         <span className={cx(styles.value, utilities.typograpy.gamma700)}>
-          {selected ? getOptionLabel(selected) : "—"}
+          {selected ? getOptionLabel(selected) : emptyOptionLabel}
         </span>
 
         {hasError ? <Icon name="error" /> : <Icon name="down" />}
       </Listbox.Button>
-      
 
       <Listbox.Options className={styles.options}>
+        <Listbox.Option
+          value={null}
+          className={({ active, selected }) =>
+            cx(
+              styles.option,
+              utilities.typograpy.gamma700,
+              active ? styles.isActiveOption : null,
+              selected ? styles.isSelectedOption : null
+            )
+          }
+        >
+          <Icon name="top" className={styles.checkIcon} />
+          <span className={styles.optionLabel}>{emptyOptionLabel}</span>
+        </Listbox.Option>
+
         {options.map((option) => (
           <Listbox.Option
             className={({ active, selected }) =>
@@ -74,7 +88,7 @@ export function Select<TOption extends Option>({
             value={option}
             disabled={option.disabled}
           >
-            <Icon name="top" className={styles.checkIcon} />{" "}
+            <Icon name="top" className={styles.checkIcon} />
             <span className={styles.optionLabel}>{getOptionLabel(option)}</span>
           </Listbox.Option>
         ))}

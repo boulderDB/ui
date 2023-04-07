@@ -16,6 +16,12 @@
   padding: 8px 0;
   display: none;
 
+  @media (--m) {
+    display: grid;
+    grid-column-gap: 16px;
+    grid-template-columns: 40px auto 60px 80px 80px;
+  }
+
   @media (--xl-to-l) {
     display: grid;
     grid-column-gap: 16px;
@@ -23,8 +29,24 @@
   }
 }
 
-.headerCell.isExpanderHeaderCell {
-  @media (--xl-to-l) {
+.headerCell {
+  &.isBouldersHeaderCell,
+  &.isGenderHeaderCell,
+  &.isLastActivityHeaderCell,
+  &.isExpanderHeaderCell {
     display: none;
+  }
+
+  @media (--xl-to-l) {
+    &.isBouldersHeaderCell,
+    &.isGenderHeaderCell,
+    &.isLastActivityHeaderCell,
+    &.isExpanderHeaderCell {
+      display: flex;
+    }
+
+    &.isExpanderHeaderCell {
+      display: none;
+    }
   }
 }

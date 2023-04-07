@@ -67,3 +67,7 @@
   @extend .eta;
   font-weight: bold;
 }
+
+.nowrap {
+  white-space: nowrap;
+}

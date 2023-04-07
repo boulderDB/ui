@@ -12,37 +12,6 @@
   }
 }
 
-.sideTitle {
-  display: flex;
-  justify-content: space-between;
-  grid-column: 1 / -1;
-}
-
-.sideContent {
-  grid-column: 1 / -1;
-  margin-top: 50px;
-}
-
-.full {
-  grid-column: 1 / span 12;
-}
-
-.column {
-  margin-bottom: 60px;
-}
-
-.leftColumn {
-  grid-column: 1 / span 5;
-
-  @media (--s) {
-    grid-column: 1 / span 12;
-  }
-}
-
-.rightColumn {
-  grid-column: 7 / span 5;
-
-  @media (--m-to-s) {
-    grid-column: 1 / span 12;
-  }
+.inlineFlex {
+  display: inline-flex;
 }

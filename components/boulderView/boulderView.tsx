@@ -5,6 +5,7 @@ import {
   Grade,
   HoldType,
   Setter,
+  User,
   Wall,
 } from "../../lib/types";
 import { uniqBy } from "../../lib/uniqueBy";
@@ -16,7 +17,7 @@ import { Grade as GradeComponent } from "../grade/grade";
 import { Icon } from "../icon/_icon";
 import { Input } from "../input/input";
 import { useMemo, useState } from "react";
-import Pagination from "../../components/pagination/pagination";
+import Pagination from "../pagination/pagination";
 import {
   ColumnFiltersState,
   Row,
@@ -48,13 +49,24 @@ import { selectOptionLabels } from "../../lib/selectOptionLabels";
 import { ascents } from "../../lib/globals";
 import { IndeterminateCheckbox } from "../table/indeterminateCheckbox";
 import { TableHeaderCell } from "../table/tableHeaderCell";
+import Bar from "../bar/bar";
+import { Button } from "../button/button";
+import { Details } from "./details";
+import { useRouter } from "next/router";
 
 type BoulderViewProps = {
   data: Boulder[];
+  forUser?: User;
+  forEvent?: Event;
   initialFilters?: ColumnFiltersState;
 };
 
-export function BoulderView({ data, initialFilters = [] }: BoulderViewProps) {
+export function BoulderView({
+  data,
+  forUser,
+  forEvent,
+  initialFilters = [],
+}: BoulderViewProps) {
   const { mutate } = useSWRConfig();
   const columnHelper = createColumnHelper<Boulder>();
 
@@ -142,8 +154,13 @@ export function BoulderView({ data, initialFilters = [] }: BoulderViewProps) {
       columnHelper.accessor("areas", {
         header: () => null,
         cell: ({ row }) => null,
-        filterFn: (row, columnId, filterValue: Area) =>
-          row.original.areas.some((area) => area.id === filterValue.id),
+        filterFn: (row, columnId, filterValue: Area) => {
+          if (!filterValue) {
+            return true;
+          }
+
+          return row.original.areas.some((area) => area.id === filterValue.id);
+        },
       }),
       columnHelper.display({
         id: "select",
@@ -174,8 +191,13 @@ export function BoulderView({ data, initialFilters = [] }: BoulderViewProps) {
 
           return <HoldTypeComponent image={image} size="small" />;
         },
-        filterFn: (row, columnId, filterValue: HoldType) =>
-          row.original.holdType.id === filterValue.id,
+        filterFn: (row, columnId, filterValue: HoldType) => {
+          if (!filterValue) {
+            return true;
+          }
+
+          return row.original.holdType.id === filterValue.id;
+        },
       }),
       columnHelper.accessor("grade", {
         header: () => "Grade",
@@ -192,6 +214,10 @@ export function BoulderView({ data, initialFilters = [] }: BoulderViewProps) {
           );
         },
         filterFn: (row, columnId, filterValue: Grade) => {
+          if (!filterValue) {
+            return true;
+          }
+
           return row.original.grade.id === filterValue.id;
         },
       }),
@@ -203,25 +229,31 @@ export function BoulderView({ data, initialFilters = [] }: BoulderViewProps) {
         header: () => "Name",
         cell: (props) => (
           <>
-            <Modal
-              label="✏️"
-              title={`Edit boulder ${props.row.original.name}`}
-              className={styles.editButton}
-            >
-              <EditBoulderForm id={props.row.original.id} />
-            </Modal>
+            {hasRole("ROLE_ADMIN") || hasRole("ROLE_SETTER") ? (
+              <Modal
+                label="✏️"
+                title={`Edit boulder ${props.row.original.name}`}
+                className={styles.editButton}
+              >
+                <EditBoulderForm id={props.row.original.id} />
+              </Modal>
+            ) : null}
 
-            <button
-              onClick={() => alert("b21b1")}
+            <Modal
+              label={
+                <>
+                  <span>{props.getValue()}</span> <Icon name="plus" />
+                </>
+              }
+              title={`Details on ${props.row.original.name}`}
               className={cx(
                 styles.name,
                 typography.delta700,
                 utilities.colors.lila
               )}
             >
-              <span>{props.getValue()}</span>
-              <Icon name="plus" />
-            </button>
+              <Details id={props.row.original.id} />
+            </Modal>
           </>
         ),
       }),
@@ -232,8 +264,13 @@ export function BoulderView({ data, initialFilters = [] }: BoulderViewProps) {
             {row.original.startWall.name}
           </div>
         ),
-        filterFn: (row, columnId, filterValue: Wall) =>
-          row.original.startWall.id === filterValue.id,
+        filterFn: (row, columnId, filterValue: Wall) => {
+          if (!filterValue) {
+            return true;
+          }
+
+          return row.original.startWall.id === filterValue.id;
+        },
       }),
       columnHelper.accessor("endWall", {
         header: () => "End",
@@ -242,8 +279,13 @@ export function BoulderView({ data, initialFilters = [] }: BoulderViewProps) {
             {row.original.endWall.name}
           </div>
         ),
-        filterFn: (row, columnId, filterValue: Wall) =>
-          row.original.endWall.id === filterValue.id,
+        filterFn: (row, columnId, filterValue: Wall) => {
+          if (!filterValue) {
+            return true;
+          }
+
+          return row.original.endWall.id === filterValue.id;
+        },
       }),
       columnHelper.accessor("setters", {
         header: () => "Setter",
@@ -252,8 +294,15 @@ export function BoulderView({ data, initialFilters = [] }: BoulderViewProps) {
             .getValue()
             .map((setter) => setter.username)
             .join(",  "),
-        filterFn: (row, columnId, filterValue: Setter) =>
-          row.original.setters.some((setter) => setter.id === filterValue.id),
+        filterFn: (row, columnId, filterValue: Setter) => {
+          if (!filterValue) {
+            return true;
+          }
+
+          return row.original.setters.some(
+            (setter) => setter.id === filterValue.id
+          );
+        },
       }),
       columnHelper.accessor("createdAt", {
         header: () => "Date",
@@ -261,7 +310,7 @@ export function BoulderView({ data, initialFilters = [] }: BoulderViewProps) {
       }),
       columnHelper.accessor("userAscent", {
         id: "ascent",
-        header: () => "",
+        header: () => "Flash | Top | Hide",
         cell: ({ getValue, row }) => {
           const ascent = getValue();
 
@@ -287,6 +336,10 @@ export function BoulderView({ data, initialFilters = [] }: BoulderViewProps) {
           );
         },
         filterFn: (row, columnId, filterValue: AscentType) => {
+          if (!filterValue) {
+            return true;
+          }
+
           if (filterValue.id === "todo") {
             return row.original.userAscent === null;
           }
@@ -363,6 +416,7 @@ export function BoulderView({ data, initialFilters = [] }: BoulderViewProps) {
               <Label htmlFor={filter.id}>{filter.label}</Label>
 
               <Select
+                emptyOptionLabel="All"
                 value={columnFilters.find(
                   (columnFilter) => columnFilter.id === filter.id
                 )}
@@ -433,6 +487,22 @@ export function BoulderView({ data, initialFilters = [] }: BoulderViewProps) {
         previousPage={() => table.previousPage()}
         nextPage={() => table.nextPage()}
       />
+
+      <Bar variant={"danger"} visible={Object.keys(rowSelection).length > 0}>
+        <span
+          className={cx(utilities.typograpy.gamma, utilities.typograpy.nowrap)}
+        >
+          Selected ({Object.keys(rowSelection).length})
+        </span>
+
+        <Button variant={"danger"} display={"inline"}>
+          Deactivate
+        </Button>
+      </Bar>
+
+      <Bar variant={"danger"} visible={true}>
+        ss
+      </Bar>
     </>
   );
 }

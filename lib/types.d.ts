@@ -1,5 +1,29 @@
 export type Role = "ROLE_ADMIN" | "ROLE_SETTER" | "ROLE_SUPER_ADMIN";
 
+export type Event = {
+  id: number;
+  name: string;
+  visible: boolean;
+  boulders: Boulder[];
+  participants?: Participant[];
+  public: boolean;
+  startDate: string;
+  endDate: string;
+  ranking?: "defaultPoints" | "ascent";
+  isParticipant: boolean;
+  state: "ended" | "active" | "upcoming";
+};
+
+export type Participant = {
+  id: number;
+  username: string;
+  gender: Gender;
+  roles: Role[];
+  visible: boolean;
+  image: null | string;
+  lastActivity: string;
+};
+
 export type Boulder = {
   group: any;
   id: number;
@@ -12,14 +36,20 @@ export type Boulder = {
   status: string;
   points: number;
   ascents: Ascent[];
-  comments: any[];
+  comments: Comment[];
   tags: Tag[];
   setters: Setter[];
   readableIdentifier: null;
   userAscent: Ascent | null;
   currentPoints: number;
-  createdAt: Date;
+  createdAt: string;
   areas: Area[];
+};
+
+export type Comment = {
+  id: number;
+  message: string;
+  author: User;
 };
 
 export type Rank = {
@@ -74,7 +104,7 @@ export type Ascent = {
   user: User;
   type: "top" | "flash" | "resignation" | "todo";
   score: number;
-  createdAt: Date;
+  createdAt: string;
 };
 
 export type AscentType = {
@@ -96,7 +126,7 @@ export type Setter = {
   username: string;
   user: User;
   active: boolean;
-  createdAt: Date;
+  createdAt: string;
 };
 
 export type Location = {
@@ -115,10 +145,10 @@ export type User = {
   id: number;
   username: string;
   gender: "male" | "female" | "neutral";
-  roles: string[];
   visible: boolean;
   image: null | string;
-  lastActivity: Date | string;
+  lastActivity: string;
+  roles?: string[];
   email?: string;
   firstName?: string;
   lastName?: string;

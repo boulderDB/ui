@@ -44,13 +44,15 @@
   @media (--xl-to-l) {
     display: grid;
     grid-column-gap: 16px;
-    grid-template-columns: 20px 20px 80px 60px minmax(60px, auto) 200px 140px 140px 100px 152px;
+    grid-template-columns: 20px 20px 80px 60px minmax(60px, auto) 200px 140px 140px 100px 136px;
   }
 }
 
-.headerCell.isExpanderHeaderCell {
-  @media (--xl-to-l) {
-    display: none;
+.headerCell {
+  &.isExpanderHeaderCell {
+    @media (--xl-to-l) {
+      display: none;
+    }
   }
 }
 

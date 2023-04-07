@@ -1,10 +1,12 @@
+import cx from "classix";
+import utilities from "../../styles/utilities/utilities";
 import Avatar from "../avatar/avatar";
 import styles from "./userRank.module.css";
 
 type UserRankProps = {
   image?: string | null;
   username: string;
-  sentAllBoulders: boolean;
+  sentAllBoulders?: boolean;
 };
 
 export function UserRank({
@@ -13,7 +15,7 @@ export function UserRank({
   sentAllBoulders = false,
 }: UserRankProps) {
   return (
-    <div className={styles.root}>
+    <div className={cx(styles.root, utilities.typograpy.delta)}>
       <Avatar image={image} />
       <span className={styles.username}>{username}</span>
       {sentAllBoulders && <span className={styles.badge}>🥋</span>}

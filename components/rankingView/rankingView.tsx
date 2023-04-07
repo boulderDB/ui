@@ -69,7 +69,7 @@ export default function RankingView({ data, boulderCount }: RankingViewProps) {
         cell: (props) => <span>{props.getValue()}</span>,
       }),
       columnHelper.accessor("total.count", {
-        id: "total",
+        id: "boulders",
         header: () => "Boulders",
         cell: (props) => (
           <Progress percentage={(props.getValue() / boulderCount) * 100} />

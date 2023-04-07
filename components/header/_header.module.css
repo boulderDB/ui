@@ -14,10 +14,6 @@
   flex: 1;
   display: flex;
   justify-content: space-between;
-
-  @media (--m-to-s) {
-    display: none;
-  }
 }
 
 .primary,

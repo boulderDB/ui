@@ -1,86 +1,46 @@
 .root {
-  padding: 8px 32px;
-  display: inline-flex;
-  align-self: flex-start;
+  align-items: center;
+  justify-content: center;
   white-space: nowrap;
-}
-
-.isSizeS {
-  display: inline-flex;
-  align-items: center;
-  padding: 8px 16px;
-}
-
-.isSizeXs {
-  display: inline-flex;
-  align-items: center;
-  padding: 4px 8px;
-}
-
-.isDefault {
-  background: var(--color-lila);
+  background-color: var(--color-lila);
   color: var(--color-white);
-}
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  text-align: center;
 
-.isDanger {
-  background: var(--color-red);
-  color: var(--color-white);
-}
+  &.isInline {
+    display: inline-flex;
+  }
 
-.isSuccess {
-  background: var(--color-top);
-  color: var(--color-white);
-}
+  &.isFull {
+    width: 100%;
+    display: flex;
+  }
 
-.isDark {
-  background: var(--color-white);
-  color: var(--color-black);
-}
+  &.isMedium {
+    height: 48px;
+    padding: 0 16px;
+  }
 
-.isLoading {
-  opacity: 0.3;
-  cursor: not-allowed;
-}
+  &.isSmall {
+    height: 24px;
+    padding: 0 8px;
+    text-transform: none;
+  }
 
-.isInverted {
-  background: none;
-  border-radius: 4px;
-  font-weight: bold;
-  transition: all 140ms ease-in-out;
-}
+  &.isDanger {
+    background-color: var(--color-red);
+  }
 
-.isInverted.isDefault:hover {
-  background: var(--color-lila-400);
-  color: var(--color-lila);
-}
+  &.isOutlined {
+    border-radius: 4px;
+    border: 1px solid var(--color-lila);
+    background-color: var(--color-white);
+    color: var(--color-lila);
 
-.isInverted.isDefault {
-  color: var(--color-lila);
-}
-
-.isInverted.isDanger:hover {
-  background: var(--color-red-400);
-  color: var(--color-red);
-}
-
-.isInverted.isDanger {
-  color: var(--color-red);
-}
-
-.isInverted.isSuccess:hover {
-  background: var(--color-top-400);
-  color: var(--color-top);
-}
-
-.isInverted.isSuccess {
-  color: var(--color-top);
-}
-
-.isInverted.isDark:hover {
-  background: var(--color-lightgrey);
-  color: var(--color-black);
-}
-
-.isInverted.isDark {
-  color: var(--color-black);
+    &:hover {
+      background-color: var(--color-lila);
+      color: var(--color-white);
+    }
+  }
 }
