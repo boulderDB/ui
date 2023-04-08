@@ -1,6 +1,6 @@
 import cx from "classix";
 import styles from "./holdType.module.css";
-import capitalize from "../../utilties/capitalize";
+import { capitalize } from "../../lib/capitalize";
 
 type HoldTypeProps = {
   image: string;

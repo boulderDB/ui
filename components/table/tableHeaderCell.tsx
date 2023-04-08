@@ -1,7 +1,7 @@
 import cx from "classix";
 import utilities from "../../styles/utilities/utilities";
 import { Header, flexRender } from "@tanstack/react-table";
-import { Icon } from "../icon/_icon";
+import { Icon } from "../icon/icon";
 
 type TableHeaderProps<TData, TValue> = {
   header: Header<TData, TValue>;

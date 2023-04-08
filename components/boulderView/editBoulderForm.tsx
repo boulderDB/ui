@@ -3,7 +3,7 @@ import { Boulder, Grade, HoldType, Setter, Tag, Wall } from "../../lib/types";
 import { useAppContext } from "../../pages/_app";
 import useSWR, { useSWRConfig } from "swr";
 import Loader from "../loader/loader";
-import { Form } from "../form/_form";
+import { Form } from "../form/form";
 import axios from "axios";
 import { z } from "zod";
 import { Input } from "../input/input";

@@ -1,6 +1,6 @@
 import { cx } from "classix";
 import styles from "./iconButton.module.css";
-import { Icon, IconName } from "../icon/_icon";
+import { Icon, IconName } from "../icon/icon";
 
 type IconButtonProps = {
   icon: IconName;

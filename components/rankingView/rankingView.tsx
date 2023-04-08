@@ -1,7 +1,5 @@
 import styles from "./rankingView.module.css";
 import { Progress } from "../progress/progress";
-import calculatePercentage from "../../utilties/calculatePercentage";
-import { parseDate } from "../../utilties/parseDate";
 import { Event, Rank } from "../../lib/types";
 import {
   Row,
@@ -14,15 +12,17 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import utilities from "../../styles/utilities/utilities";
-import { Icon } from "../icon/_icon";
+import { Icon } from "../icon/icon";
 import { useMemo, useState } from "react";
 import { Input } from "../input/input";
-import { UserRank } from "./userRank";
 import { TableHeaderCell } from "../table/tableHeaderCell";
 import { capitalize } from "../../lib/capitalize";
 import cx from "classix";
 import { Row as RowComponent } from "./row";
 import { SubRow } from "./subRow";
+import { User } from "../user/user";
+import { calculatePercentage } from "../../lib/calculatePercentage";
+import { parseDate } from "../../lib/parseDate";
 
 type RankingViewProps = {
   data: Rank[];
@@ -55,7 +55,7 @@ export default function RankingView({
         header: () => "Username",
         cell: ({ row }) => {
           return (
-            <UserRank
+            <User
               username={row.original.user.username}
               image={row.original.user.image}
               sentAllBoulders={row.original.total.count === boulderCount}
@@ -97,7 +97,7 @@ export default function RankingView({
       columnHelper.accessor("user.lastActivity", {
         id: "lastActivity",
         header: () => "Last activity",
-        cell: (props) => <span>{parseDate(props.getValue()).string}</span>,
+        cell: (props) => <span>{parseDate(props.getValue())}</span>,
       }),
       columnHelper.display({
         id: "expander",

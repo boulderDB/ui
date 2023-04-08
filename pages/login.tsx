@@ -3,7 +3,7 @@ import styles from "../styles/pages/frontPage.module.css";
 import utilities from "../styles/utilities/utilities";
 import Link from "next/link";
 import { z } from "zod";
-import { Form } from "../components/form/_form";
+import { Form } from "../components/form/form";
 import { Input } from "../components/input/input";
 import cookies from "js-cookie";
 import { LoginResponse } from "../lib/types";

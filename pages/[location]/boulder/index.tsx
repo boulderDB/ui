@@ -1,13 +1,13 @@
 import { useRouter } from "next/router";
 import { BoulderView } from "../../../components/boulderView/boulderView";
-import Loader from "../../../components/loader/loader";
 import { fetcher } from "../../../lib/http";
 import { Boulder, Event, User } from "../../../lib/types";
 import utilities from "../../../styles/utilities/utilities";
 import { useAppContext } from "../../_app";
 import useSWR from "swr";
-import { parseDate } from "../../../utilties/parseDate";
+import { parseDate } from "../../../lib/parseDate";
 import { Notice } from "../../../components/notice/notice";
+import { Loader } from "../../../components/loader/loader";
 
 export default function Page() {
   const { currentLocation, hasRole } = useAppContext();
@@ -44,7 +44,7 @@ export default function Page() {
     return (
       <Notice type="error" display="inline">
         <h1 className={utilities.typograpy.alpha700}>
-          This event has ended on {parseDate(event.endDate, true).string}
+          This event has ended on {parseDate(event.endDate, true)}
         </h1>
       </Notice>
     );
@@ -54,7 +54,7 @@ export default function Page() {
     return (
       <Notice type="error" display="inline">
         <h1 className={utilities.typograpy.alpha700}>
-          This event starts {parseDate(event.startDate, true).string}
+          This event starts {parseDate(event.startDate, true)}
         </h1>
       </Notice>
     );

@@ -1,11 +1,47 @@
-.row {
-  padding: 24px 0;
+.root {
+  opacity: 1;
+
+  &.isSubmitting {
+    opacity: 0.5;
+  }
 }
 
-.row > * {
-  width: 100%;
+.row {
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 8px;
+  margin-top: 24px;
+}
+
+.input {
+  margin-top: 12px;
+}
+
+.description,
+.error {
+  margin-top: 4px;
 }
 
 .button {
-  margin-top: 30px;
+  margin-top: 48px;
+}
+
+.notice {
+  display: flex;
+  padding: 16px;
+  margin-top: 16px;
+}
+
+.notice.isErrorNotice {
+  background-color: var(--color-red);
+  color: var(--color-white);
+}
+
+.notice.isSuccessNotice {
+  background-color: var(--color-top);
+  color: var(--color-white);
+}
+
+.error {
+  margin-top: 8px;
 }

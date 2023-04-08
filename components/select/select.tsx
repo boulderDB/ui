@@ -1,7 +1,7 @@
 import { ReactNode, useEffect, useRef, useState } from "react";
-import { FormFieldProps } from "../form/_form";
+import { FormFieldProps } from "../form/form";
 import { Listbox } from "@headlessui/react";
-import { Icon } from "../icon/_icon";
+import { Icon } from "../icon/icon";
 import styles from "./select.module.css";
 import { cx } from "classix";
 import utilities from "../../styles/utilities/utilities";

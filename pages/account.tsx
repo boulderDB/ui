@@ -1,10 +1,10 @@
 import cx from "classix";
 import utilities from "../styles/utilities/utilities";
 import styles from "../styles/pages/account.module.css";
-import { Form } from "../components/form/_form";
-import { Switch } from "../components/switch/_switch";
+import { Form } from "../components/form/form";
+import { Switch } from "../components/switch/switch";
 import { z } from "zod";
-import { Upload } from "../components/upload/_upload";
+import { Upload } from "../components/upload/upload";
 import { Input } from "../components/input/input";
 import { ChangePasswordRequest } from "../types/GetMeResponse";
 import { UploadResponse } from "../lib/types";

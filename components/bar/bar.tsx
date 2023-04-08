@@ -1,8 +1,8 @@
 import styles from "./bar.module.css";
-import capitalize from "../../utilties/capitalize";
 import { PropsWithChildren } from "react";
 import { cx } from "classix";
 import { Transition } from "@headlessui/react";
+import { capitalize } from "../../lib/capitalize";
 
 type BarProps = {
   visible: boolean;

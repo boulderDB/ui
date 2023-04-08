@@ -1,15 +1,15 @@
 import { fetcher } from "../../lib/http";
-import useSWR, { useSWRConfig } from "swr";
+import useSWR from "swr";
 import { useAppContext } from "../../pages/_app";
 import { Boulder } from "../../lib/types";
-import Loader from "../loader/loader";
 import styles from "./details.module.css";
-import { parseDate } from "../../utilties/parseDate";
+import { parseDate } from "../../lib/parseDate";
 import { cx } from "classix";
 import utilities from "../../styles/utilities/utilities";
-import { Icon } from "../icon/_icon";
+import { Icon } from "../icon/icon";
 import { Button } from "../button/button";
-import { UserRank } from "../rankingView/userRank";
+import { Loader } from "../loader/loader";
+import { User } from "../user/user";
 
 type DetailsProps = {
   id: number;
@@ -61,17 +61,14 @@ export function Details({ id }: DetailsProps) {
         <ol className={styles.ascentList}>
           {data.ascents.map((ascent) => (
             <li className={styles.ascentListItem}>
-              <UserRank
-                image={ascent.user.image}
-                username={ascent.user.username}
-              />
+              <User image={ascent.user.image} username={ascent.user.username} />
 
               <span className={utilities.typograpy.delta}>
                 <Icon name={ascent.type} /> ({ascent.type})
               </span>
 
               <span className={utilities.typograpy.delta}>
-                {parseDate(ascent.createdAt).string}
+                {parseDate(ascent.createdAt)}
               </span>
 
               <Button size={"small"} display={"inline"} outlined={true}>
@@ -90,7 +87,7 @@ export function Details({ id }: DetailsProps) {
         <ul className={styles.commentList}>
           {data.comments.map((comment) => (
             <li>
-              <UserRank
+              <User
                 image={comment.author.image}
                 username={comment.author.username}
               />

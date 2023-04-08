@@ -99,10 +99,14 @@ export type Wall = {
   active: boolean;
 };
 
+export type InvalidAscentType = "resignation";
+export type ValidAscentType = "todo" | "top" | "flash";
+export type DoubtedAscentTyp = "top-pending-doubt" | "flash-pending-doubt";
+
 export type Ascent = {
   id: number;
   user: User;
-  type: "top" | "flash" | "resignation" | "todo";
+  type: InvalidAscentType | InvalidAscentType | DoubtedAscentType;
   score: number;
   createdAt: string;
 };

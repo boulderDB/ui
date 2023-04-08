@@ -1,9 +1,10 @@
 import { cx } from "classix";
-import { Icon } from "../icon/_icon";
+import { Icon } from "../icon/icon";
 import styles from "./ascent.module.css";
 import { capitalize } from "../../lib/capitalize";
 import utilities from "../../styles/utilities/utilities";
 import { Ascent } from "../../lib/types";
+import { isDoubt } from "../../lib/isDoubt";
 
 export type AscentProps = {
   type: Ascent["type"];
@@ -33,7 +34,7 @@ export function Ascent({
       {...rest}
     >
       <div className={styles.icon}>
-        <Icon name={type} />
+        {!isDoubt(type) ? <Icon name={type} /> : null}
       </div>
 
       {label ? (

@@ -1,8 +1,8 @@
 import cx from "classix";
 import styles from "./input.module.css";
 import utilities from "../../styles/utilities/utilities";
-import { FormFieldProps } from "../form/_form";
-import { Icon } from "../icon/_icon";
+import { FormFieldProps } from "../form/form";
+import { Icon } from "../icon/icon";
 
 export type InputProps = FormFieldProps &
   React.InputHTMLAttributes<HTMLInputElement>;

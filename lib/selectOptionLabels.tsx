@@ -1,10 +1,7 @@
-import { SelectProps } from "../components/select/select";
 import { Grade, HoldType, Tag } from "./types";
 import { HoldType as HoldTypeComponent } from "../components/holdType/holdType";
 
-export const selectOptionLabels: {
-  [key: string]: SelectProps<any>["getOptionLabel"];
-} = {
+export const selectOptionLabels = {
   holdType: (option: HoldType) => (
     <div style={{ display: "flex", alignItems: "center" }}>
       <HoldTypeComponent image={option.image} />

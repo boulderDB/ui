@@ -4,7 +4,7 @@ import styles from "../../styles/utilities/frontPage.module.css";
 import { useRouter } from "next/router";
 import axios from "axios";
 import { z } from "zod";
-import { Form } from "../../components/form/_form";
+import { Form } from "../../components/form/form";
 import { Input } from "../../components/input/input";
 
 export default function Page() {

@@ -3,7 +3,7 @@ import cx from "classix";
 import Link from "next/link";
 import styles from "../../styles/utilities/frontPage.module.css";
 import { z } from "zod";
-import { Form } from "../../components/form/_form";
+import { Form } from "../../components/form/form";
 import { api } from "../../lib/http";
 import { Input } from "../../components/input/input";
 

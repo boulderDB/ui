@@ -2,12 +2,12 @@ import utilities from "../../../styles/utilities/utilities";
 import RankingView from "../../../components/rankingView/rankingView";
 import { useAppContext } from "../../_app";
 import useSWR from "swr";
-import Loader from "../../../components/loader/loader";
 import { fetcher } from "../../../lib/http";
 import { useRouter } from "next/router";
 import { Event } from "../../../lib/types";
 import { Notice } from "../../../components/notice/notice";
-import { parseDate } from "../../../utilties/parseDate";
+import { Loader } from "../../../components/loader/loader";
+import { parseDate } from "../../../lib/parseDate";
 
 export default function Page() {
   const { currentLocation } = useAppContext();
@@ -36,7 +36,7 @@ export default function Page() {
     return <Loader />;
   }
 
-   if (query.forEvent && !event) {
+  if (query.forEvent && !event) {
     return <h1 className={utilities.typograpy.alpha700}>Event not found</h1>;
   }
 
@@ -44,7 +44,7 @@ export default function Page() {
     return (
       <Notice type="error" display="inline">
         <h1 className={utilities.typograpy.alpha700}>
-          This event starts {parseDate(event.startDate, true).string}
+          This event starts {parseDate(event.startDate, true)}
         </h1>
       </Notice>
     );

@@ -1,10 +1,10 @@
 import styles from "./ascents.module.css";
 import { Ascent as AscentComponent, AscentProps } from "../ascent/ascent";
-import isDoubt from "../../utilties/isDoubt";
 import cx from "classix";
 import { Ascent } from "../../lib/types";
 import { capitalize } from "../../lib/capitalize";
 import { useState } from "react";
+import { isDoubt } from "../../lib/isDoubt";
 
 type AscentsProps = {
   userAscent: Ascent | null;
@@ -36,7 +36,7 @@ export function Ascents({
       disabled,
       onClick: async () => {
         setPending(true);
-        checked ? await onUncheck(type) : await onCheck(type);
+        checked ? await onUncheck() : await onCheck(type);
         setPending(false);
       },
     };

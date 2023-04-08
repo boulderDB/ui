@@ -5,21 +5,22 @@ import {
   Event,
   Grade,
   HoldType,
+  InvalidAscentType,
   Location,
   Setter,
   User,
+  ValidAscentType,
   Wall,
 } from "../../lib/types";
 import { uniqBy } from "../../lib/uniqueBy";
-import { Label } from "../label/_label";
-import { Option, Select } from "../select/select";
+import { Label } from "../label/label";
+import { Option, Select, SelectProps } from "../select/select";
 import styles from "./boulderView.module.css";
 import { HoldType as HoldTypeComponent } from "../holdType/holdType";
 import { Grade as GradeComponent } from "../grade/grade";
-import { Icon } from "../icon/_icon";
+import { Icon } from "../icon/icon";
 import { Input } from "../input/input";
 import { useMemo, useState } from "react";
-import Pagination from "../pagination/pagination";
 import {
   ColumnFiltersState,
   Row,
@@ -41,10 +42,8 @@ import { SubRow } from "./subRow";
 import { Ascents } from "./ascents";
 import { typography } from "../../styles/utilities";
 import { capitalize } from "../../lib/capitalize";
-import { parseDate } from "../../utilties/parseDate";
 import { Modal } from "../modal/modal";
 import { EditBoulderForm } from "./editBoulderForm";
-import axios from "axios";
 import { useAppContext } from "../../pages/_app";
 import { useSWRConfig } from "swr";
 import { selectOptionLabels } from "../../lib/selectOptionLabels";
@@ -55,10 +54,12 @@ import Bar from "../bar/bar";
 import { Button } from "../button/button";
 import { Details } from "./details";
 import { FilterTag } from "./filterTag";
-import { UserRank } from "../rankingView/userRank";
 import { IconButton } from "../iconButton/iconButton";
 import { addAscent } from "../../lib/addAscent";
 import { removeAscent } from "../../lib/removeAscent";
+import { User as UserComponent } from "../user/user";
+import { Pagination } from "../pagination/pagination";
+import { parseDate } from "../../lib/parseDate";
 
 type BoulderViewProps = {
   data: Boulder[];
@@ -66,6 +67,23 @@ type BoulderViewProps = {
   forEvent?: Event;
   initialFilters?: ColumnFiltersState;
 };
+
+type Filter<TOption extends Option> = {
+  id: string;
+  label: string;
+} & SelectProps<TOption>;
+
+function createFilter<TOption extends Option>({
+  id,
+  label,
+  ...rest
+}: Filter<TOption>) {
+  return {
+    id,
+    label,
+    ...rest,
+  };
+}
 
 export function BoulderView({
   data,
@@ -86,16 +104,16 @@ export function BoulderView({
 
   const filters = useMemo(
     () => [
-      {
+      createFilter<Area>({
         id: "areas",
         label: "Area",
         options: uniqBy(
           data.flatMap((boulder) => boulder.areas),
           "id"
         ),
-        getOptionLabel: (option: Grade) => option.name,
-      },
-      {
+        getOptionLabel: (option) => option.name,
+      }),
+      createFilter<HoldType>({
         id: "holdType",
         label: "Hold type",
         options: uniqBy(
@@ -103,8 +121,8 @@ export function BoulderView({
           "id"
         ),
         getOptionLabel: selectOptionLabels.holdType,
-      },
-      {
+      }),
+      createFilter<Grade>({
         id: "grade",
         label: "Grade",
         options: uniqBy(
@@ -112,44 +130,45 @@ export function BoulderView({
           "id"
         ),
         getOptionLabel: selectOptionLabels.grade,
-      },
-      {
+      }),
+      createFilter<Wall>({
         id: "startWall",
         label: "Start",
         options: uniqBy(
           data.flatMap((boulder) => boulder.startWall),
           "id"
         ),
-        getOptionLabel: (option: Wall) => option.name,
-      },
-      {
+        getOptionLabel: (option) => option.name,
+      }),
+      createFilter<Wall>({
         id: "endWall",
         label: "End",
         options: uniqBy(
           data.flatMap((boulder) => boulder.endWall),
           "id"
         ),
-        getOptionLabel: (option: Wall) => option.name,
-      },
-      {
+        getOptionLabel: (option) => option.name,
+      }),
+      createFilter<Setter>({
         id: "setters",
         label: "Setter",
         options: uniqBy(
           data.flatMap((boulder) => boulder.setters),
           "id"
         ),
-        getOptionLabel: (option: Setter) => option.username,
-      },
-      {
+        getOptionLabel: (option) => option.username,
+      }),
+      createFilter<AscentType>({
         id: "ascent",
         label: "Ascent",
         options: ascents,
-        getOptionLabel: (option: AscentType) => (
+        getOptionLabel: (option) => (
           <span>
-            <Icon name={option.id} /> {option.name}
+            <Icon name={option.id as ValidAscentType | InvalidAscentType} />{" "}
+            {option.name}
           </span>
         ),
-      },
+      }),
     ],
     [data]
   );
@@ -164,8 +183,6 @@ export function BoulderView({
           if (!filterValue) {
             return true;
           }
-
-          console.log(filterValue);
 
           return row.original.areas.some((area) => area.id === filterValue.id);
         },
@@ -314,7 +331,7 @@ export function BoulderView({
       }),
       columnHelper.accessor("createdAt", {
         header: () => "Date",
-        cell: (props) => parseDate(props.getValue()).string,
+        cell: (props) => parseDate(props.getValue()),
       }),
       columnHelper.accessor("userAscent", {
         id: "ascent",
@@ -442,17 +459,16 @@ export function BoulderView({
               (columnFilter) => columnFilter.id === filter.id
             );
 
+            type Option = typeof filter.options[number];
+
             return (
               <div className={styles.filter} key={filter.id}>
                 <Label htmlFor={filter.id}>{filter.label}</Label>
 
                 <Select
+                  {...filter}
                   emptyOptionLabel="All"
                   value={appliedFilter ? (appliedFilter.value as Option) : null}
-                  options={filter.options}
-                  getOptionLabel={filter.getOptionLabel}
-                  name={filter.id}
-                  id={filter.id}
                   className={styles.select}
                   onChange={(value) =>
                     header?.column?.setFilterValue(() => value)
@@ -470,14 +486,16 @@ export function BoulderView({
                 (filter) => filter.id === columnFilter.id
               );
 
-              if (!columnFilter.value) {
+              if (!filter || !columnFilter.value) {
                 return null;
               }
+
+              type FilterOption = typeof filter.options[number];
 
               return (
                 <FilterTag>
                   <span className={utilities.typograpy.delta700}>
-                    {filter?.getOptionLabel(columnFilter.value)}
+                    {filter.getOptionLabel(columnFilter.value as FilterOption)}
                   </span>
 
                   <IconButton
@@ -564,7 +582,7 @@ export function BoulderView({
           className={cx(utilities.typograpy.gamma, utilities.typograpy.nowrap)}
         >
           Checking boulders for user:{" "}
-          <UserRank
+          <UserComponent
             username={(forUser as User).username}
             image={(forUser as User).image}
           />

@@ -25,15 +25,3 @@ export type ChangePasswordRequest = {
   oldPassword: string;
   newPassword: string;
 };
-
-export type Notification = {
-  id: number;
-  type: string;
-  location: Location;
-};
-
-export type Location = {
-  id: number;
-  name: string;
-  url: string;
-};
