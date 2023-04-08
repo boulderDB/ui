@@ -4,8 +4,10 @@
   align-items: center;
   margin: 0 auto;
   padding: 0 16px;
-  height: 60px;
+  height: 48px;
   border-bottom: 1px solid var(--color-black);
+  color: var(--color-black);
+  background-color: var(--color-white);
 }
 
 .nav {
@@ -14,42 +16,55 @@
   justify-content: space-between;
 }
 
-.mobileNav {
-  flex: 1;
-  justify-content: space-between;
-  display: none;
+.primary,
+.secondary {
+  display: flex;
   align-items: center;
+}
 
-  @media (--m-to-s) {
+.navItem {
+  margin-left: 16px;
+  display: none;
+}
+
+@media (--xl-to-m) {
+  .navItem {
     display: flex;
   }
 }
 
-.mobileNavIcon {
-  cursor: pointer;
+.navItem {
+  color: var(--color-black);
 }
 
-.mobileNavOverlay {
-  background: var(--color-white);
-  width: 100vw;
-  height: calc(100vh - 60px);
+.toggleMobileMenu {
+  display: flex;
+}
+
+@media (--xl-to-m) {
+  .toggleMobileMenu {
+    display: none;
+  }
+}
+
+.mobileOverlay {
   position: fixed;
-  z-index: 10;
-  top: 60px;
+  width: 100vw;
+  height: calc(100vh - 48px);
+  top: 48px;
   left: 0;
-  display: none;
-  padding: 16px;
+  z-index: 1000;
+  background-color: var(--color-white);
 }
 
-.isVisibleMobileNavOverlay {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
+.mobileNav {
+  padding: 16px;
 }
 
 .mobileNavItem {
   margin-top: 16px;
-}
 
-.mobileNavItem:first-child {
-  margin-top: 0;
+  &:first-child {
+    margin-top: 0;
+  }
 }

@@ -5,7 +5,7 @@ import Link from "next/link";
 import { z } from "zod";
 import { Form } from "../components/form/_form";
 import { Input } from "../components/input/input";
-import { Select } from "../components/select/_select";
+import { Select } from "../components/select/select";
 import axios from "axios";
 import { genders } from "../lib/globals";
 import { selectValidation } from "../lib/selectValidation";

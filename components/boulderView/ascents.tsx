@@ -4,13 +4,13 @@ import isDoubt from "../../utilties/isDoubt";
 import cx from "classix";
 import { Ascent } from "../../lib/types";
 import { capitalize } from "../../lib/capitalize";
-import { useCallback, useState } from "react";
+import { useState } from "react";
 
 type AscentsProps = {
   userAscent: Ascent | null;
   variant?: "vertical" | "horizontal";
   onCheck: (type: Ascent["type"]) => Promise<void>;
-  onUncheck: (type: Ascent["type"]) => Promise<void>;
+  onUncheck: () => Promise<void>;
 };
 
 export function Ascents({

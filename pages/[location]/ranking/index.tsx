@@ -4,12 +4,26 @@ import { useAppContext } from "../../_app";
 import useSWR from "swr";
 import Loader from "../../../components/loader/loader";
 import { fetcher } from "../../../lib/http";
+import { useRouter } from "next/router";
+import { Event } from "../../../lib/types";
+import { Notice } from "../../../components/notice/notice";
+import { parseDate } from "../../../utilties/parseDate";
 
 export default function Page() {
   const { currentLocation } = useAppContext();
+  const { query } = useRouter();
+
+  const { data: event } = useSWR<Event>(
+    query.forEvent
+      ? `/api/${currentLocation?.url}/events/${query.forEvent}`
+      : null,
+    fetcher
+  );
 
   const { data } = useSWR(
-    `/api/${currentLocation?.url}/rankings/current`,
+    event
+      ? `/api/${currentLocation?.url}/rankings/event/${event.id}`
+      : `/api/${currentLocation?.url}/rankings/current`,
     fetcher
   );
 
@@ -22,10 +36,24 @@ export default function Page() {
     return <Loader />;
   }
 
+   if (query.forEvent && !event) {
+    return <h1 className={utilities.typograpy.alpha700}>Event not found</h1>;
+  }
+
+  if (query.forEvent && event && event.state === "upcoming") {
+    return (
+      <Notice type="error" display="inline">
+        <h1 className={utilities.typograpy.alpha700}>
+          This event starts {parseDate(event.startDate, true).string}
+        </h1>
+      </Notice>
+    );
+  }
+
   return (
     <>
       <h1 className={utilities.typograpy.alpha700}>Ranking</h1>
-      <RankingView data={data} boulderCount={boulderCount} />
+      <RankingView data={data} boulderCount={boulderCount} forEvent={event} />
     </>
   );
 }

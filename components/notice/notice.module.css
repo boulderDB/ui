@@ -1,7 +1,6 @@
 .root {
   display: flex;
   padding: 16px;
-  margin-top: 16px;
 
   &.isError {
     background-color: var(--color-red);

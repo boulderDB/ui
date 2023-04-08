@@ -23,11 +23,12 @@
 }
 
 .options {
-  min-width: 100%;
+  width: 100%;
+  overflow-x: hidden;
+  overflow-y: scroll;
   z-index: 800;
   background-color: var(--color-white);
   max-height: 200px;
-  overflow: scroll;
   position: absolute;
   border: 1px solid var(--color-black);
 }

@@ -2,7 +2,7 @@ import styles from "./rankingView.module.css";
 import { Progress } from "../progress/progress";
 import calculatePercentage from "../../utilties/calculatePercentage";
 import { parseDate } from "../../utilties/parseDate";
-import { Rank } from "../../lib/types";
+import { Event, Rank } from "../../lib/types";
 import {
   Row,
   SortingState,
@@ -26,10 +26,15 @@ import { SubRow } from "./subRow";
 
 type RankingViewProps = {
   data: Rank[];
+  forEvent?: Event;
   boulderCount: number;
 };
 
-export default function RankingView({ data, boulderCount }: RankingViewProps) {
+export default function RankingView({
+  data,
+  forEvent,
+  boulderCount,
+}: RankingViewProps) {
   const columnHelper = createColumnHelper<Rank>();
 
   const [globalFilter, setGlobalFilter] = useState("");
@@ -48,7 +53,7 @@ export default function RankingView({ data, boulderCount }: RankingViewProps) {
       }),
       columnHelper.accessor("user.username", {
         header: () => "Username",
-        cell: ({row}) => {
+        cell: ({ row }) => {
           return (
             <UserRank
               username={row.original.user.username}
@@ -56,7 +61,7 @@ export default function RankingView({ data, boulderCount }: RankingViewProps) {
               sentAllBoulders={row.original.total.count === boulderCount}
             />
           );
-        }
+        },
       }),
       columnHelper.accessor("user.gender", {
         id: "gender",

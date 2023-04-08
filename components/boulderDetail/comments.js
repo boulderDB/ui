@@ -3,7 +3,6 @@ import { typography } from "../../styles/utilities";
 import { useCallback, useContext } from "react";
 import { useHttp } from "../../hooks/useHttp";
 import { AppContext } from "../../pages/_app";
-import contextualizedApiPath from "../../utilties/contextualizedApiPath";
 import extractErrorMessage from "../../utilties/extractErrorMessage";
 import toast from "../../utilties/toast";
 import { mutate } from "swr";
@@ -12,9 +11,8 @@ import styles from "./comment.module.css";
 
 export default function Comments({ boulderId, comments }) {
   const http = useHttp();
-  const { dispatchMessage, currentLocation, tokenPayload } = useContext(
-    AppContext
-  );
+  const { dispatchMessage, currentLocation, tokenPayload } =
+    useContext(AppContext);
 
   const userId = tokenPayload?.user?.id;
 

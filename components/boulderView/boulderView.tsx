@@ -2,15 +2,17 @@ import {
   Area,
   AscentType,
   Boulder,
+  Event,
   Grade,
   HoldType,
+  Location,
   Setter,
   User,
   Wall,
 } from "../../lib/types";
 import { uniqBy } from "../../lib/uniqueBy";
 import { Label } from "../label/_label";
-import { Select } from "../select/_select";
+import { Option, Select } from "../select/select";
 import styles from "./boulderView.module.css";
 import { HoldType as HoldTypeComponent } from "../holdType/holdType";
 import { Grade as GradeComponent } from "../grade/grade";
@@ -52,7 +54,11 @@ import { TableHeaderCell } from "../table/tableHeaderCell";
 import Bar from "../bar/bar";
 import { Button } from "../button/button";
 import { Details } from "./details";
-import { useRouter } from "next/router";
+import { FilterTag } from "./filterTag";
+import { UserRank } from "../rankingView/userRank";
+import { IconButton } from "../iconButton/iconButton";
+import { addAscent } from "../../lib/addAscent";
+import { removeAscent } from "../../lib/removeAscent";
 
 type BoulderViewProps = {
   data: Boulder[];
@@ -97,7 +103,6 @@ export function BoulderView({
           "id"
         ),
         getOptionLabel: selectOptionLabels.holdType,
-        getValue: (option: HoldType) => option.name,
       },
       {
         id: "grade",
@@ -152,12 +157,15 @@ export function BoulderView({
   const columns = useMemo(
     () => [
       columnHelper.accessor("areas", {
+        id: "areas",
         header: () => null,
         cell: ({ row }) => null,
         filterFn: (row, columnId, filterValue: Area) => {
           if (!filterValue) {
             return true;
           }
+
+          console.log(filterValue);
 
           return row.original.areas.some((area) => area.id === filterValue.id);
         },
@@ -314,23 +322,38 @@ export function BoulderView({
         cell: ({ getValue, row }) => {
           const ascent = getValue();
 
+          if (!ascent) {
+            return null;
+          }
+
           return (
             <Ascents
               userAscent={ascent}
               onCheck={async (type) => {
-                await axios.post(`/api/${currentLocation?.url}/ascents`, {
-                  boulder: row.original.id,
+                const mutations = await addAscent({
                   type,
+                  boulderId: row.original.id,
+                  location: currentLocation as Location,
+                  forUser,
+                  forEvent,
                 });
 
-                await mutate(`/api/${currentLocation?.url}/boulders`);
+                for (const key of mutations) {
+                  await mutate(key);
+                }
               }}
-              onUncheck={async (type) => {
-                await axios.delete(
-                  `/api/${currentLocation?.url}/ascents/${ascent?.id}`
-                );
+              onUncheck={async () => {
+                const mutations = await removeAscent({
+                  ascentId: ascent.id,
+                  boulderId: row.original.id,
+                  location: currentLocation as Location,
+                  forUser,
+                  forEvent,
+                });
 
-                await mutate(`/api/${currentLocation?.url}/boulders`);
+                for (const key of mutations) {
+                  await mutate(key);
+                }
               }}
             />
           );
@@ -385,7 +408,6 @@ export function BoulderView({
       columnFilters,
       sorting,
       columnVisibility: {
-        areas: false,
         select: hasRole("ROLE_ADMIN") || hasRole("ROLE_SETTER"),
       },
     },
@@ -411,41 +433,78 @@ export function BoulderView({
     <>
       <div className={styles.refine}>
         <div className={styles.filters}>
-          {filters.map((filter) => (
-            <div className={styles.filter} key={filter.id}>
-              <Label htmlFor={filter.id}>{filter.label}</Label>
+          {filters.map((filter) => {
+            const header = table
+              .getFlatHeaders()
+              .find((column) => column.id === filter.id);
 
-              <Select
-                emptyOptionLabel="All"
-                value={columnFilters.find(
-                  (columnFilter) => columnFilter.id === filter.id
-                )}
-                options={filter.options}
-                getOptionLabel={filter.getOptionLabel}
-                name={filter.id}
-                id={filter.id}
-                className={styles.select}
-                onChange={(value) => {
-                  setColumnFilters([
-                    ...columnFilters,
-                    {
-                      id: filter.id,
-                      value,
-                    },
-                  ]);
-                }}
-              />
-            </div>
-          ))}
+            const appliedFilter = columnFilters.find(
+              (columnFilter) => columnFilter.id === filter.id
+            );
+
+            return (
+              <div className={styles.filter} key={filter.id}>
+                <Label htmlFor={filter.id}>{filter.label}</Label>
+
+                <Select
+                  emptyOptionLabel="All"
+                  value={appliedFilter ? (appliedFilter.value as Option) : null}
+                  options={filter.options}
+                  getOptionLabel={filter.getOptionLabel}
+                  name={filter.id}
+                  id={filter.id}
+                  className={styles.select}
+                  onChange={(value) =>
+                    header?.column?.setFilterValue(() => value)
+                  }
+                />
+              </div>
+            );
+          })}
         </div>
 
-        <Input
-          value={globalFilter ?? ""}
-          onChange={(value) => setGlobalFilter(value)}
-          name={"search"}
-          placeholder={"Search"}
-          className={styles.search}
-        />
+        <div className={styles.search}>
+          <div className={styles.searchTags}>
+            {columnFilters.map((columnFilter) => {
+              const filter = filters.find(
+                (filter) => filter.id === columnFilter.id
+              );
+
+              if (!columnFilter.value) {
+                return null;
+              }
+
+              return (
+                <FilterTag>
+                  <span className={utilities.typograpy.delta700}>
+                    {filter?.getOptionLabel(columnFilter.value)}
+                  </span>
+
+                  <IconButton
+                    outline={false}
+                    icon="close"
+                    onClick={() =>
+                      setColumnFilters([
+                        ...columnFilters.filter(
+                          (appliedColumnFilter) =>
+                            appliedColumnFilter.id !== columnFilter.id
+                        ),
+                      ])
+                    }
+                  />
+                </FilterTag>
+              );
+            })}
+          </div>
+
+          <Input
+            className={styles.searchInput}
+            value={globalFilter ?? ""}
+            onChange={(value) => setGlobalFilter(value)}
+            name={"search"}
+            placeholder={"Search"}
+          />
+        </div>
       </div>
 
       <div className={styles.table}>
@@ -500,8 +559,16 @@ export function BoulderView({
         </Button>
       </Bar>
 
-      <Bar variant={"danger"} visible={true}>
-        ss
+      <Bar variant={"danger"} visible={forUser !== undefined}>
+        <span
+          className={cx(utilities.typograpy.gamma, utilities.typograpy.nowrap)}
+        >
+          Checking boulders for user:{" "}
+          <UserRank
+            username={(forUser as User).username}
+            image={(forUser as User).image}
+          />
+        </span>
       </Bar>
     </>
   );

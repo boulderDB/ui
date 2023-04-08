@@ -42,6 +42,10 @@ export function Select<TOption extends Option>({
     }
   }, [selected]);
 
+  useEffect(() => {
+    setSelected(value);
+  }, [value]);
+
   return (
     <Listbox value={selected} onChange={setSelected}>
       <Listbox.Button

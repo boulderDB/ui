@@ -1,17 +1,20 @@
 import { Row } from "@tanstack/react-table";
-import { Boulder } from "../../lib/types";
+import { Boulder, Location, User, Event } from "../../lib/types";
 import styles from "./subRow.module.css";
 import cx from "classix";
 import { Ascents } from "./ascents";
 import { useSWRConfig } from "swr";
 import { useAppContext } from "../../pages/_app";
-import axios from "axios";
+import { addAscent } from "../../lib/addAscent";
+import { removeAscent } from "../../lib/removeAscent";
 
 type SubRowProps = {
   onClose: () => void;
+  forUser?: User;
+  forEvent?: Event;
 } & Row<Boulder>;
 
-export function SubRow({ original, onClose }: SubRowProps) {
+export function SubRow({ original, onClose, forUser, forEvent }: SubRowProps) {
   const { mutate } = useSWRConfig();
   const { currentLocation } = useAppContext();
 
@@ -21,21 +24,36 @@ export function SubRow({ original, onClose }: SubRowProps) {
         variant="vertical"
         userAscent={original.userAscent}
         onCheck={async (type) => {
-          await axios.post(`/api/${currentLocation?.url}/ascents`, {
-            boulder: original.id,
+          const mutations = await addAscent({
             type,
+            boulderId: original.id,
+            location: currentLocation as Location,
+            forUser,
+            forEvent,
           });
 
-          await mutate(`/api/${currentLocation?.url}/boulders`);
+          for (const key of mutations) {
+            await mutate(key);
+          }
 
           onClose();
         }}
-        onUncheck={async (type) => {
-          await axios.delete(
-            `/api/${currentLocation?.url}/ascents/${original.userAscent?.id}`
-          );
+        onUncheck={async () => {
+          if (!original.userAscent) {
+            return;
+          }
 
-          await mutate(`/api/${currentLocation?.url}/boulders`);
+          const mutations = await removeAscent({
+            ascentId: original.userAscent.id,
+            boulderId: original.id,
+            location: currentLocation as Location,
+            forUser,
+            forEvent,
+          });
+
+          for (const key of mutations) {
+            await mutate(key);
+          }
 
           onClose();
         }}

@@ -7,7 +7,7 @@ import { Form } from "../form/_form";
 import axios from "axios";
 import { z } from "zod";
 import { Input } from "../input/input";
-import { Select } from "../select/_select";
+import { Select } from "../select/select";
 import { HoldType as HoldTypeComponent } from "../holdType/holdType";
 import { selectValidation } from "../../lib/selectValidation";
 import { MultiSelect } from "../select/multiSelect";

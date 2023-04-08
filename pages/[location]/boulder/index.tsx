@@ -26,7 +26,9 @@ export default function Page() {
   );
 
   const { data: event } = useSWR<Event>(
-    `/api/${currentLocation?.url}/events/${query.forEvent}`,
+    query.forEvent
+      ? `/api/${currentLocation?.url}/events/${query.forEvent}`
+      : null,
     fetcher
   );
 
@@ -34,11 +36,11 @@ export default function Page() {
     return <Loader />;
   }
 
-  if (!event) {
+  if (query.forEvent && !event) {
     return <h1 className={utilities.typograpy.alpha700}>Event not found</h1>;
   }
 
-  if (event.state === "ended") {
+  if (query.forEvent && event && event.state === "ended") {
     return (
       <Notice type="error" display="inline">
         <h1 className={utilities.typograpy.alpha700}>
@@ -48,7 +50,7 @@ export default function Page() {
     );
   }
 
-  if (event.state === "upcoming") {
+  if (query.forEvent && event && event.state === "upcoming") {
     return (
       <Notice type="error" display="inline">
         <h1 className={utilities.typograpy.alpha700}>

@@ -38,12 +38,13 @@
   }
 
   @media (--xl-to-l) {
+
     &.isBouldersHeaderCell,
-    &.isGenderHeaderCell,
-    &.isLastActivityHeaderCell,
-    &.isExpanderHeaderCell {
-      display: flex;
-    }
+  &.isGenderHeaderCell,
+  &.isLastActivityHeaderCell,
+  &.isExpanderHeaderCell {
+    display: flex;
+  }
 
     &.isExpanderHeaderCell {
       display: none;

@@ -1,22 +1,16 @@
 .root {
-  width: 40px;
-  height: 40px;
   box-sizing: border-box;
-  display: flex;
   align-items: center;
-}
 
-.root:hover svg {
-  cursor: pointer;
-  transform: scale(1.2);
-}
+  svg {
+    margin: 0 auto;
+    align-items: center;
+    transition: transform 80ms ease-in-out;
+  }
 
-.root svg {
-  margin: 0 auto;
-  align-items: center;
-  transition: transform 80ms ease-in-out;
-}
-
-.root.withOutline {
-  border: 1px solid var(--color-black);
+  &.withOutline {
+    width: 40px;
+    height: 40px;
+    border: 1px solid var(--color-black);
+  }
 }

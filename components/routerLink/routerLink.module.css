@@ -1,0 +1,9 @@
+.isActive {
+  color: var(--color-lila);
+
+  /* background-image: linear-gradient(currentColor, currentColor);
+  background-position: 0 100%;
+  background-position-x: center;
+  background-repeat: no-repeat;
+  background-size: 100% 0.0625em; */
+}

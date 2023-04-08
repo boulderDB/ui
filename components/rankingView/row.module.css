@@ -3,12 +3,8 @@
   align-items: center;
   border-bottom: 1px solid var(--color-black);
   padding: 8px 0;
-  grid-template-columns: 40px auto 60px;
+  grid-template-columns: 20px auto 60px;
   grid-column-gap: 8px;
-
-  @media (--s) {
-    grid-template-columns: 40px auto 60px;
-  }
 
   @media (--m) {
     grid-template-columns: 40px auto 60px 80px 80px;

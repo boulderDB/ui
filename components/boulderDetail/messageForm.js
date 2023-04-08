@@ -5,7 +5,6 @@ import toast from "../../utilties/toast";
 import extractErrorMessage from "../../utilties/extractErrorMessage";
 import { useHttp } from "../../hooks/useHttp";
 import { AppContext } from "../../pages/_app";
-import contextualizedApiPath from "../../utilties/contextualizedApiPath";
 import useDrawer from "../../hooks/useDrawer";
 
 const fields = [

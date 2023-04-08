@@ -1,4 +1,4 @@
-import { SelectProps } from "../components/select/_select";
+import { SelectProps } from "../components/select/select";
 import { Grade, HoldType, Tag } from "./types";
 import { HoldType as HoldTypeComponent } from "../components/holdType/holdType";
 

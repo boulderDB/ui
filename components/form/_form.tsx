@@ -13,7 +13,7 @@ import cx from "classix";
 import { InputProps } from "../input/input";
 import { Button } from "../button/button";
 import { UploadProps } from "../upload/_upload";
-import { SelectProps } from "../select/_select";
+import { SelectProps } from "../select/select";
 import { FormErrorResponse, ServerErrorResponse } from "../../lib/types";
 import { SwitchProps } from "../switch/_switch";
 import { Label } from "../label/_label";

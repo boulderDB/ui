@@ -4,7 +4,6 @@ import { Footer } from "../components/footer/footer";
 import axios from "axios";
 import styles from "../styles/pages/app.module.css";
 import { Location, Role, TokenPayload } from "../lib/types";
-import { Header } from "../components/header/_header";
 import decode from "jwt-decode";
 import { createContext, useContext, useMemo, useState } from "react";
 import { useRouter } from "next/router";
@@ -12,6 +11,7 @@ import { SWRConfig } from "swr";
 import { HTTPError } from "../lib/http";
 import "../styles/globals/index.css";
 import cookies from "js-cookie";
+import { Header } from "../components/header/header";
 
 type MyAppProps = {
   locations: Location[];
