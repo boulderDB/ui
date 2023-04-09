@@ -23,6 +23,7 @@ type Context = {
   currentLocation: Location | null;
   authenticated: boolean;
   tokenPayload: TokenPayload | null;
+  locations: Location[];
   roles: Role[];
   hasRole: (role: Role) => boolean;
 };
@@ -31,6 +32,7 @@ const AppContext = createContext<Context>({
   currentLocation: null,
   authenticated: false,
   tokenPayload: null,
+  locations: [],
   roles: [],
   hasRole: () => false,
 });
@@ -43,7 +45,7 @@ export default function MyApp({
   Component,
   pageProps,
   locations,
-  authenticated: initialAuthenticated,
+  authenticated,
   tokenPayload: intialTokenPayload,
 }: MyAppProps) {
   const router = useRouter();
@@ -51,9 +53,6 @@ export default function MyApp({
   const [tokenPayload, setTokenPayload] = useState<TokenPayload | null>(
     intialTokenPayload
   );
-
-  const [authenticated, setAuthenticated] =
-    useState<boolean>(initialAuthenticated);
 
   const currentLocation = useMemo(
     () =>
@@ -82,6 +81,7 @@ export default function MyApp({
     >
       <AppContext.Provider
         value={{
+          locations,
           currentLocation,
           authenticated,
           tokenPayload,

@@ -9,8 +9,19 @@ import { Select } from "../components/select/select";
 import axios from "axios";
 import { genders } from "../lib/globals";
 import { selectValidation } from "../lib/selectValidation";
+import { useRouter } from "next/router";
+import { useAppContext } from "./_app";
 
 export default function Page() {
+  const router = useRouter();
+  const { authenticated, tokenPayload } = useAppContext();
+
+  if (authenticated) {
+    router.push(`/${tokenPayload?.lastVisitedLocation.url}`);
+
+    return;
+  }
+
   return (
     <div className={styles.root}>
       <h1

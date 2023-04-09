@@ -6,9 +6,17 @@ import axios from "axios";
 import { z } from "zod";
 import { Form } from "../../components/form/form";
 import { Input } from "../../components/input/input";
+import { useAppContext } from "../_app";
 
 export default function Page() {
-  const { query } = useRouter();
+  const router = useRouter();
+  const { authenticated, currentLocation } = useAppContext();
+
+  if (authenticated && currentLocation) {
+    router.push(`/${currentLocation.url}`);
+
+    return;
+  }
 
   return (
     <div className={styles.root}>
@@ -21,7 +29,7 @@ export default function Page() {
       <Form
         submitLabel={"Reset"}
         onSubmit={async (values) => {
-          await axios.post(`/password-reset/${query.token}`, values);
+          await axios.post(`/password-reset/${router.query.token}`, values);
         }}
         fields={[
           {

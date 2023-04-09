@@ -9,9 +9,17 @@ import cookies from "js-cookie";
 import { LoginResponse } from "../lib/types";
 import axios from "axios";
 import { useRouter } from "next/router";
+import { useAppContext } from "./_app";
 
 export default function Page() {
   const router = useRouter();
+  const { authenticated, currentLocation, tokenPayload } = useAppContext();
+
+  if (authenticated) {
+    router.push(`/${tokenPayload?.lastVisitedLocation.url}`);
+
+    return;
+  }
 
   return (
     <div className={styles.root}>

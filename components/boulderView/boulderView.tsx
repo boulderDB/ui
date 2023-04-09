@@ -44,7 +44,6 @@ import { typography } from "../../styles/utilities";
 import { capitalize } from "../../lib/capitalize";
 import { Modal } from "../modal/modal";
 import { EditBoulderForm } from "./editBoulderForm";
-import { useAppContext } from "../../pages/_app";
 import { useSWRConfig } from "swr";
 import { selectOptionLabels } from "../../lib/selectOptionLabels";
 import { ascents } from "../../lib/globals";
@@ -60,6 +59,7 @@ import { removeAscent } from "../../lib/removeAscent";
 import { User as UserComponent } from "../user/user";
 import { Pagination } from "../pagination/pagination";
 import { parseDate } from "../../lib/parseDate";
+import { useAppContext } from "../../pages/_app";
 
 type BoulderViewProps = {
   data: Boulder[];
@@ -578,15 +578,17 @@ export function BoulderView({
       </Bar>
 
       <Bar variant={"danger"} visible={forUser !== undefined}>
-        <span
-          className={cx(utilities.typograpy.gamma, utilities.typograpy.nowrap)}
-        >
-          Checking boulders for user:{" "}
-          <UserComponent
-            username={(forUser as User).username}
-            image={(forUser as User).image}
-          />
-        </span>
+        {forUser ? (
+          <span
+            className={cx(
+              utilities.typograpy.gamma,
+              utilities.typograpy.nowrap
+            )}
+          >
+            Checking boulders for user:{" "}
+            <UserComponent username={forUser.username} image={forUser.image} />
+          </span>
+        ) : null}
       </Bar>
     </>
   );

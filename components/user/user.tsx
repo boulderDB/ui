@@ -1,6 +1,6 @@
 import cx from "classix";
 import utilities from "../../styles/utilities/utilities";
-import styles from "./userRank.module.css";
+import styles from "./user.module.css";
 import { Icon } from "../icon/icon";
 
 type UserProps = {

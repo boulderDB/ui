@@ -1,6 +1,5 @@
 import { fetcher } from "../../lib/http";
 import useSWR from "swr";
-import { useAppContext } from "../../pages/_app";
 import { Boulder } from "../../lib/types";
 import styles from "./details.module.css";
 import { parseDate } from "../../lib/parseDate";
@@ -10,6 +9,7 @@ import { Icon } from "../icon/icon";
 import { Button } from "../button/button";
 import { Loader } from "../loader/loader";
 import { User } from "../user/user";
+import { useAppContext } from "../../pages/_app";
 
 type DetailsProps = {
   id: number;

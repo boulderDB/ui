@@ -4,10 +4,21 @@ import Link from "next/link";
 import styles from "../../styles/utilities/frontPage.module.css";
 import { z } from "zod";
 import { Form } from "../../components/form/form";
-import { api } from "../../lib/http";
 import { Input } from "../../components/input/input";
+import axios from "axios";
+import { useRouter } from "next/router";
+import { useAppContext } from "../_app";
 
 export default function Page() {
+  const router = useRouter();
+  const { authenticated, tokenPayload } = useAppContext();
+
+  if (authenticated) {
+    router.push(`/${tokenPayload?.lastVisitedLocation.url}`);
+
+    return;
+  }
+
   return (
     <div className={styles.root}>
       <h1
@@ -19,7 +30,7 @@ export default function Page() {
       <Form
         submitLabel={"Request reset"}
         onSubmit={async (values) => {
-          await api("/password-reset", "POST", values);
+          await axios.post("/password-reset", values);
         }}
         fields={[
           {

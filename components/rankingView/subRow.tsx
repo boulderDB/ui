@@ -22,10 +22,11 @@ export function SubRow({ getVisibleCells }: SubRowProps) {
       {columns.map((column) => (
         <div>
           <span>
-            {typeof column.column?.columnDef?.header === "function"
+            {/* {typeof column.column?.columnDef?.header === "function"
               ? column.column?.columnDef?.header("xxx")
-              : null}
+              : null} */}
           </span>
+
           {flexRender(column.column.columnDef.cell, column.getContext())}
         </div>
       ))}

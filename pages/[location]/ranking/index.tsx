@@ -1,6 +1,5 @@
 import utilities from "../../../styles/utilities/utilities";
 import RankingView from "../../../components/rankingView/rankingView";
-import { useAppContext } from "../../_app";
 import useSWR from "swr";
 import { fetcher } from "../../../lib/http";
 import { useRouter } from "next/router";
@@ -8,6 +7,7 @@ import { Event } from "../../../lib/types";
 import { Notice } from "../../../components/notice/notice";
 import { Loader } from "../../../components/loader/loader";
 import { parseDate } from "../../../lib/parseDate";
+import { useAppContext } from "../../_app";
 
 export default function Page() {
   const { currentLocation } = useAppContext();

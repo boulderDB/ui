@@ -3,11 +3,11 @@ import { BoulderView } from "../../../components/boulderView/boulderView";
 import { fetcher } from "../../../lib/http";
 import { Boulder, Event, User } from "../../../lib/types";
 import utilities from "../../../styles/utilities/utilities";
-import { useAppContext } from "../../_app";
 import useSWR from "swr";
 import { parseDate } from "../../../lib/parseDate";
 import { Notice } from "../../../components/notice/notice";
 import { Loader } from "../../../components/loader/loader";
+import { useAppContext } from "../../_app";
 
 export default function Page() {
   const { currentLocation, hasRole } = useAppContext();

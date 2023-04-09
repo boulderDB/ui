@@ -1,5 +1,4 @@
 import { useState } from "react";
-import Loader from "../loader/loader";
 import styles from "./upload.module.css";
 import { Icon } from "../icon/icon";
 import { FormFieldProps } from "../form/form";

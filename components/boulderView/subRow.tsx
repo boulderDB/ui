@@ -4,9 +4,9 @@ import styles from "./subRow.module.css";
 import cx from "classix";
 import { Ascents } from "./ascents";
 import { useSWRConfig } from "swr";
-import { useAppContext } from "../../pages/_app";
 import { addAscent } from "../../lib/addAscent";
 import { removeAscent } from "../../lib/removeAscent";
+import { useAppContext } from "../../pages/_app";
 
 type SubRowProps = {
   onClose: () => void;

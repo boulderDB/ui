@@ -1,17 +1,16 @@
 import { fetcher } from "../../lib/http";
 import { Boulder, Grade, HoldType, Setter, Tag, Wall } from "../../lib/types";
-import { useAppContext } from "../../pages/_app";
 import useSWR, { useSWRConfig } from "swr";
-import Loader from "../loader/loader";
 import { Form } from "../form/form";
 import axios from "axios";
 import { z } from "zod";
 import { Input } from "../input/input";
 import { Select } from "../select/select";
-import { HoldType as HoldTypeComponent } from "../holdType/holdType";
 import { selectValidation } from "../../lib/selectValidation";
 import { MultiSelect } from "../select/multiSelect";
 import { selectOptionLabels } from "../../lib/selectOptionLabels";
+import { Loader } from "../loader/loader";
+import { useAppContext } from "../../pages/_app";
 
 type EditBoulderFormProps = {
   id: number;

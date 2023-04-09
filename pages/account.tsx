@@ -13,7 +13,7 @@ import { fetcher } from "../lib/http";
 import { useSWRConfig } from "swr";
 import { Button } from "../components/button/button";
 import useSWR from "swr";
-import Loader from "../components/loader/loader";
+import { Loader } from "../components/loader/loader";
 
 export default function Page() {
   const { data } = useSWR(`/api/me`, fetcher);

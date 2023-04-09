@@ -23,9 +23,6 @@ export function RouterLink({
   const target =
     prefixLocation && currentLocation ? `/${currentLocation.url}${href}` : href;
 
-  console.log({ target, asPath });
-  console.log(asPath === target);
-
   return (
     <Link
       href={target}
