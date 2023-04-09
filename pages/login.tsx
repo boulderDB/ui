@@ -10,16 +10,17 @@ import { LoginResponse } from "../lib/types";
 import axios from "axios";
 import { useRouter } from "next/router";
 import { useAppContext } from "./_app";
+import { useEffect } from "react";
 
 export default function Page() {
   const router = useRouter();
-  const { authenticated, currentLocation, tokenPayload } = useAppContext();
+  const { authenticated, tokenPayload } = useAppContext();
 
-  if (authenticated) {
-    router.push(`/${tokenPayload?.lastVisitedLocation.url}`);
-
-    return;
-  }
+  useEffect(() => {
+    if (authenticated) {
+      router.push(`/${tokenPayload?.lastVisitedLocation.url}`);
+    }
+  }, [authenticated]);
 
   return (
     <div className={styles.root}>

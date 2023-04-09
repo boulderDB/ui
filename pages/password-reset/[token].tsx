@@ -7,16 +7,17 @@ import { z } from "zod";
 import { Form } from "../../components/form/form";
 import { Input } from "../../components/input/input";
 import { useAppContext } from "../_app";
+import { useEffect } from "react";
 
 export default function Page() {
   const router = useRouter();
-  const { authenticated, currentLocation } = useAppContext();
+  const { authenticated, tokenPayload } = useAppContext();
 
-  if (authenticated && currentLocation) {
-    router.push(`/${currentLocation.url}`);
-
-    return;
-  }
+  useEffect(() => {
+    if (authenticated) {
+      router.push(`/${tokenPayload?.lastVisitedLocation.url}`);
+    }
+  }, [authenticated]);
 
   return (
     <div className={styles.root}>

@@ -11,16 +11,17 @@ import { genders } from "../lib/globals";
 import { selectValidation } from "../lib/selectValidation";
 import { useRouter } from "next/router";
 import { useAppContext } from "./_app";
+import { useEffect } from "react";
 
 export default function Page() {
   const router = useRouter();
   const { authenticated, tokenPayload } = useAppContext();
 
-  if (authenticated) {
-    router.push(`/${tokenPayload?.lastVisitedLocation.url}`);
-
-    return;
-  }
+  useEffect(() => {
+    if (authenticated) {
+      router.push(`/${tokenPayload?.lastVisitedLocation.url}`);
+    }
+  }, [authenticated]);
 
   return (
     <div className={styles.root}>

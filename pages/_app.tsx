@@ -12,21 +12,21 @@ import { HTTPError } from "../lib/http";
 import "../styles/globals/index.css";
 import cookies from "js-cookie";
 import { Header } from "../components/header/header";
+import { NextPageContext } from "next";
 
-type MyAppProps = {
-  locations: Location[];
-  tokenPayload: TokenPayload | null;
-  authenticated: true;
-} & AppProps;
+type MyAppProps = {} & ContextState & AppProps;
 
-type Context = {
+type ContextState = {
   currentLocation: Location | null;
   authenticated: boolean;
   tokenPayload: TokenPayload | null;
   locations: Location[];
   roles: Role[];
-  hasRole: (role: Role) => boolean;
 };
+
+type Context = {
+  hasRole: (role: Role) => boolean;
+} & ContextState;
 
 const AppContext = createContext<Context>({
   currentLocation: null,
@@ -41,31 +41,62 @@ export const useAppContext = () => {
   return useContext<Context>(AppContext);
 };
 
-export default function MyApp({
-  Component,
-  pageProps,
-  locations,
-  authenticated,
-  tokenPayload: intialTokenPayload,
-}: MyAppProps) {
-  const router = useRouter();
-
-  const [tokenPayload, setTokenPayload] = useState<TokenPayload | null>(
-    intialTokenPayload
+export async function getDefaultInitialProps(context: NextPageContext) {
+  const { data: locations } = await axios.get(
+    `${process.env.NEXT_PUBLIC_API_HOST}/api/locations`
   );
 
-  const currentLocation = useMemo(
-    () =>
-      locations.find((location) => location.url === router.query.location) ||
-      null,
-    [router.query.location]
+  const cookies = context.req?.headers.cookie
+    ?.split(";")
+    .map((cookie) => cookie.split("="))
+    .reduce((object, [key, value]) => {
+      return {
+        ...object,
+        [key.trim()]: value.trim(),
+      };
+    }, {});
+
+  const token = cookies?.["BEARER"];
+  const tokenPayload = token ? decode<TokenPayload>(token) : null;
+  const authenticated = cookies?.["authenticated"] === "true";
+
+  const currentLocation = locations.find(
+    (location) => location.url === context.query.location
   );
 
+  tokenPayload;
   const roles = currentLocation
     ? (tokenPayload?.user.roles
         .filter((role) => role.endsWith(currentLocation?.id.toString()))
         .map((role) => role.replace(`@${currentLocation.id}`, "")) as Role[])
     : [];
+
+  return {
+    roles,
+    locations,
+    tokenPayload,
+    authenticated,
+    currentLocation,
+  };
+}
+
+export default function MyApp({
+  Component,
+  pageProps,
+  locations,
+  authenticated,
+  currentLocation,
+  roles,
+  tokenPayload,
+}: MyAppProps) {
+  const router = useRouter();
+  const [context, setContext] = useState<ContextState>({
+    currentLocation,
+    authenticated,
+    tokenPayload,
+    locations,
+    roles,
+  });
 
   return (
     <SWRConfig
@@ -81,12 +112,8 @@ export default function MyApp({
     >
       <AppContext.Provider
         value={{
-          locations,
-          currentLocation,
-          authenticated,
-          tokenPayload,
-          roles,
-          hasRole: (role) => roles.includes(role),
+          ...context,
+          hasRole: (role) => context.roles.includes(role),
         }}
       >
         <Header locations={locations} />
@@ -102,19 +129,10 @@ export default function MyApp({
 }
 
 MyApp.getInitialProps = async (context: AppContext) => {
-  const ctx = App.getInitialProps(context);
-
-  const { data: locations } = await axios.get(
-    `${process.env.NEXT_PUBLIC_API_HOST}/api/locations`
-  );
-
-  const token = context.ctx.req?.cookies["BEARER"];
-  const authenticated = context.ctx.req?.cookies["authenticated"] === "true";
+  const appContext = App.getInitialProps(context);
 
   return {
-    ...ctx,
-    locations,
-    tokenPayload: token ? decode(token) : null,
-    authenticated,
+    ...appContext,
+    ...(await getDefaultInitialProps(context.ctx)),
   };
 };
