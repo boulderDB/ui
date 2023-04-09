@@ -1,22 +1,15 @@
-import { ReactNode, useEffect, useRef, useState } from "react";
-import { FormFieldProps } from "../form/form";
+import { useEffect, useRef, useState } from "react";
 import { Listbox } from "@headlessui/react";
 import { Icon } from "../icon/icon";
 import styles from "./select.module.css";
 import { cx } from "classix";
 import utilities from "../../styles/utilities/utilities";
-
-export type Option = {
-  id: string | number;
-  disabled?: boolean;
-};
+import { Option, SelectProps } from "./select";
 
 export type MultiSelectProps<TOption extends Option> = {
-  options: TOption[];
-  getOptionLabel: (option: TOption) => string | ReactNode;
-  value?: TOption[];
-  className?: string;
-} & FormFieldProps<TOption>;
+  value: TOption[];
+  onChange: (value: TOption[]) => void;
+} & Omit<SelectProps<TOption>, "value" | "onChange">;
 
 export function MultiSelect<TOption extends Option>({
   options,

@@ -19,6 +19,14 @@ export type SelectProps<TOption extends Option> = {
   emptyOptionLabel?: string;
 } & FormFieldProps<TOption>;
 
+export function createSelectProps<TOption extends Option>(
+  props: SelectProps<TOption>
+): SelectProps<TOption> {
+  return {
+    ...props,
+  };
+}
+
 export function Select<TOption extends Option>({
   options,
   getOptionLabel,

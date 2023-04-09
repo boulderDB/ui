@@ -12,6 +12,7 @@ import { selectValidation } from "../lib/selectValidation";
 import { useRouter } from "next/router";
 import { useAppContext } from "./_app";
 import { useEffect } from "react";
+import { GenericOption } from "../lib/types";
 
 export default function Page() {
   const router = useRouter();
@@ -64,7 +65,7 @@ export default function Page() {
           {
             name: "gender",
             label: "Gender",
-            getOptionLabel: (option) => option.label,
+            getOptionLabel: (option: GenericOption) => option.name,
             options: genders,
             onChangeValidate: selectValidation(),
             component: Select,

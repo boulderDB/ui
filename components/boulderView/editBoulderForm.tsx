@@ -1,16 +1,25 @@
 import { fetcher } from "../../lib/http";
-import { Boulder, Grade, HoldType, Setter, Tag, Wall } from "../../lib/types";
+import {
+  Boulder,
+  GenericOption,
+  Grade,
+  HoldType,
+  Setter,
+  Tag,
+  Wall,
+} from "../../lib/types";
 import useSWR, { useSWRConfig } from "swr";
 import { Form } from "../form/form";
 import axios from "axios";
 import { z } from "zod";
 import { Input } from "../input/input";
-import { Select } from "../select/select";
+import { Select, createSelectProps } from "../select/select";
 import { selectValidation } from "../../lib/selectValidation";
 import { MultiSelect } from "../select/multiSelect";
 import { selectOptionLabels } from "../../lib/selectOptionLabels";
 import { Loader } from "../loader/loader";
 import { useAppContext } from "../../pages/_app";
+import { status } from "../../lib/globals";
 
 type EditBoulderFormProps = {
   id: number;
@@ -115,9 +124,11 @@ export function EditBoulderForm({ id }: EditBoulderFormProps) {
         {
           name: "setters",
           label: "Setters",
-          getOptionLabel: (option: Setter) => option.username,
-          options: setters,
           component: MultiSelect,
+          ...createSelectProps<Setter>({
+            options: setters,
+            getOptionLabel: (option) => option.username,
+          }),
         },
         {
           name: "points",
@@ -127,12 +138,13 @@ export function EditBoulderForm({ id }: EditBoulderFormProps) {
           component: Input,
         },
         {
-          name: "status",
           label: "Status",
-          onChangeValidate: z.string().nonempty(),
-          getOptionLabel: (option) => option,
-          options: ["active", "inactive"],
+          name: "status",
           component: Select,
+          ...createSelectProps<GenericOption>({
+            options: status,
+            getOptionLabel: (option) => option.name,
+          }),
         },
       ]}
     />

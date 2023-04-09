@@ -73,16 +73,8 @@ type Filter<TOption extends Option> = {
   label: string;
 } & SelectProps<TOption>;
 
-function createFilter<TOption extends Option>({
-  id,
-  label,
-  ...rest
-}: Filter<TOption>) {
-  return {
-    id,
-    label,
-    ...rest,
-  };
+function createFilter<TOption extends Option>(props: Filter<TOption>) {
+  return props;
 }
 
 export function BoulderView({
@@ -102,7 +94,7 @@ export function BoulderView({
 
   const { currentLocation, hasRole } = useAppContext();
 
-  const filters = useMemo(
+  const filters = useMemo<Filter<Option>[]>(
     () => [
       createFilter<Area>({
         id: "areas",
@@ -490,12 +482,10 @@ export function BoulderView({
                 return null;
               }
 
-              type FilterOption = typeof filter.options[number];
-
               return (
                 <FilterTag>
                   <span className={utilities.typograpy.delta700}>
-                    {filter.getOptionLabel(columnFilter.value as FilterOption)}
+                    {filter.getOptionLabel(columnFilter.value as Option)}
                   </span>
 
                   <IconButton
@@ -518,7 +508,11 @@ export function BoulderView({
           <Input
             className={styles.searchInput}
             value={globalFilter ?? ""}
-            onChange={(value) => setGlobalFilter(value)}
+            onChange={(value) => {
+              if (value) {
+                setGlobalFilter(value.toString());
+              }
+            }}
             name={"search"}
             placeholder={"Search"}
           />

@@ -4,7 +4,7 @@ import { Icon } from "../icon/icon";
 import { FormFieldProps } from "../form/form";
 import cx from "classix";
 
-export type UploadProps = FormFieldProps & {
+export type UploadProps = FormFieldProps<string> & {
   value: string;
   onUpload: (formData: FormData) => Promise<string>;
 };

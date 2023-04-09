@@ -1,14 +1,14 @@
-import { AscentType } from "./types";
+import { AscentType, GenericOption } from "./types";
 
-export const genders = [
-  { id: "male", label: "Male" },
-  { id: "female", label: "Female" },
-  { id: "neutral", label: "Neutral" },
+export const genders: GenericOption[] = [
+  { id: "male", name: "Male" },
+  { id: "female", name: "Female" },
+  { id: "neutral", name: "Neutral" },
 ];
 
-export const status = [
-  { id: "active", label: "Active" },
-  { id: "inactive", label: "Inactive" },
+export const status: GenericOption[] = [
+  { id: "active", name: "Active" },
+  { id: "inactive", name: "Inactive" },
 ];
 
 export const ascents: AscentType[] = [

@@ -42,7 +42,7 @@ export const useAppContext = () => {
 };
 
 export async function getDefaultInitialProps(context: NextPageContext) {
-  const { data: locations } = await axios.get(
+  const { data: locations } = await axios.get<Location[]>(
     `${process.env.NEXT_PUBLIC_API_HOST}/api/locations`
   );
 
@@ -60,16 +60,17 @@ export async function getDefaultInitialProps(context: NextPageContext) {
   const tokenPayload = token ? decode<TokenPayload>(token) : null;
   const authenticated = cookies?.["authenticated"] === "true";
 
+  let roles: Role[] = [];
+
   const currentLocation = locations.find(
     (location) => location.url === context.query.location
   );
 
-  tokenPayload;
-  const roles = currentLocation
-    ? (tokenPayload?.user.roles
-        .filter((role) => role.endsWith(currentLocation?.id.toString()))
-        .map((role) => role.replace(`@${currentLocation.id}`, "")) as Role[])
-    : [];
+  if (tokenPayload && currentLocation) {
+    roles = tokenPayload.user.roles
+      ?.filter((role) => role.endsWith(currentLocation?.id.toString()))
+      .map((role) => role.replace(`@${currentLocation.id}`, "")) as Role[];
+  }
 
   return {
     roles,

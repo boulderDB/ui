@@ -4,8 +4,8 @@ import utilities from "../../styles/utilities/utilities";
 import { FormFieldProps } from "../form/form";
 import { Icon } from "../icon/icon";
 
-export type InputProps = FormFieldProps &
-  React.InputHTMLAttributes<HTMLInputElement>;
+export type InputProps = FormFieldProps<string | number> &
+  Omit<React.InputHTMLAttributes<HTMLInputElement>, "onChange">;
 
 export function Input({
   type,

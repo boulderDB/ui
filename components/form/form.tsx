@@ -1,5 +1,3 @@
-"use client";
-
 import {
   Field as HouseFormField,
   Form as HouseForm,
@@ -13,33 +11,33 @@ import cx from "classix";
 import { InputProps } from "../input/input";
 import { Button } from "../button/button";
 import { UploadProps } from "../upload/upload";
-import { SelectProps } from "../select/select";
+import { Option, SelectProps } from "../select/select";
 import { FormErrorResponse, ServerErrorResponse } from "../../lib/types";
 import { SwitchProps } from "../switch/switch";
 import { Label } from "../label/label";
 import { Notice } from "../notice/notice";
+import { MultiSelectProps } from "../select/multiSelect";
 
-export type PrimitiveInput = number | string | boolean | null;
-
-export type ChangeHandler<ComplexInput = void> = (
-  value: PrimitiveInput | PrimitiveInput[] | ComplexInput | ComplexInput[]
-) => void;
-
-export type FormFieldProps<ComplexInput = void> = {
+export type FormFieldProps<TValue> = {
   id?: string;
   name?: string;
-  onChange?: ChangeHandler<ComplexInput>;
+  onChange?: (value: TValue | null) => void;
   hasError?: boolean;
 };
 
-type ComponentProps = InputProps | UploadProps | SelectProps<any> | SwitchProps;
+type ComponentProps =
+  | InputProps
+  | UploadProps
+  | SelectProps<Option>
+  | MultiSelectProps<Option>
+  | SwitchProps;
 
-type FormField = {
+type FormField<TValue> = {
   placeholder?: string;
   label: string;
   description?: string;
   component: React.ComponentType<ComponentProps>;
-} & FormFieldProps &
+} & FormFieldProps<TValue> &
   FieldInstanceProps &
   ComponentProps;
 
@@ -51,7 +49,7 @@ type FormProps<TValues> = {
     setSuccess: (message: string) => void
   ) => Promise<void>;
   submitLabel: string;
-  fields: FormField[];
+  fields: FormField<unknown>[];
 };
 
 function isFormErrorResponse(
@@ -60,7 +58,7 @@ function isFormErrorResponse(
   return (error as FormErrorResponse).errors !== undefined;
 }
 
-export function Form<TValues>({
+export function Form<TValues extends {}>({
   data,
   onSubmit,
   submitLabel,
@@ -148,7 +146,7 @@ export function Form<TValues>({
                             className={cx(styles.input)}
                             value={value}
                             onBlur={onBlur}
-                            onChange={(value: any) => setValue(value)}
+                            onChange={(value) => setValue(value)}
                           />
 
                           {description ? (

@@ -144,7 +144,11 @@ export default function RankingView({
     <>
       <Input
         value={globalFilter ?? ""}
-        onChange={(value) => setGlobalFilter(value)}
+        onChange={(value) => {
+          if (value) {
+            setGlobalFilter(value.toString());
+          }
+        }}
         name={"search"}
         placeholder={"Search"}
         className={styles.search}

@@ -1,3 +1,5 @@
+import { Option } from "../components/select/select";
+
 export type Role = "ROLE_ADMIN" | "ROLE_SETTER" | "ROLE_SUPER_ADMIN";
 
 export type Event = {
@@ -25,7 +27,6 @@ export type Participant = {
 };
 
 export type Boulder = {
-  group: any;
   id: number;
   name: string;
   holdType: HoldType;
@@ -116,6 +117,10 @@ export type AscentType = {
   name: string;
   color: string;
 };
+
+export type GenericOption = {
+  name: string;
+} & Option;
 
 export type Grade = {
   id: number;

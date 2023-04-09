@@ -7,7 +7,7 @@ import styles from "./switch.module.css";
 import { FormFieldProps } from "../form/form";
 import cx from "classix";
 
-export type SwitchProps = FormFieldProps &
+export type SwitchProps = FormFieldProps<boolean> &
   Omit<HeadlessUISwitchProps<"div">, "value"> & {
     label: string;
     value?: boolean;
