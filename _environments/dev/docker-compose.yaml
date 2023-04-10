@@ -1,15 +1,10 @@
 services:
-  dpa-com-nextjs:
+  boulderdb-nextjs:
     build:
       context: .
       dockerfile: nextjs/Dockerfile
-    depends_on:
-      dpa-com-meili:
-        condition: service_started
-      dpa-com-mysql:
-        condition: service_started
 
-  dpa-com-nginx:
+  boulderdb-nginx:
     build:
       context: nginx
       dockerfile: Dockerfile
@@ -22,28 +17,6 @@ services:
     depends_on:
       dpa-com-nextjs:
         condition: service_started
-
-  dpa-com-meili:
-    image: getmeili/meilisearch:v0.29
-    environment:
-      MEILI_MASTER_KEY: foobar
-      VIRTUAL_HOST: search.$PROJECT_HOSTNAME
-      LETSENCRYPT_HOST: search.$PROJECT_HOSTNAME
-      LETSENCRYPT_EMAIL: infra@atelierdisko.de
-    volumes:
-      - /var/data/dpa-com-meili:/meili_data
-    expose:
-      - 7700
-
-  dpa-com-mysql:
-    image: mysql:8.0.29-debian
-    volumes:
-      - /var/data/dpa-com-mysql:/var/lib/mysql
-    environment:
-      MYSQL_DATABASE: $PROJECT_DATABASE_NAME
-      MYSQL_ROOT_PASSWORD: $PROJECT_DATABASE_PASSWORD
-    expose:
-      - 3306
 
 networks:
   default:
