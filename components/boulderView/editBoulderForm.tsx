@@ -5,8 +5,10 @@ import {
   Grade,
   HoldType,
   Setter,
+  Status,
   Tag,
   Wall,
+  WithRequired,
 } from "../../lib/types";
 import useSWR, { useSWRConfig } from "swr";
 import { Form } from "../form/form";
@@ -20,15 +22,22 @@ import { selectOptionLabels } from "../../lib/selectOptionLabels";
 import { Loader } from "../loader/loader";
 import { useAppContext } from "../../pages/_app";
 import { status } from "../../lib/globals";
+import { PutBoulder } from "../../types/GetMeResponse";
+import { useRouter } from "next/router";
 
 type EditBoulderFormProps = {
   id: number;
 };
 
+type FormData = {
+  status: Status;
+} & WithRequired<Omit<Boulder, "status">, "internalGrade">;
+
 export function EditBoulderForm({ id }: EditBoulderFormProps) {
   const { currentLocation } = useAppContext();
+  const { query } = useRouter();
 
-  const { data } = useSWR<Boulder[]>(
+  const { data } = useSWR<WithRequired<Boulder, "internalGrade">>(
     `/api/${currentLocation?.url}/boulders/${id}`,
     fetcher
   );
@@ -65,11 +74,28 @@ export function EditBoulderForm({ id }: EditBoulderFormProps) {
   }
 
   return (
-    <Form
-      data={data}
+    <Form<FormData>
+      data={{
+        ...data,
+        status: (status.find((status) => status.id === data.status) ||
+          null) as Status,
+      }}
       submitLabel={"Update"}
       onSubmit={async (values) => {
-        await axios.put(`/api/${currentLocation?.url}/boulders/${id}`, values);
+        await axios.put<Boulder, Boulder, PutBoulder>(
+          `/api/${currentLocation?.url}/boulders/${id}`,
+          {
+            ...values,
+            status: values.status.id,
+            startWall: values.startWall.id,
+            endWall: values.endWall.id,
+            grade: values.grade.id,
+            internalGrade: values.internalGrade.id,
+            holdType: values.holdType.id,
+            tags: values.tags.map((tag) => tag.id),
+            setters: values.setters.map((setter) => setter.id),
+          }
+        );
 
         mutate(`/api/${currentLocation?.url}/boulders/${id}`);
         mutate(`/api/${currentLocation?.url}/boulders`);
@@ -85,7 +111,6 @@ export function EditBoulderForm({ id }: EditBoulderFormProps) {
         {
           name: "startWall",
           label: "Start wall",
-          onChangeValidate: selectValidation(),
           getOptionLabel: (option: Wall) => option.name,
           options: walls,
           component: Select,
@@ -107,6 +132,14 @@ export function EditBoulderForm({ id }: EditBoulderFormProps) {
           component: Select,
         },
         {
+          name: "internalGrade",
+          label: "Internal grade",
+          getOptionLabel: selectOptionLabels.grade,
+          options: grades,
+          component: Select,
+          required: false,
+        },
+        {
           name: "holdType",
           label: "Hold type",
           onChangeValidate: selectValidation(),
@@ -120,6 +153,7 @@ export function EditBoulderForm({ id }: EditBoulderFormProps) {
           getOptionLabel: selectOptionLabels.tag,
           options: tags,
           component: MultiSelect,
+          required: false,
         },
         {
           name: "setters",

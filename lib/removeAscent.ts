@@ -28,7 +28,7 @@ export async function removeAscent({
 
   if (forEvent) {
     params.event = forEvent.id;
-    mutations.push(`/${location?.url}/events/${forEvent.id}`);
+    mutations.push(`/api/${location?.url}/events/${forEvent.id}`);
   }
 
   if (forUser) {

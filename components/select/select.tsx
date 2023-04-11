@@ -1,4 +1,4 @@
-import { ReactNode, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { FormFieldProps } from "../form/form";
 import { Listbox } from "@headlessui/react";
 import { Icon } from "../icon/icon";
@@ -13,10 +13,11 @@ export type Option = {
 
 export type SelectProps<TOption extends Option> = {
   options: TOption[];
-  getOptionLabel: (option: TOption) => string | ReactNode;
+  getOptionLabel: (option: TOption) => string | React.ReactElement;
   value?: TOption | null;
   className?: string;
   emptyOptionLabel?: string;
+  required?: boolean;
 } & FormFieldProps<TOption>;
 
 export function createSelectProps<TOption extends Option>(
@@ -27,6 +28,13 @@ export function createSelectProps<TOption extends Option>(
   };
 }
 
+function findValueOptionReference<TOption extends Option>(
+  options: TOption[],
+  value: TOption | null
+): TOption | null {
+  return options.find((option) => option.id === value?.id) || null;
+}
+
 export function Select<TOption extends Option>({
   options,
   getOptionLabel,
@@ -34,9 +42,12 @@ export function Select<TOption extends Option>({
   hasError,
   onChange,
   emptyOptionLabel = "—",
+  required = true,
   className,
 }: SelectProps<TOption>) {
-  const [selected, setSelected] = useState<TOption | null>(value);
+  const [selected, setSelected] = useState<TOption | null>(
+    findValueOptionReference<TOption>(options, value)
+  );
   const isInitial = useRef<boolean>(true);
 
   useEffect(() => {
@@ -50,8 +61,11 @@ export function Select<TOption extends Option>({
     }
   }, [selected]);
 
+  // ensure external resets are reflected
   useEffect(() => {
-    setSelected(value);
+    if (!value) {
+      setSelected(null);
+    }
   }, [value]);
 
   return (
@@ -71,20 +85,22 @@ export function Select<TOption extends Option>({
       </Listbox.Button>
 
       <Listbox.Options className={styles.options}>
-        <Listbox.Option
-          value={null}
-          className={({ active, selected }) =>
-            cx(
-              styles.option,
-              utilities.typograpy.gamma700,
-              active ? styles.isActiveOption : null,
-              selected ? styles.isSelectedOption : null
-            )
-          }
-        >
-          <Icon name="top" className={styles.checkIcon} />
-          <span className={styles.optionLabel}>{emptyOptionLabel}</span>
-        </Listbox.Option>
+        {!required ? (
+          <Listbox.Option
+            value={null}
+            className={({ active, selected }) =>
+              cx(
+                styles.option,
+                utilities.typograpy.gamma700,
+                active ? styles.isActiveOption : null,
+                selected ? styles.isSelectedOption : null
+              )
+            }
+          >
+            <Icon name="top" className={styles.checkIcon} />
+            <span className={styles.optionLabel}>{emptyOptionLabel}</span>
+          </Listbox.Option>
+        ) : null}
 
         {options.map((option) => (
           <Listbox.Option

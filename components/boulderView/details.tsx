@@ -10,6 +10,7 @@ import { Button } from "../button/button";
 import { Loader } from "../loader/loader";
 import { User } from "../user/user";
 import { useAppContext } from "../../pages/_app";
+import { ascentColors } from "../ascent/ascent";
 
 type DetailsProps = {
   id: number;
@@ -64,10 +65,19 @@ export function Details({ id }: DetailsProps) {
               <User image={ascent.user.image} username={ascent.user.username} />
 
               <span className={utilities.typograpy.delta}>
-                <Icon name={ascent.type} /> ({ascent.type})
+                <Icon
+                  name={ascent.type}
+                  style={{ color: ascentColors[ascent.type] }}
+                />{" "}
+                ({ascent.type})
               </span>
 
-              <span className={utilities.typograpy.delta}>
+              <span
+                className={cx(
+                  utilities.typograpy.delta,
+                  styles.ascentCreatedAt
+                )}
+              >
                 {parseDate(ascent.createdAt)}
               </span>
 

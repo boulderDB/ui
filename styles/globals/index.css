@@ -2,3 +2,10 @@
 @import "variables.css";
 @import "typography.css";
 @import "document.css";
+
+hr {
+  background-color: var(--color-black);
+  margin-top: 16px;
+  border: none;
+  height: 1px;
+}

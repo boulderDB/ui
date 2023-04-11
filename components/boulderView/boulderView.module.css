@@ -82,3 +82,8 @@
 .editButton {
   margin-right: 8px;
 }
+
+.expanderButton {
+  cursor: pointer;
+  text-align: right;
+}

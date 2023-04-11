@@ -3,16 +3,16 @@ import App from "next/app";
 import { Footer } from "../components/footer/footer";
 import axios from "axios";
 import styles from "../styles/pages/app.module.css";
-import { Location, Role, TokenPayload } from "../lib/types";
+import { Event, Location, Role, TokenPayload } from "../lib/types";
 import decode from "jwt-decode";
-import { createContext, useContext, useMemo, useState } from "react";
+import { createContext, useContext, useState } from "react";
 import { useRouter } from "next/router";
 import { SWRConfig } from "swr";
 import { HTTPError } from "../lib/http";
-import "../styles/globals/index.css";
 import cookies from "js-cookie";
 import { Header } from "../components/header/header";
 import { NextPageContext } from "next";
+import "../styles/globals/index.css";
 
 type MyAppProps = {} & ContextState & AppProps;
 
@@ -21,11 +21,13 @@ type ContextState = {
   authenticated: boolean;
   tokenPayload: TokenPayload | null;
   locations: Location[];
+  events: Event[];
   roles: Role[];
 };
 
 type Context = {
   hasRole: (role: Role) => boolean;
+  setCurrentLocation: (location: Location) => void;
 } & ContextState;
 
 const AppContext = createContext<Context>({
@@ -33,8 +35,10 @@ const AppContext = createContext<Context>({
   authenticated: false,
   tokenPayload: null,
   locations: [],
+  events: [],
   roles: [],
   hasRole: () => false,
+  setCurrentLocation: () => {},
 });
 
 export const useAppContext = () => {
@@ -61,15 +65,40 @@ export async function getDefaultInitialProps(context: NextPageContext) {
   const authenticated = cookies?.["authenticated"] === "true";
 
   let roles: Role[] = [];
+  let events: Event[] = [];
 
-  const currentLocation = locations.find(
-    (location) => location.url === context.query.location
-  );
+  const currentLocation =
+    locations.find((location) => location.url === context.query.location) ||
+    tokenPayload?.lastVisitedLocation;
 
   if (tokenPayload && currentLocation) {
     roles = tokenPayload.user.roles
       ?.filter((role) => role.endsWith(currentLocation?.id.toString()))
       .map((role) => role.replace(`@${currentLocation.id}`, "")) as Role[];
+  }
+
+  if (authenticated && currentLocation) {
+    const { data: active } = await axios.get<Event[]>(
+      `${process.env.NEXT_PUBLIC_API_HOST}/api/${currentLocation?.url}/events`,
+      {
+        params: { filter: "active" },
+        headers: {
+          Authorization: `BEARER ${token}`,
+        },
+      }
+    );
+
+    const { data: upcoming } = await axios.get<Event[]>(
+      `${process.env.NEXT_PUBLIC_API_HOST}/api/${currentLocation?.url}/events`,
+      {
+        params: { filter: "upcoming" },
+        headers: {
+          Authorization: `BEARER ${token}`,
+        },
+      }
+    );
+
+    events = [...active, ...upcoming];
   }
 
   return {
@@ -78,6 +107,7 @@ export async function getDefaultInitialProps(context: NextPageContext) {
     tokenPayload,
     authenticated,
     currentLocation,
+    events,
   };
 }
 
@@ -85,25 +115,35 @@ export default function MyApp({
   Component,
   pageProps,
   locations,
+  events,
   authenticated,
   currentLocation,
   roles,
   tokenPayload,
 }: MyAppProps) {
   const router = useRouter();
+
   const [context, setContext] = useState<ContextState>({
     currentLocation,
     authenticated,
     tokenPayload,
     locations,
+    events,
     roles,
   });
+
+  function setCurrentLocation(location: Location) {
+    setContext({
+      ...context,
+      currentLocation: location,
+    });
+  }
 
   return (
     <SWRConfig
       value={{
         onError: (error: HTTPError, key: string) => {
-          if (error.response.code === 401) {
+          if (error?.response?.code === 401) {
             cookies.remove("authenticated");
 
             return router.push("/login");
@@ -114,6 +154,7 @@ export default function MyApp({
       <AppContext.Provider
         value={{
           ...context,
+          setCurrentLocation,
           hasRole: (role) => context.roles.includes(role),
         }}
       >

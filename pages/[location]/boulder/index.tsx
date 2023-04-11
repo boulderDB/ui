@@ -8,15 +8,11 @@ import { parseDate } from "../../../lib/parseDate";
 import { Notice } from "../../../components/notice/notice";
 import { Loader } from "../../../components/loader/loader";
 import { useAppContext } from "../../_app";
+import { ascents } from "../../../lib/globals";
 
 export default function Page() {
   const { currentLocation, hasRole } = useAppContext();
   const { query } = useRouter();
-
-  const { data } = useSWR<Boulder[]>(
-    `/api/${currentLocation?.url}/boulders`,
-    fetcher
-  );
 
   const { data: user } = useSWR<User>(
     hasRole("ROLE_ADMIN") && query.forUser
@@ -25,14 +21,19 @@ export default function Page() {
     fetcher
   );
 
-  const { data: event } = useSWR<Event>(
+  const { data: event, isLoading: eventIsLoading } = useSWR<Event>(
     query.forEvent
       ? `/api/${currentLocation?.url}/events/${query.forEvent}`
       : null,
     fetcher
   );
 
-  if (!data) {
+  const { data: boulders } = useSWR<Boulder[]>(
+    `/api/${currentLocation?.url}/boulders`,
+    fetcher
+  );
+
+  if (!boulders || eventIsLoading) {
     return <Loader />;
   }
 
@@ -60,10 +61,33 @@ export default function Page() {
     );
   }
 
+  if (query.forEvent && event && !event.isParticipant) {
+    return (
+      <Notice type="error" display="inline">
+        <h1 className={utilities.typograpy.alpha700}>
+          Your are not registered for this event
+        </h1>
+      </Notice>
+    );
+  }
+
   return (
     <>
-      <h1 className={utilities.typograpy.alpha700}>Boulder ({data.length})</h1>
-      <BoulderView data={data} forUser={user} forEvent={event} />
+      <h1 className={utilities.typograpy.alpha700}>
+        Boulder ({event ? event.boulders.length : boulders?.length})
+      </h1>
+
+      <BoulderView
+        data={event ? event.boulders : boulders}
+        forUser={user}
+        forEvent={event}
+        initialFilters={[
+          {
+            id: "ascent",
+            value: ascents.find((ascent) => ascent.id === "todo"),
+          },
+        ]}
+      />
     </>
   );
 }

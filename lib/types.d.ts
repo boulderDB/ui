@@ -1,5 +1,7 @@
 import { Option } from "../components/select/select";
 
+export type WithRequired<T, K extends keyof T> = T & { [P in K]-?: T[P] };
+
 export type Role = "ROLE_ADMIN" | "ROLE_SETTER" | "ROLE_SUPER_ADMIN";
 
 export type Event = {
@@ -31,7 +33,7 @@ export type Boulder = {
   name: string;
   holdType: HoldType;
   grade: Grade;
-  internalGrade: Grade;
+  internalGrade?: Grade;
   startWall: Wall;
   endWall: Wall;
   status: string;
@@ -121,6 +123,11 @@ export type AscentType = {
 export type GenericOption = {
   name: string;
 } & Option;
+
+export type Status = {
+  id: "active" | "inactive";
+  name: "Active" | "Inactive";
+};
 
 export type Grade = {
   id: number;

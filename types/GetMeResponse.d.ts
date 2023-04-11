@@ -25,3 +25,18 @@ export type ChangePasswordRequest = {
   oldPassword: string;
   newPassword: string;
 };
+
+// REST API TYPES
+export interface PutBoulder {
+  id: number;
+  name: string;
+  status: "active" | "inactive";
+  points: number;
+  startWall: number;
+  endWall: number;
+  grade: number;
+  internalGrade: number;
+  holdType: number;
+  tags: number[];
+  setters: number[];
+}

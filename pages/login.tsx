@@ -14,7 +14,7 @@ import { useEffect } from "react";
 
 export default function Page() {
   const router = useRouter();
-  const { authenticated, tokenPayload } = useAppContext();
+  const { authenticated, tokenPayload, setCurrentLocation } = useAppContext();
 
   useEffect(() => {
     if (authenticated) {
@@ -44,7 +44,9 @@ export default function Page() {
             expires,
           });
 
-          router.push(
+          setCurrentLocation(data.lastVisitedLocation);
+
+          await router.push(
             data.lastVisitedLocation
               ? `/${data.lastVisitedLocation.url}`
               : "/setup"

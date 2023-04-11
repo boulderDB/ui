@@ -25,11 +25,12 @@
 .navItem {
   margin-left: 16px;
   display: none;
+  cursor: pointer;
 }
 
 @media (--xl-to-m) {
   .navItem {
-    display: flex;
+    display: block;
   }
 }
 
@@ -38,13 +39,7 @@
 }
 
 .toggleMobileMenu {
-  display: flex;
-}
-
-@media (--xl-to-m) {
-  .toggleMobileMenu {
-    display: none;
-  }
+  display: block;
 }
 
 .mobileOverlay {
@@ -55,16 +50,37 @@
   left: 0;
   z-index: 1000;
   background-color: var(--color-white);
-}
-
-.mobileNav {
   padding: 16px;
+  overflow-y: scroll;
 }
 
+.mobileNav,
 .mobileNavItem {
   margin-top: 16px;
 
   &:first-child {
     margin-top: 0;
+  }
+}
+
+.event {
+  margin-top: 8px;
+}
+
+.eventListItem {
+  margin-top: 16px;
+  display: flex;
+  justify-content: space-between;
+
+  &:first-child {
+    margin-top: 0;
+  }
+}
+
+.admin {
+  display: none;
+
+  @media (--xl-to-m) {
+    display: block;
   }
 }

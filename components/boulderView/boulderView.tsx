@@ -60,6 +60,7 @@ import { User as UserComponent } from "../user/user";
 import { Pagination } from "../pagination/pagination";
 import { parseDate } from "../../lib/parseDate";
 import { useAppContext } from "../../pages/_app";
+import { ascentColors } from "../ascent/ascent";
 
 type BoulderViewProps = {
   data: Boulder[];
@@ -331,10 +332,6 @@ export function BoulderView({
         cell: ({ getValue, row }) => {
           const ascent = getValue();
 
-          if (!ascent) {
-            return null;
-          }
-
           return (
             <Ascents
               userAscent={ascent}
@@ -352,6 +349,10 @@ export function BoulderView({
                 }
               }}
               onUncheck={async () => {
+                if (!ascent) {
+                  return;
+                }
+
                 const mutations = await removeAscent({
                   ascentId: ascent.id,
                   boulderId: row.original.id,
@@ -383,21 +384,39 @@ export function BoulderView({
         id: "expander",
         header: () => null,
         cell: ({ row }) => {
+          const ascent = row.original.userAscent;
+
           return row.getCanExpand() ? (
             <button
               {...{
                 onClick: row.getToggleExpandedHandler(),
-                style: { cursor: "pointer" },
               }}
+              className={styles.expanderButton}
             >
               {row.getIsExpanded() ? (
                 <Icon name="close" />
               ) : (
-                <span
-                  className={cx(typography.delta700, utilities.colors.lila)}
-                >
-                  Add
-                </span>
+                <>
+                  {ascent ? (
+                    <span
+                      className={cx(typography.delta700, utilities.colors.lila)}
+                    >
+                      <Icon
+                        name={ascent.type}
+                        style={{
+                          color: ascentColors[ascent.type],
+                        }}
+                      />
+                      Edit
+                    </span>
+                  ) : (
+                    <span
+                      className={cx(typography.delta700, utilities.colors.lila)}
+                    >
+                      Add
+                    </span>
+                  )}
+                </>
               )}
             </button>
           ) : null;
@@ -451,7 +470,7 @@ export function BoulderView({
               (columnFilter) => columnFilter.id === filter.id
             );
 
-            type Option = typeof filter.options[number];
+            type Option = (typeof filter.options)[number];
 
             return (
               <div className={styles.filter} key={filter.id}>
@@ -483,7 +502,7 @@ export function BoulderView({
               }
 
               return (
-                <FilterTag>
+                <FilterTag key={columnFilter.id}>
                   <span className={utilities.typograpy.delta700}>
                     {filter.getOptionLabel(columnFilter.value as Option)}
                   </span>
@@ -542,7 +561,11 @@ export function BoulderView({
               <RowComponent collapsed={collapsed} {...row} />
 
               {row.getIsExpanded() ? (
-                <SubRow {...row} onClose={() => row.toggleExpanded()} />
+                <SubRow
+                  {...row}
+                  onClose={() => row.toggleExpanded()}
+                  forEvent={forEvent}
+                />
               ) : null}
             </>
           );

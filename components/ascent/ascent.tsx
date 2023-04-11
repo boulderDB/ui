@@ -3,8 +3,17 @@ import { Icon } from "../icon/icon";
 import styles from "./ascent.module.css";
 import { capitalize } from "../../lib/capitalize";
 import utilities from "../../styles/utilities/utilities";
-import { Ascent } from "../../lib/types";
+import { Ascent, InvalidAscentType, ValidAscentType } from "../../lib/types";
 import { isDoubt } from "../../lib/isDoubt";
+
+export const ascentColors: {
+  [key in ValidAscentType | InvalidAscentType]: string;
+} = {
+  todo: "#fff617",
+  flash: "#1687ff",
+  top: "#02deaf",
+  resignation: "#ff5d5f",
+};
 
 export type AscentProps = {
   type: Ascent["type"];

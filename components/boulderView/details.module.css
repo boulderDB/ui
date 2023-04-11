@@ -14,10 +14,14 @@
 
 .ascentListItem {
   display: grid;
-  grid-template-columns: 1fr 140px 100px 75px;
+  grid-template-columns: minmax(100px, auto) 100px 75px;
   padding: 8px 0;
   border-bottom: 1px solid var(--color-black);
   align-items: center;
+
+  @media (--xl-to-l) {
+    grid-template-columns: 1fr 140px 100px 75px;
+  }
 
   &:last-child {
     border-bottom: none;
@@ -26,6 +30,18 @@
 
   & > *:last-child {
     justify-self: flex-end;
+  }
+
+  & > * {
+    overflow: hidden;
+  }
+}
+
+.ascentCreatedAt {
+  display: none;
+
+  @media (--xl-to-l) {
+    display: block;
   }
 }
 

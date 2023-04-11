@@ -5,7 +5,7 @@ import styles from "./modal.module.css";
 import utilities from "../../styles/utilities/utilities";
 
 type ModalProps = {
-  label: string | React.ReactNode;
+  label: string | React.ReactElement;
   title: string;
 } & React.ButtonHTMLAttributes<HTMLButtonElement>;
 

@@ -70,17 +70,19 @@ export function Form<TValues extends {}>({
 
   return (
     <div className={cx(styles.root, submitting ? styles.isSubmitting : null)}>
-      {error ? (
-        <Notice type="error">
-          <p className={utilities.typograpy.delta700}>{error}</p>
-        </Notice>
-      ) : null}
+      <div className={styles.notice}>
+        {error ? (
+          <Notice type="error">
+            <p className={utilities.typograpy.delta700}>{error}</p>
+          </Notice>
+        ) : null}
 
-      {success ? (
-        <Notice type="success">
-          <p className={utilities.typograpy.delta700}>{success}</p>
-        </Notice>
-      ) : null}
+        {success ? (
+          <Notice type="success">
+            <p className={utilities.typograpy.delta700}>{success}</p>
+          </Notice>
+        ) : null}
+      </div>
 
       <HouseForm<TValues>
         onSubmit={async (values, form) => {
@@ -89,6 +91,10 @@ export function Form<TValues extends {}>({
           try {
             await onSubmit(values, form, setSuccess);
           } catch (error) {
+            if (!error.response) {
+              throw error;
+            }
+
             if (!isFormErrorResponse(error.response.data)) {
               setError(error.response.data.message);
             } else {

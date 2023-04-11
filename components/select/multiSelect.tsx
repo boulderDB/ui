@@ -11,6 +11,15 @@ export type MultiSelectProps<TOption extends Option> = {
   onChange: (value: TOption[]) => void;
 } & Omit<SelectProps<TOption>, "value" | "onChange">;
 
+function filterValueOptionReferences<TOption extends Option>(
+  options: TOption[],
+  value: TOption[]
+): TOption[] {
+  return options.filter((option) =>
+    value.map((value) => value.id).includes(option.id)
+  );
+}
+
 export function MultiSelect<TOption extends Option>({
   options,
   getOptionLabel,
@@ -20,9 +29,7 @@ export function MultiSelect<TOption extends Option>({
   className,
 }: MultiSelectProps<TOption>) {
   const [selected, setSelected] = useState<TOption[]>(
-    options.filter((option) =>
-      value.map((value) => value.id).includes(option.id)
-    )
+    filterValueOptionReferences(options, value)
   );
 
   const isInitial = useRef<boolean>(true);
@@ -38,6 +45,13 @@ export function MultiSelect<TOption extends Option>({
     }
   }, [selected]);
 
+  // ensure external resets are reflected
+  useEffect(() => {
+    if (value.length === 0) {
+      setSelected([]);
+    }
+  }, [value]);
+
   return (
     <Listbox value={selected} onChange={setSelected} multiple>
       <Listbox.Button
@@ -48,7 +62,7 @@ export function MultiSelect<TOption extends Option>({
         )}
       >
         <span className={cx(styles.value, utilities.typograpy.gamma700)}>
-          {selected
+          {selected.length > 0
             ? selected.map((entry) => (
                 <div className={styles.tag} key={entry.id}>
                   {getOptionLabel(entry)}

@@ -6,6 +6,10 @@
   }
 }
 
+.notice {
+  margin-top: 12px;
+}
+
 .row {
   display: flex;
   flex-direction: column;
@@ -24,12 +28,6 @@
 
 .button {
   margin-top: 48px;
-}
-
-.notice {
-  display: flex;
-  padding: 16px;
-  margin-top: 16px;
 }
 
 .notice.isErrorNotice {
