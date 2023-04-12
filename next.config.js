@@ -11,10 +11,10 @@ const moduleExports = {
   async rewrites() {
     const entries = [];
 
-    if (process.env.NEXT_PUBLIC_API_PROXY) {
+    if (process.env.NEXT_PUBLIC_API_HOST) {
       entries.push({
         source: "/api/:path*",
-        destination: `${process.env.NEXT_PUBLIC_API_PROXY}/api/:path*`,
+        destination: `${process.env.NEXT_PUBLIC_API_HOST}/api/:path*`,
         basePath: false,
       });
     }
