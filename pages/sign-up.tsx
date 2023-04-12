@@ -26,11 +26,7 @@ export default function Page() {
 
   return (
     <div className={styles.root}>
-      <h1
-        className={cx(utilities.typograpy.alpha700, utilities.layout.sideTitle)}
-      >
-        Sign up
-      </h1>
+      <h1 className={cx(utilities.typograpy.alpha700)}>Sign up</h1>
 
       <Form<{
         username: string;

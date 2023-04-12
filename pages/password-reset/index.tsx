@@ -22,11 +22,7 @@ export default function Page() {
 
   return (
     <div className={styles.root}>
-      <h1
-        className={cx(utilities.typograpy.alpha700, utilities.layout.sideTitle)}
-      >
-        Password reset
-      </h1>
+      <h1 className={cx(utilities.typograpy.alpha700)}>Password reset</h1>
 
       <Form
         submitLabel={"Request reset"}

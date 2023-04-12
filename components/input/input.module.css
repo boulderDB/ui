@@ -1,28 +1,28 @@
 .root {
   display: flex;
   position: relative;
-}
+  box-shadow: 0px 1px 0px 0px var(--color-black);
 
-.hasError .input {
-  box-shadow: 0px 1px 0px 0px var(--color-red);
+  &:focus-within {
+    box-shadow: 0px 2px 0px 0px var(--color-black);
+  }
 
-  &:focus {
-    box-shadow: 0px 2px 0px 0px var(--color-red);
+  &.hasError {
+    box-shadow: 0px 1px 0px 0px var(--color-red);
+
+    &:focus-within {
+      box-shadow: 0px 2px 0px 0px var(--color-red);
+    }
   }
 }
 
 .input {
   border: 0;
   outline: none;
-  box-shadow: 0px 1px 0px 0px var(--color-black);
   padding-bottom: 8px;
   width: 100%;
   color: var(--color-black);
   background-color: var(--color-white);
-
-  &:focus {
-    box-shadow: 0px 2px 0px 0px var(--color-black);
-  }
 }
 
 .errorIndicator {

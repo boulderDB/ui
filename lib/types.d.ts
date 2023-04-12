@@ -132,7 +132,8 @@ export type Status = {
 export type Grade = {
   id: number;
   name: string;
-  position: number;
+
+  ition: number;
   color: string;
   active: boolean;
 };
@@ -180,13 +181,6 @@ export type TokenPayload = {
   lastVisitedLocation: Location;
 };
 
-export type LoginResponse = {
-  expiration: number;
-  lastVisitedLocation: Location;
-  target: string | null;
-  user: User;
-};
-
 export type AccountResponse = {};
 
 export type Gender = {
@@ -213,3 +207,15 @@ export type ServerErrorResponse = {
 };
 
 export type ErrorReponse = FormErrorResponse | ServerErrorResponse;
+
+export type PostLoginData = {
+  username: string;
+  password: string;
+};
+
+export type PostLoginResponse = {
+  expiration: number;
+  lastVisitedLocation: Location;
+  target: string | null;
+  user: User;
+};

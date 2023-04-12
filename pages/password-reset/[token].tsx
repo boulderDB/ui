@@ -21,9 +21,7 @@ export default function Page() {
 
   return (
     <div className={styles.root}>
-      <h1
-        className={cx(utilities.typograpy.alpha700, utilities.layout.sideTitle)}
-      >
+      <h1 className={cx(utilities.typograpy.alpha700)}>
         Choose your new password
       </h1>
 

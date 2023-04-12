@@ -3,7 +3,14 @@ import App from "next/app";
 import { Footer } from "../components/footer/footer";
 import axios from "axios";
 import styles from "../styles/pages/app.module.css";
-import { Event, Location, Role, TokenPayload } from "../lib/types";
+import {
+  Event,
+  Location,
+  PostLoginData,
+  PostLoginResponse,
+  Role,
+  TokenPayload,
+} from "../lib/types";
 import decode from "jwt-decode";
 import { createContext, useContext, useState } from "react";
 import { useRouter } from "next/router";
@@ -27,7 +34,9 @@ type ContextState = {
 
 type Context = {
   hasRole: (role: Role) => boolean;
-  setCurrentLocation: (location: Location) => void;
+  setCurrentLocation: (location: Location | null) => void;
+  logout: () => Promise<void>;
+  login: (data: PostLoginData) => Promise<void>;
 } & ContextState;
 
 const AppContext = createContext<Context>({
@@ -39,6 +48,8 @@ const AppContext = createContext<Context>({
   roles: [],
   hasRole: () => false,
   setCurrentLocation: () => {},
+  logout: async () => {},
+  login: async () => {},
 });
 
 export const useAppContext = () => {
@@ -132,11 +143,58 @@ export default function MyApp({
     roles,
   });
 
-  function setCurrentLocation(location: Location) {
+  function setCurrentLocation(location: Location | null) {
     setContext({
       ...context,
       currentLocation: location,
     });
+  }
+
+  async function logout() {
+    cookies.remove("authenticated");
+
+    setContext({
+      ...context,
+      currentLocation: null,
+      tokenPayload: null,
+      authenticated: false,
+      events: [],
+      roles: [],
+    });
+
+    await router.push("/login");
+  }
+
+  async function login(data: PostLoginData) {
+    const { data: response } = await axios.post<PostLoginResponse>(
+      "/api/login",
+      data
+    );
+
+    const expires = response.expiration - Math.floor(Date.now() / 1000);
+
+    cookies.set("authenticated", true, {
+      expires,
+    });
+
+    setContext({
+      ...context,
+      currentLocation: response.lastVisitedLocation,
+      tokenPayload: {
+        ...response,
+        iat: Date.now(),
+        exp: response.expiration,
+        username: response.user.username,
+        roles: response.user.roles as string[],
+      },
+      authenticated: true,
+    });
+
+    await router.push(
+      response.lastVisitedLocation
+        ? `/${response.lastVisitedLocation.url}`
+        : "/setup"
+    );
   }
 
   return (
@@ -155,6 +213,8 @@ export default function MyApp({
         value={{
           ...context,
           setCurrentLocation,
+          logout,
+          login,
           hasRole: (role) => context.roles.includes(role),
         }}
       >

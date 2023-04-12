@@ -5,16 +5,14 @@ import Link from "next/link";
 import { z } from "zod";
 import { Form } from "../components/form/form";
 import { Input } from "../components/input/input";
-import cookies from "js-cookie";
-import { LoginResponse } from "../lib/types";
-import axios from "axios";
+import { PostLoginData } from "../lib/types";
 import { useRouter } from "next/router";
 import { useAppContext } from "./_app";
 import { useEffect } from "react";
 
 export default function Page() {
   const router = useRouter();
-  const { authenticated, tokenPayload, setCurrentLocation } = useAppContext();
+  const { authenticated, tokenPayload, login } = useAppContext();
 
   useEffect(() => {
     if (authenticated) {
@@ -24,33 +22,12 @@ export default function Page() {
 
   return (
     <div className={styles.root}>
-      <h1
-        className={cx(utilities.typograpy.alpha700, utilities.layout.sideTitle)}
-      >
-        Sign in
-      </h1>
+      <h1 className={cx(utilities.typograpy.alpha700)}>Sign in</h1>
 
-      <Form
+      <Form<PostLoginData>
         submitLabel={"Login"}
         onSubmit={async (values) => {
-          const { data } = await axios.post<LoginResponse>(
-            "/api/login",
-            values
-          );
-
-          const expires = data.expiration - Math.floor(Date.now() / 1000);
-
-          cookies.set("authenticated", true, {
-            expires,
-          });
-
-          setCurrentLocation(data.lastVisitedLocation);
-
-          await router.push(
-            data.lastVisitedLocation
-              ? `/${data.lastVisitedLocation.url}`
-              : "/setup"
-          );
+          await login(values);
         }}
         fields={[
           {

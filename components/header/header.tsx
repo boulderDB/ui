@@ -30,6 +30,7 @@ export function Header({ locations }: HeaderProps) {
     tokenPayload,
     setCurrentLocation,
     hasRole,
+    logout,
   } = useAppContext();
 
   const { mutate } = useSWRConfig();
@@ -66,7 +67,10 @@ export function Header({ locations }: HeaderProps) {
     <header className={styles.root}>
       <nav className={styles.nav}>
         <div className={styles.primary}>
-          <Link className={utilities.typograpy.delta700} href={backlink}>
+          <Link
+            className={cx(utilities.typograpy.delta700, styles.logo)}
+            href={backlink}
+          >
             BoulderDB
           </Link>
 
@@ -172,12 +176,14 @@ export function Header({ locations }: HeaderProps) {
             </>
           ) : null} */}
 
-          <IconButton
-            icon={mobileOverlay ? "close" : "burger"}
-            onClick={() => setMobileOverlay(!mobileOverlay)}
-            outline={false}
-            className={styles.toggleMobileMenu}
-          />
+          {authenticated ? (
+            <IconButton
+              icon={mobileOverlay ? "close" : "burger"}
+              onClick={() => setMobileOverlay(!mobileOverlay)}
+              outline={false}
+              className={styles.toggleMobileMenu}
+            />
+          ) : null}
         </div>
       </nav>
 
@@ -204,7 +210,7 @@ export function Header({ locations }: HeaderProps) {
                               <RouterLink
                                 href={`/boulder?forEvent=${event.id}`}
                                 prefixLocation={true}
-                                className={cx(utilities.typograpy.gamma700)}
+                                className={cx(utilities.typograpy.alpha)}
                               >
                                 Boulder
                               </RouterLink>
@@ -214,7 +220,7 @@ export function Header({ locations }: HeaderProps) {
                               <RouterLink
                                 href={`/ranking?forEvent=${event.id}`}
                                 prefixLocation={true}
-                                className={cx(utilities.typograpy.gamma700)}
+                                className={cx(utilities.typograpy.alpha)}
                               >
                                 Ranking
                               </RouterLink>
@@ -301,10 +307,7 @@ export function Header({ locations }: HeaderProps) {
 
                     <li className={styles.mobileNavItem}>
                       <button
-                        onClick={() => {
-                          cookies.remove("authenticated");
-                          router.push("/login");
-                        }}
+                        onClick={() => logout()}
                         className={cx(utilities.typograpy.alpha700)}
                       >
                         Logout

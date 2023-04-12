@@ -4,8 +4,8 @@
 @import "document.css";
 
 hr {
+  display: block;
   background-color: var(--color-black);
-  margin-top: 16px;
   border: none;
   height: 1px;
 }
