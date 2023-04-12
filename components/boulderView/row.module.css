@@ -8,7 +8,13 @@
 
   @media (--xl-to-l) {
     grid-column-gap: 16px;
-    grid-template-columns: 20px 20px 80px 60px minmax(60px, auto) 200px 120px 120px 100px 136px;
+    grid-template-columns: 20px 80px 60px minmax(60px, auto) 200px 120px 120px 100px 136px;
+  }
+
+  &.isAdmin {
+    @media (--xl-to-l) {
+      grid-template-columns: 20px 20px 80px 60px minmax(60px, auto) 200px 120px 120px 100px 136px;
+    }
   }
 }
 

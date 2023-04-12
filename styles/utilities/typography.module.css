@@ -71,3 +71,7 @@
 .nowrap {
   white-space: nowrap;
 }
+
+.textLink {
+  text-decoration: underline;
+}

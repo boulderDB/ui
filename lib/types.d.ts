@@ -178,7 +178,7 @@ export type TokenPayload = {
   roles: string[];
   user: User;
   username: string;
-  lastVisitedLocation: Location;
+  lastVisitedLocation: Location | null;
 };
 
 export type AccountResponse = {};

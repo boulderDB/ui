@@ -35,7 +35,12 @@ export function Header({ locations }: HeaderProps) {
 
   const { mutate } = useSWRConfig();
 
-  useSWR(authenticated ? `/api/${currentLocation?.url}/ping` : null, fetcher);
+  useSWR(
+    authenticated && currentLocation
+      ? `/api/${currentLocation?.url}/ping`
+      : null,
+    fetcher
+  );
 
   const { data: activeEvents = [] } = useSWR(
     currentLocation

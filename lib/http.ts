@@ -11,12 +11,12 @@ export class HTTPError extends Error {
 }
 
 export const fetcher = async (url: string) => {
-  if (cookies.get("authenticated") !== "true") {
-    throw new HTTPError({
-      code: 401,
-      message: "Unauthorized",
-    });
-  }
+  // if (cookies.get("authenticated") !== "true") {
+  //   throw new HTTPError({
+  //     code: 401,
+  //     message: "Unauthorized",
+  //   });
+  // }
 
   const response = await fetch(url);
   const data = await response.json();

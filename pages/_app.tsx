@@ -201,6 +201,8 @@ export default function MyApp({
     <SWRConfig
       value={{
         onError: (error: HTTPError, key: string) => {
+          console.error(error);
+
           if (error?.response?.code === 401) {
             cookies.remove("authenticated");
 

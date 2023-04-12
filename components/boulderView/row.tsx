@@ -6,13 +6,14 @@ import styles from "./row.module.css";
 import utilities from "../../styles/utilities/utilities";
 
 type RowProps = {
+  admin: boolean;
   collapsed: boolean;
 } & Row<Boulder>;
 
-export function Row({ collapsed, id, getVisibleCells }: RowProps) {
+export function Row({ collapsed, admin, id, getVisibleCells }: RowProps) {
   if (!collapsed) {
     return (
-      <div key={id} className={cx(styles.root)}>
+      <div key={id} className={cx(styles.root, admin ? styles.isAdmin : null)}>
         {getVisibleCells().map((cell) => (
           <div
             key={cell.id}
@@ -49,7 +50,6 @@ export function Row({ collapsed, id, getVisibleCells }: RowProps) {
   const expanderCell = getVisibleCells().find(
     (cell) => cell.column.id === "expander"
   );
-
 
   return (
     <div key={id} className={cx(styles.root)}>

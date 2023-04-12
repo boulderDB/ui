@@ -15,7 +15,7 @@ export default function Page() {
   const { authenticated, tokenPayload } = useAppContext();
 
   useEffect(() => {
-    if (authenticated) {
+    if (authenticated && tokenPayload?.lastVisitedLocation) {
       router.push(`/${tokenPayload?.lastVisitedLocation.url}`);
     }
   }, [authenticated]);
@@ -26,8 +26,13 @@ export default function Page() {
 
       <Form
         submitLabel={"Request reset"}
-        onSubmit={async (values) => {
+        onSubmit={async (values, form, setSuccess) => {
           await axios.post("/password-reset", values);
+
+          form.reset();
+          setSuccess(
+            "Check your email for a link to reset your password. If it doesn’t appear within a few minutes, check your spam folder."
+          );
         }}
         fields={[
           {

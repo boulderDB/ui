@@ -1,0 +1,12 @@
+.root {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.locations {
+  margin-top: 32px;
+}
+
+.locations > * {
+  margin-top: 16px;
+}

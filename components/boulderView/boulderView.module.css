@@ -40,7 +40,6 @@
 
 .searchInput {
   width: 100%;
-  display: inline;
   margin-top: 16px;
 }
 
@@ -56,6 +55,10 @@
   @media (--xl-to-l) {
     display: grid;
     grid-column-gap: 16px;
+    grid-template-columns: 20px 80px 60px minmax(60px, auto) 200px 120px 120px 100px 136px;
+  }
+
+  &.isAdmin {
     grid-template-columns: 20px 20px 80px 60px minmax(60px, auto) 200px 120px 120px 100px 136px;
   }
 }

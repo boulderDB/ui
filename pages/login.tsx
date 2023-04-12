@@ -15,7 +15,7 @@ export default function Page() {
   const { authenticated, tokenPayload, login } = useAppContext();
 
   useEffect(() => {
-    if (authenticated) {
+    if (authenticated && tokenPayload?.lastVisitedLocation) {
       router.push(`/${tokenPayload?.lastVisitedLocation.url}`);
     }
   }, [authenticated]);

@@ -106,7 +106,7 @@ export default function Page() {
   return (
     <h1 className={utilities.typograpy.alpha700}>
       Welcome back {tokenPayload?.username} 👋
-      <div>
+      {/* <div>
         <div>
           {tagChartData ? (
             <Radar
@@ -132,7 +132,7 @@ export default function Page() {
             </li>
           ))}
         </ul>
-      </div>
+      </div> */}
     </h1>
   );
 }

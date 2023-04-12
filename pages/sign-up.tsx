@@ -5,10 +5,9 @@ import Link from "next/link";
 import { z } from "zod";
 import { Form } from "../components/form/form";
 import { Input } from "../components/input/input";
-import { Select } from "../components/select/select";
+import { Select, createSelectProps } from "../components/select/select";
 import axios from "axios";
 import { genders } from "../lib/globals";
-import { selectValidation } from "../lib/selectValidation";
 import { useRouter } from "next/router";
 import { useAppContext } from "./_app";
 import { useEffect } from "react";
@@ -19,8 +18,8 @@ export default function Page() {
   const { authenticated, tokenPayload } = useAppContext();
 
   useEffect(() => {
-    if (authenticated) {
-      router.push(`/${tokenPayload?.lastVisitedLocation.url}`);
+    if (authenticated && tokenPayload?.lastVisitedLocation) {
+      router.push(`/${tokenPayload.lastVisitedLocation.url}`);
     }
   }, [authenticated]);
 
@@ -37,40 +36,51 @@ export default function Page() {
         password: string;
       }>
         submitLabel={"Register"}
-        onSubmit={async (values) => {
+        onSubmit={async (values, form, setSuccess) => {
           await axios.post("/api/register", {
             ...values,
             gender: values.gender.id,
           });
+
+          form.reset();
+          setSuccess(
+            <span>
+              Your account has been successfully created. You can{" "}
+              <Link href={"/login"} className={utilities.typograpy.textLink}>
+                login here
+              </Link>
+            </span>
+          );
         }}
         fields={[
           {
             name: "username",
             label: "Username / E-Mail",
             type: "text",
-            onChangeValidate: z.string().min(4),
+            onBlurValidate: z.string().min(4),
             component: Input,
           },
           {
             name: "email",
             label: "E-Mail",
             type: "email",
-            onChangeValidate: z.string().email(),
+            onBlurValidate: z.string().email(),
             component: Input,
           },
           {
             name: "gender",
             label: "Gender",
-            getOptionLabel: (option: GenericOption) => option.name,
-            options: genders,
-            onChangeValidate: selectValidation(),
             component: Select,
+            ...createSelectProps<GenericOption>({
+              options: genders,
+              getOptionLabel: (option) => option.name,
+            }),
           },
           {
             name: "password",
             label: "Password",
             type: "password",
-            onChangeValidate: z.string().min(6),
+            onBlurValidate: z.string().min(6),
             component: Input,
           },
         ]}

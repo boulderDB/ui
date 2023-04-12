@@ -46,7 +46,7 @@ type FormProps<TValues> = {
   onSubmit: (
     values: TValues,
     form: FormInstance<TValues>,
-    setSuccess: (message: string) => void
+    setSuccess: (message: React.ReactNode) => void
   ) => Promise<void>;
   submitLabel: string;
   fields: FormField<unknown>[];
@@ -66,7 +66,7 @@ export function Form<TValues extends {}>({
 }: FormProps<TValues>) {
   const [submitting, setSubmitting] = useState<boolean>(false);
   const [error, setError] = useState<string>();
-  const [success, setSuccess] = useState<string>();
+  const [success, setSuccess] = useState<React.ReactNode>();
 
   return (
     <div className={cx(styles.root, submitting ? styles.isSubmitting : null)}>

@@ -540,7 +540,15 @@ export function BoulderView({
 
       <div className={styles.table}>
         {table.getHeaderGroups().map((headerGroup) => (
-          <div key={headerGroup.id} className={styles.header}>
+          <div
+            key={headerGroup.id}
+            className={cx(
+              styles.header,
+              hasRole("ROLE_ADMIN") || hasRole("ROLE_SETTER")
+                ? styles.isAdmin
+                : null
+            )}
+          >
             {headerGroup.headers.map((header) => (
               <div
                 key={header.id}
@@ -558,7 +566,11 @@ export function BoulderView({
         {table.getRowModel().rows.map((row) => {
           return (
             <>
-              <RowComponent collapsed={collapsed} {...row} />
+              <RowComponent
+                collapsed={collapsed}
+                admin={hasRole("ROLE_ADMIN") || hasRole("ROLE_SETTER")}
+                {...row}
+              />
 
               {row.getIsExpanded() ? (
                 <SubRow
