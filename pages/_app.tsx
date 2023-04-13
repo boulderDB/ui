@@ -4,7 +4,6 @@ import { Footer } from "../components/footer/footer";
 import axios from "axios";
 import styles from "../styles/pages/app.module.css";
 import {
-  Event,
   Location,
   PostLoginData,
   PostLoginResponse,
@@ -28,7 +27,6 @@ type ContextState = {
   authenticated: boolean;
   tokenPayload: TokenPayload | null;
   locations: Location[];
-  events: Event[];
   roles: Role[];
 };
 
@@ -44,7 +42,6 @@ const AppContext = createContext<Context>({
   authenticated: false,
   tokenPayload: null,
   locations: [],
-  events: [],
   roles: [],
   hasRole: () => false,
   setCurrentLocation: () => {},
@@ -76,7 +73,6 @@ export async function getDefaultInitialProps(context: NextPageContext) {
   const authenticated = cookies?.["authenticated"] === "true";
 
   let roles: Role[] = [];
-  let events: Event[] = [];
 
   const currentLocation =
     locations.find((location) => location.url === context.query.location) ||
@@ -88,37 +84,12 @@ export async function getDefaultInitialProps(context: NextPageContext) {
       .map((role) => role.replace(`@${currentLocation.id}`, "")) as Role[];
   }
 
-  if (authenticated && currentLocation) {
-    const { data: active } = await axios.get<Event[]>(
-      `${process.env.NEXT_PUBLIC_API_HOST}/api/${currentLocation?.url}/events`,
-      {
-        params: { filter: "active" },
-        headers: {
-          Authorization: `BEARER ${token}`,
-        },
-      }
-    );
-
-    const { data: upcoming } = await axios.get<Event[]>(
-      `${process.env.NEXT_PUBLIC_API_HOST}/api/${currentLocation?.url}/events`,
-      {
-        params: { filter: "upcoming" },
-        headers: {
-          Authorization: `BEARER ${token}`,
-        },
-      }
-    );
-
-    events = [...active, ...upcoming];
-  }
-
   return {
     roles,
     locations,
     tokenPayload,
     authenticated,
     currentLocation,
-    events,
   };
 }
 
@@ -126,7 +97,6 @@ export default function MyApp({
   Component,
   pageProps,
   locations,
-  events,
   authenticated,
   currentLocation,
   roles,
@@ -139,7 +109,6 @@ export default function MyApp({
     authenticated,
     tokenPayload,
     locations,
-    events,
     roles,
   });
 
@@ -158,7 +127,6 @@ export default function MyApp({
       currentLocation: null,
       tokenPayload: null,
       authenticated: false,
-      events: [],
       roles: [],
     });
 

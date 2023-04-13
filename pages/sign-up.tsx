@@ -45,7 +45,7 @@ export default function Page() {
           form.reset();
           setSuccess(
             <span>
-              Your account has been successfully created. You can{" "}
+              Your account has been successfully created. You can now{" "}
               <Link href={"/login"} className={utilities.typograpy.textLink}>
                 login here
               </Link>

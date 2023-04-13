@@ -56,25 +56,16 @@
 }
 
 .mobileNav {
-  padding-bottom: 32px;
+  padding-bottom: 16px;
 }
 
 .mobileNav,
 .mobileNavItem {
-  margin-top: 32px;
+  margin-top: 16px;
 
   &:first-child {
     margin-top: 0;
   }
-}
-
-.event {
-  margin-top: 8px;
-  display: flex;
-}
-
-.event > * {
-  margin-right: 16px;
 }
 
 .admin {

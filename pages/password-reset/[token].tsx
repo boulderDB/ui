@@ -8,6 +8,7 @@ import { Form } from "../../components/form/form";
 import { Input } from "../../components/input/input";
 import { useAppContext } from "../_app";
 import { useEffect } from "react";
+import Link from "next/link";
 
 export default function Page() {
   const router = useRouter();
@@ -27,8 +28,18 @@ export default function Page() {
 
       <Form
         submitLabel={"Reset"}
-        onSubmit={async (values) => {
+        onSubmit={async (values, form, setSuccess) => {
           await axios.post(`/password-reset/${router.query.token}`, values);
+
+          form.reset();
+          setSuccess(
+            <span>
+              Your passprd has been successfully reset. You can now{" "}
+              <Link href={"/login"} className={utilities.typograpy.textLink}>
+                login here
+              </Link>
+            </span>
+          );
         }}
         fields={[
           {

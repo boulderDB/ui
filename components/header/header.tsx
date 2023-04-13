@@ -2,8 +2,7 @@ import { Fragment, useEffect, useMemo, useState } from "react";
 import styles from "./header.module.css";
 import utilities from "../../styles/utilities/utilities";
 import Link from "next/link";
-import { Event, Location } from "../../lib/types";
-import cookies from "js-cookie";
+import { Location } from "../../lib/types";
 import { IconButton } from "../iconButton/iconButton";
 import cx from "classix";
 import { useRouter } from "next/router";
@@ -12,9 +11,8 @@ import { useAppContext } from "../../pages/_app";
 import { DropDown } from "../dropdown/dropdown";
 import useSWR, { useSWRConfig } from "swr";
 import { fetcher } from "../../lib/http";
-import { Button } from "../button/button";
-import { resources } from "../../pages/[location]/[resource]";
 import { Dialog, Transition } from "@headlessui/react";
+import { EventList } from "../eventList/eventList";
 
 type HeaderProps = {
   locations: Location[];
@@ -29,11 +27,8 @@ export function Header({ locations }: HeaderProps) {
     currentLocation,
     tokenPayload,
     setCurrentLocation,
-    hasRole,
     logout,
   } = useAppContext();
-
-  const { mutate } = useSWRConfig();
 
   useSWR(
     authenticated && currentLocation
@@ -65,8 +60,6 @@ export function Header({ locations }: HeaderProps) {
   useEffect(() => {
     setMobileOverlay(false);
   }, [router.query.location, router.asPath]);
-
-  const events: Event[] = [...activeEvents, ...upcomingEvents];
 
   return (
     <header className={styles.root}>
@@ -111,34 +104,6 @@ export function Header({ locations }: HeaderProps) {
               >
                 Ranking
               </RouterLink>
-
-              {/* {events.map((event) => (
-                <DropDown<{
-                  id: string;
-                  label: string;
-                  href: string;
-                }>
-                  className={styles.navItem}
-                  items={[
-                    {
-                      id: "boulder",
-                      label: "Boulder",
-                      href: `/${currentLocation.url}/boulder?forEvent=${event.id}`,
-                    },
-                    {
-                      id: "ranking",
-                      label: "Ranking",
-                      href: `/${currentLocation.url}/ranking?forEvent=${event.id}`,
-                    },
-                  ]}
-                  label={event.name}
-                  renderItem={(props, item) => (
-                    <Link href={item.href} onClick={() => props.close()}>
-                      {item.label}
-                    </Link>
-                  )}
-                />
-              ))} */}
             </>
           ) : null}
         </div>
@@ -200,79 +165,17 @@ export function Header({ locations }: HeaderProps) {
         >
           {authenticated && currentLocation ? (
             <>
-              {events?.length ? (
+              {activeEvents?.length ? (
+                <EventList title={"Active event"} items={activeEvents} />
+              ) : null}
+
+              {upcomingEvents?.length ? (
                 <>
-                  <ul className={styles.mobileNav}>
-                    {events.map((event) => (
-                      <li className={styles.mobileNavItem} key={event.id}>
-                        <h3 className={cx(utilities.typograpy.alpha700)}>
-                          Event / {event.name}
-                        </h3>
-
-                        {event.isParticipant ? (
-                          <ul className={styles.event}>
-                            <li>
-                              <RouterLink
-                                href={`/boulder?forEvent=${event.id}`}
-                                prefixLocation={true}
-                                className={cx(utilities.typograpy.alpha)}
-                              >
-                                Boulder
-                              </RouterLink>
-                            </li>
-
-                            <li>
-                              <RouterLink
-                                href={`/ranking?forEvent=${event.id}`}
-                                prefixLocation={true}
-                                className={cx(utilities.typograpy.alpha)}
-                              >
-                                Ranking
-                              </RouterLink>
-                            </li>
-                          </ul>
-                        ) : (
-                          <>
-                            {event.public ? (
-                              <Button
-                                className={styles.event}
-                                size="small"
-                                outlined={true}
-                                display="inline"
-                                onClick={async () => {
-                                  await mutate(
-                                    `/api/${currentLocation.url}/events/${event.id}/registration`,
-                                    async () => {
-                                      await fetch(
-                                        `/api/${currentLocation.url}/events/${event.id}/registration`,
-                                        {
-                                          method: "POST",
-                                        }
-                                      );
-                                    }
-                                  );
-
-                                  await mutate(
-                                    `/api/${currentLocation?.url}/events?filter=active`
-                                  );
-
-                                  await mutate(
-                                    `/api/${currentLocation.url}/events?filter=upcoming`
-                                  );
-                                }}
-                              >
-                                Register
-                              </Button>
-                            ) : null}
-                          </>
-                        )}
-                      </li>
-                    ))}
-                  </ul>
-
-                  <hr />
+                  <EventList title={"Upcoming event"} items={upcomingEvents} />
                 </>
               ) : null}
+
+              <hr />
 
               <ul className={styles.mobileNav}>
                 <li className={styles.mobileNavItem}>

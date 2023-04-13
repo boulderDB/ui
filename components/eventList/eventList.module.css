@@ -1,0 +1,25 @@
+.root {
+  padding-bottom: 16px;
+}
+
+.root,
+.item {
+  margin-top: 16px;
+
+  &:first-child {
+    margin-top: 0;
+  }
+}
+
+.links,
+.button {
+  margin-top: 8px;
+}
+
+.links {
+  display: flex;
+}
+
+.links > * {
+  margin-right: 16px;
+}

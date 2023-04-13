@@ -21,6 +21,8 @@ import {
   ChartData,
 } from "chart.js";
 import { util } from "zod";
+import { EventList } from "../../components/eventList/eventList";
+import styles from "../../styles/pages/index.module.css";
 
 ChartJS.register(
   RadialLinearScale,
@@ -99,40 +101,41 @@ export default function Page() {
     };
   }, [boulders]);
 
+  const { data: activeEvents = [] } = useSWR(
+    currentLocation
+      ? `/api/${currentLocation?.url}/events?filter=active`
+      : null,
+    fetcher
+  );
+
+  const { data: upcomingEvents = [] } = useSWR(
+    currentLocation
+      ? `/api/${currentLocation?.url}/events?filter=upcoming`
+      : null,
+    fetcher
+  );
+
   if (!boulders) {
     return <Loader />;
   }
 
   return (
-    <h1 className={utilities.typograpy.alpha700}>
-      Welcome back {tokenPayload?.username} 👋
-      {/* <div>
-        <div>
-          {tagChartData ? (
-            <Radar
-              height={400}
-              data={tagChartData}
-              options={{
-                plugins: {
-                  legend: {
-                    display: false,
-                  },
-                },
-                maintainAspectRatio: false,
-              }}
-            />
-          ) : null}
-        </div>
+    <>
+      <h1 className={utilities.typograpy.alpha700}>
+        Welcome back {tokenPayload?.username} 👋
+      </h1>
 
-        <ul>
-          {tags?.map((tag) => (
-            <li key={tag.id}>
-              {tag.emoji}{" "}
-              <span className={utilities.typograpy.delta}>{tag.name}</span>
-            </li>
-          ))}
-        </ul>
-      </div> */}
-    </h1>
+      <div className={styles.events}>
+        {activeEvents?.length ? (
+          <EventList title={"Active event"} items={activeEvents} />
+        ) : null}
+
+        {upcomingEvents?.length ? (
+          <>
+            <EventList title={"Upcoming event"} items={upcomingEvents} />
+          </>
+        ) : null}
+      </div>
+    </>
   );
 }

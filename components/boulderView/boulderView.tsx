@@ -439,12 +439,14 @@ export function BoulderView({
         select: hasRole("ROLE_ADMIN") || hasRole("ROLE_SETTER"),
       },
     },
+
     onColumnFiltersChange: setColumnFilters,
     onGlobalFilterChange: setGlobalFilter,
     onSortingChange: setSorting,
     onRowSelectionChange: setRowSelection,
 
     enableRowSelection: true,
+    autoResetAll: false,
 
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
@@ -481,9 +483,10 @@ export function BoulderView({
                   emptyOptionLabel="All"
                   value={appliedFilter ? (appliedFilter.value as Option) : null}
                   className={styles.select}
-                  onChange={(value) =>
-                    header?.column?.setFilterValue(() => value)
-                  }
+                  onChange={(value) => {
+                    header?.column?.setFilterValue(() => value);
+                    table.resetPageIndex();
+                  }}
                 />
               </div>
             );

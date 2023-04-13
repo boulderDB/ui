@@ -72,7 +72,7 @@ Wrap these usages of :hover pseudo class with this media query:
 /* @media (prefers-color-scheme: dark) {
   :root {
     --color-black: #ffffff;
-    --color-white: #000000;
+    --color-white: #121212;
   }
 } */
 
