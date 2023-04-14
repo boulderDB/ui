@@ -3,8 +3,11 @@ import packageJson from "./../../package.json";
 import utilities from "../../styles/utilities/utilities";
 import { cx } from "classix";
 import Link from "next/link";
+import { useAppContext } from "../../pages/_app";
 
 export function Footer() {
+  const { currentLocation } = useAppContext();
+
   return (
     <footer className={styles.root}>
       <a
@@ -23,7 +26,11 @@ export function Footer() {
 
         <Link
           className={cx(styles.item, utilities.typograpy.delta)}
-          href={"https://old.boulderdb.de"}
+          href={
+            currentLocation
+              ? `https://old.boulderdb.de/${currentLocation.url}`
+              : "https://old.boulderdb.de"
+          }
         >
           Old version
         </Link>
