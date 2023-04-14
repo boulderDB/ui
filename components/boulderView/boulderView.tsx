@@ -589,7 +589,7 @@ export function BoulderView({
 
       <Pagination
         pageIndex={table.getState().pagination.pageIndex}
-        pageSize={20}
+        pageSize={10}
         pageCount={table.getPageCount()}
         canPreviousPage={table.getCanPreviousPage()}
         canNextPage={table.getCanNextPage()}
