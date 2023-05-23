@@ -239,7 +239,7 @@ export function BoulderView({
           return row.original.grade.id === filterValue.id;
         },
       }),
-      columnHelper.accessor("points", {
+      columnHelper.accessor("currentPoints", {
         header: () => "Points",
         cell: (props) => `${props.getValue()}`,
       }),
