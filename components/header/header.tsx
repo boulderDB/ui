@@ -13,6 +13,7 @@ import useSWR, { useSWRConfig } from "swr";
 import { fetcher } from "../../lib/http";
 import { Dialog, Transition } from "@headlessui/react";
 import { EventList } from "../eventList/eventList";
+import { type } from "os";
 
 type HeaderProps = {
   locations: Location[];
@@ -28,6 +29,7 @@ export function Header({ locations }: HeaderProps) {
     tokenPayload,
     setCurrentLocation,
     logout,
+    hasRole,
   } = useAppContext();
 
   useSWR(
@@ -56,6 +58,69 @@ export function Header({ locations }: HeaderProps) {
       authenticated && currentLocation ? `/${currentLocation.url}` : "/login",
     [authenticated]
   );
+
+  const admin = useMemo(() => {
+    if (!authenticated || !hasRole("ROLE_ADMIN")) {
+      return null;
+    }
+
+    return (
+      <DropDown
+        className={styles.admin}
+        label={"Admin"}
+        items={[
+          {
+            id: "/admin/boulders",
+            label: "Boulder",
+          },
+          {
+            id: "/admin/events",
+            label: "Events",
+          },
+          {
+            id: "/admin/setters",
+            label: "Setter",
+          },
+          {
+            id: "/admin/users",
+            label: "User",
+          },
+          {
+            id: "/admin/areas",
+            label: "Areas",
+          },
+          {
+            id: "/admin/walls",
+            label: "Walls",
+          },
+          {
+            id: "/admin/grades",
+            label: "Grades",
+          },
+          {
+            id: "/admin/holdtypes",
+            label: "Hold types",
+          },
+          {
+            id: "/admin/boulder-tags",
+            label: "Tags",
+          },
+          {
+            id: "/admin/readable-identifiers",
+            label: "Readable identifiers",
+          },
+        ]}
+        renderItem={(props, item) => item.label}
+        onClick={async (item) => {
+          if (typeof window !== "undefined") {
+            window.open(
+              `https://old.boulderdb.de/${currentLocation?.url}/${item.id}`
+            );
+          }
+        }}
+      />
+    );
+  }, [authenticated && hasRole("ROLE_ADMIN")]);
 
   useEffect(() => {
     setMobileOverlay(false);
@@ -109,23 +174,9 @@ export function Header({ locations }: HeaderProps) {
         </div>
 
         <div className={styles.secondary}>
-          {/* {authenticated && hasRole("ROLE_ADMIN") ? (
-            <DropDown
-              className={styles.admin}
-              label={"Admin"}
-              items={resources}
-              renderItem={(props, item) => (
-                <Link
-                  href={`/${currentLocation?.url}/${item.id}`}
-                  onClick={() => props.close()}
-                >
-                  {item.label}
-                </Link>
-              )}
-            />
-          ) : null} */}
+          {admin}
 
-          {/* {authenticated && tokenPayload ? (
+          {authenticated && tokenPayload ? (
             <>
               <RouterLink
                 href={"/account"}
@@ -135,16 +186,13 @@ export function Header({ locations }: HeaderProps) {
               </RouterLink>
 
               <button
-                onClick={() => {
-                  cookies.remove("authenticated");
-                  router.push("/login");
-                }}
+                onClick={() => logout()}
                 className={cx(utilities.typograpy.delta, styles.navItem)}
               >
                 Logout
               </button>
             </>
-          ) : null} */}
+          ) : null}
 
           {authenticated ? (
             <IconButton
@@ -174,8 +222,6 @@ export function Header({ locations }: HeaderProps) {
                   <EventList title={"Upcoming event"} items={upcomingEvents} />
                 </>
               ) : null}
-
-              <hr />
 
               <ul className={styles.mobileNav}>
                 <li className={styles.mobileNavItem}>

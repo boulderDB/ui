@@ -81,9 +81,9 @@ export function Details({ id }: DetailsProps) {
                 {parseDate(ascent.createdAt)}
               </span>
 
-              <Button size={"small"} display={"inline"} outlined={true}>
+              {/* <Button size={"small"} display={"inline"} outlined={true}>
                 Doubt it
-              </Button>
+              </Button> */}
             </li>
           ))}
         </ol>
@@ -107,12 +107,12 @@ export function Details({ id }: DetailsProps) {
           ))}
         </ul>
 
-        <Button className={styles.addCommentButton}>Leave a comment</Button>
+        {/* <Button className={styles.addCommentButton}>Leave a comment</Button> */}
       </section>
 
-      <section className={styles.section}>
+      {/* <section className={styles.section}>
         <Button variant={"danger"}>Report error</Button>
-      </section>
+      </section> */}
     </div>
   );
 }

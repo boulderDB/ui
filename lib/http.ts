@@ -1,6 +1,4 @@
 import { ErrorReponse } from "./types";
-import cookies from "js-cookie";
-
 export class HTTPError extends Error {
   response: ErrorReponse;
 
@@ -11,21 +9,24 @@ export class HTTPError extends Error {
 }
 
 export const fetcher = async (url: string) => {
-  // if (cookies.get("authenticated") !== "true") {
-  //   throw new HTTPError({
-  //     code: 401,
-  //     message: "Unauthorized",
-  //   });
-  // }
+  try {
+    const response = await fetch(url);
 
-  const response = await fetch(url);
-  const data = await response.json();
+    if (response.status === 204) {
+      return;
+    }
 
-  if (!response.ok) {
-    const error = new HTTPError(data);
+    const data = await response.json();
 
-    throw error;
+    if (!response.ok) {
+      const error = new HTTPError(data);
+
+      throw error;
+    }
+
+    return data;
+  } catch (error) {
+    console.error(url);
+    console.error(error);
   }
-
-  return data;
 };

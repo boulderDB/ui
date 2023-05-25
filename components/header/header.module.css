@@ -7,6 +7,7 @@
   border-bottom: 1px solid var(--color-black);
   color: var(--color-black);
   background-color: var(--color-white);
+  padding: 0 16px;
 }
 
 .nav {
@@ -27,7 +28,7 @@
   cursor: pointer;
 }
 
-@media (--xl-to-m) {
+@media (min-width: 720px) {
   .navItem {
     display: block;
   }
@@ -39,8 +40,13 @@
 
 .logo,
 .toggleMobileMenu {
-  padding: 16px;
   display: block;
+}
+
+.toggleMobileMenu {
+  @media (min-width: 720px) {
+    display: none;
+  }
 }
 
 .mobileOverlay {
@@ -53,6 +59,10 @@
   background-color: var(--color-white);
   padding: 16px;
   overflow-y: scroll;
+
+  @media (min-width: 720px) {
+    display: none;
+  }
 }
 
 .mobileNav {
@@ -69,9 +79,13 @@
 }
 
 .admin {
-  display: none;
+  margin-right: 16px;
 
-  @media (--xl-to-m) {
-    display: block;
+  @media (min-width: 720px) {
+    margin-right: 0;
   }
+}
+
+.dropdownLink {
+  width: 100%;
 }

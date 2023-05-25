@@ -172,9 +172,7 @@ export default function MyApp({
           console.error(error);
 
           if (error?.response?.code === 401) {
-            cookies.remove("authenticated");
-
-            return router.push("/login");
+            logout();
           }
         },
       }}

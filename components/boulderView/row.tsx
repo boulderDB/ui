@@ -13,7 +13,14 @@ type RowProps = {
 export function Row({ collapsed, admin, id, getVisibleCells }: RowProps) {
   if (!collapsed) {
     return (
-      <div key={id} className={cx(styles.root, admin ? styles.isAdmin : null)}>
+      <div
+        key={id}
+        className={cx(
+          styles.root,
+          admin ? styles.isAdmin : null,
+          utilities.typograpy.delta
+        )}
+      >
         {getVisibleCells().map((cell) => (
           <div
             key={cell.id}

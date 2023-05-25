@@ -2,6 +2,7 @@ import cx from "classix";
 import utilities from "../../styles/utilities/utilities";
 import { Header, flexRender } from "@tanstack/react-table";
 import { Icon } from "../icon/icon";
+import styles from "./tableHeaderCell.module.css";
 
 type TableHeaderProps<TData, TValue> = {
   header: Header<TData, TValue>;
@@ -17,11 +18,13 @@ export function TableHeaderCell<TData, TValue>({
   return (
     <button
       {...{
-        className: cx(utilities.typograpy.delta700),
+        className: cx(utilities.typograpy.delta700, styles.root),
         onClick: header.column.getToggleSortingHandler(),
       }}
     >
-      {flexRender(header.column.columnDef.header, header.getContext())}
+      <span>
+        {flexRender(header.column.columnDef.header, header.getContext())}
+      </span>
 
       {{
         asc: <Icon name="chevronUp" />,

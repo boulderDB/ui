@@ -91,7 +91,12 @@ export function BoulderView({
   const [globalFilter, setGlobalFilter] = useState("");
   const [columnFilters, setColumnFilters] =
     useState<ColumnFiltersState>(initialFilters);
-  const [sorting, setSorting] = useState<SortingState>([]);
+  const [sorting, setSorting] = useState<SortingState>([
+    {
+      id: "createdAt",
+      desc: true,
+    },
+  ]);
 
   const { currentLocation, hasRole } = useAppContext();
 
