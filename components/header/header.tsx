@@ -114,7 +114,7 @@ export function Header({ locations }: HeaderProps) {
         onClick={async (item) => {
           if (typeof window !== "undefined") {
             window.open(
-              `https://old.boulderdb.de/${currentLocation?.url}/${item.id}`
+              `${process.env.NEXT_PUBLIC_LEGACY_HOST}/${currentLocation?.url}/${item.id}`
             );
           }
         }}

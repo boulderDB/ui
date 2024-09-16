@@ -1,0 +1,45 @@
+name: INTERNAL deployment
+
+on:
+  push:
+    branches: [ "dev" ]
+
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    environment:
+      name: internal
+      url: https://dev.boulderdb.de
+    env:
+      SSH_USER: ${{ secrets.INTERNAL_SSH_USER }}
+      SSH_KEY: ${{ secrets.INTERNAL_SSH_KEY }}
+      SSH_HOST: ${{ secrets.INTERNAL_SSH_HOST }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Configure SSH
+        run: |
+          mkdir -p ~/.ssh/
+          echo "$SSH_KEY" > ~/.ssh/infra.key
+          chmod 600 ~/.ssh/infra.key
+          cat >>~/.ssh/config <<END
+          Host target
+            HostName $SSH_HOST
+            User $SSH_USER
+            IdentityFile ~/.ssh/infra.key
+            StrictHostKeyChecking no
+          END
+
+      - name: Sync repository
+        run: rsync . --archive --recursive --checksum --verbose --delete target:/var/www/boulderdb/current/ui
+
+      - name: Copy shared files and environment configuration
+        run: ssh target "cd /var/www/boulderdb && cp -rf shared/. current && cd /var/www/boulderdb/current"
+
+      - name: Run postdeploy.sh
+        run: ssh target "cd /var/www/boulderdb/current && ./postdeploy.sh"

@@ -28,8 +28,8 @@ export function Footer() {
           className={cx(styles.item, utilities.typograpy.delta)}
           href={
             currentLocation
-              ? `https://old.boulderdb.de/${currentLocation.url}`
-              : "https://old.boulderdb.de"
+              ? `${process.env.NEXT_PUBLIC_LEGACY_HOST}/${currentLocation.url}`
+              : process.env.NEXT_PUBLIC_LEGACY_HOST
           }
         >
           Old version
