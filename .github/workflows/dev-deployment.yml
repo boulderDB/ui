@@ -14,9 +14,9 @@ jobs:
       name: internal
       url: https://dev.boulderdb.de
     env:
-      SSH_USER: ${{ secrets.STAGING_SSH_USER }}
-      SSH_KEY: ${{ secrets.STAGING_SSH_KEY }}
-      SSH_HOST: ${{ secrets.STAGING_SSH_HOST }}
+      SSH_USER: ${{ secrets.INTERNAL_SSH_USER }}
+      SSH_KEY: ${{ secrets.INTERNAL_SSH_KEY }}
+      SSH_HOST: ${{ secrets.INTERNAL_SSH_HOST }}
 
     steps:
       - name: Checkout
