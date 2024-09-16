@@ -29,7 +29,7 @@ export function Footer() {
           href={
             currentLocation
               ? `${process.env.NEXT_PUBLIC_LEGACY_HOST}/${currentLocation.url}`
-              : process.env.NEXT_PUBLIC_LEGACY_HOST
+              : process.env.NEXT_PUBLIC_LEGACY_HOST as string
           }
         >
           Old version
