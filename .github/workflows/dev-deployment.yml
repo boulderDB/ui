@@ -1,4 +1,4 @@
-name: INTERNAL deployment
+name: dev deployment
 
 on:
   push:
