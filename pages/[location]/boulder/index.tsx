@@ -18,19 +18,19 @@ export default function Page() {
     hasRole("ROLE_ADMIN") && query.forUser
       ? `/api/${currentLocation?.url}/users/${query.forUser}`
       : null,
-    fetcher
+    fetcher,
   );
 
   const { data: event, isLoading: eventIsLoading } = useSWR<Event>(
     query.forEvent
       ? `/api/${currentLocation?.url}/events/${query.forEvent}`
       : null,
-    fetcher
+    fetcher,
   );
 
   const { data: boulders } = useSWR<Boulder[]>(
     `/api/${currentLocation?.url}/boulders`,
-    fetcher
+    fetcher,
   );
 
   if (!boulders || eventIsLoading) {
@@ -74,7 +74,8 @@ export default function Page() {
   return (
     <>
       <h1 className={utilities.typograpy.alpha700}>
-        Boulder ({event ? event.boulders.length : boulders?.length})
+        {event ? event.name : null} Boulder (
+        {event ? event.boulders.length : boulders?.length})
       </h1>
 
       <BoulderView
