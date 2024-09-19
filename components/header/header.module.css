@@ -80,9 +80,11 @@
 
 .admin {
   margin-right: 16px;
+  display: none;
 
   @media (min-width: 720px) {
     margin-right: 0;
+    display: block;
   }
 }
 

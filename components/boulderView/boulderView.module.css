@@ -73,6 +73,10 @@
       display: none;
     }
   }
+
+  &.isAscentHeaderCell * {
+    justify-content: flex-end;
+  }
 }
 
 .name {

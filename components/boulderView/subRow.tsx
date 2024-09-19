@@ -23,6 +23,7 @@ export function SubRow({ original, onClose, forUser, forEvent }: SubRowProps) {
       <Ascents
         variant="vertical"
         userAscent={original.userAscent}
+        enableResignation={forEvent === undefined}
         onCheck={async (type) => {
           const mutations = await addAscent({
             type,

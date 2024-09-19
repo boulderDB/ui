@@ -36,27 +36,27 @@ export function Header({ locations }: HeaderProps) {
     authenticated && currentLocation
       ? `/api/${currentLocation?.url}/ping`
       : null,
-    fetcher
+    fetcher,
   );
 
   const { data: activeEvents = [] } = useSWR(
     currentLocation
       ? `/api/${currentLocation?.url}/events?filter=active`
       : null,
-    fetcher
+    fetcher,
   );
 
   const { data: upcomingEvents = [] } = useSWR(
     currentLocation
       ? `/api/${currentLocation?.url}/events?filter=upcoming`
       : null,
-    fetcher
+    fetcher,
   );
 
   const backlink = useMemo(
     () =>
       authenticated && currentLocation ? `/${currentLocation.url}` : "/login",
-    [authenticated]
+    [authenticated],
   );
 
   const admin = useMemo(() => {
@@ -114,7 +114,7 @@ export function Header({ locations }: HeaderProps) {
         onClick={async (item) => {
           if (typeof window !== "undefined") {
             window.open(
-              `${process.env.NEXT_PUBLIC_LEGACY_HOST}/${currentLocation?.url}/${item.id}`
+              `${process.env.NEXT_PUBLIC_LEGACY_HOST}/${currentLocation?.url}/${item.id}`,
             );
           }
         }}
@@ -243,6 +243,17 @@ export function Header({ locations }: HeaderProps) {
                     Ranking
                   </RouterLink>
                 </li>
+
+                {authenticated && hasRole("ROLE_ADMIN") ? (
+                  <li className={styles.mobileNavItem}>
+                    <RouterLink
+                      href={`${process.env.NEXT_PUBLIC_LEGACY_HOST}/${currentLocation.url}/admin`}
+                      className={cx(utilities.typograpy.alpha700)}
+                    >
+                      Admin
+                    </RouterLink>
+                  </li>
+                ) : null}
               </ul>
 
               {authenticated && tokenPayload ? (

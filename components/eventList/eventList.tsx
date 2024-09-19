@@ -6,6 +6,7 @@ import { RouterLink } from "../routerLink/routerLink";
 import { Button } from "../button/button";
 import { useSWRConfig } from "swr";
 import { useAppContext } from "../../pages/_app";
+import { parseDate } from "../../lib/parseDate";
 
 type EventListProps = {
   title: string;
@@ -21,9 +22,16 @@ export function EventList({ title, items, className }: EventListProps) {
     <ul className={cx(styles.root, className)}>
       {items.map((event) => (
         <li className={styles.item} key={event.id}>
-          <h3 className={cx(utilities.typograpy.alpha700)}>
-            {title}: {event.name}
+          <h3
+            className={cx(utilities.typograpy.alpha700, utilities.colors.lila)}
+          >
+            {event.name}
           </h3>
+
+          <span>
+            {parseDate(event.startDate, true)} —{" "}
+            {parseDate(event.endDate, true)}
+          </span>
 
           {event.isParticipant ? (
             <ul className={styles.links}>
@@ -31,9 +39,9 @@ export function EventList({ title, items, className }: EventListProps) {
                 <RouterLink
                   href={`/boulder?forEvent=${event.id}`}
                   prefixLocation={true}
-                  className={cx(utilities.typograpy.alpha)}
+                  className={cx(utilities.typograpy.delta700, styles.button)}
                 >
-                  Boulder
+                  Boulders
                 </RouterLink>
               </li>
 
@@ -41,7 +49,7 @@ export function EventList({ title, items, className }: EventListProps) {
                 <RouterLink
                   href={`/ranking?forEvent=${event.id}`}
                   prefixLocation={true}
-                  className={cx(utilities.typograpy.alpha)}
+                  className={cx(utilities.typograpy.delta700, styles.button)}
                 >
                   Ranking
                 </RouterLink>
@@ -67,21 +75,21 @@ export function EventList({ title, items, className }: EventListProps) {
                           }/registration`,
                           {
                             method: "POST",
-                          }
+                          },
                         );
-                      }
+                      },
                     );
 
                     await mutate(
                       `/api/${
                         (currentLocation as Location).url
-                      }/events?filter=active`
+                      }/events?filter=active`,
                     );
 
                     await mutate(
                       `/api/${
                         (currentLocation as Location).url
-                      }/events?filter=upcoming`
+                      }/events?filter=upcoming`,
                     );
                   }}
                 >

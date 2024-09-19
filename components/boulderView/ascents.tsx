@@ -11,6 +11,7 @@ type AscentsProps = {
   variant?: "vertical" | "horizontal";
   onCheck: (type: Ascent["type"]) => Promise<void>;
   onUncheck: () => Promise<void>;
+  enableResignation?: boolean;
 };
 
 export function Ascents({
@@ -18,6 +19,7 @@ export function Ascents({
   variant = "horizontal",
   onCheck,
   onUncheck,
+  enableResignation = false,
 }: AscentsProps) {
   const [pending, setPending] = useState(false);
 
@@ -25,7 +27,7 @@ export function Ascents({
     type: Ascent["type"],
     ascent: Ascent | null,
     onCheck: AscentsProps["onCheck"],
-    onUncheck: AscentsProps["onUncheck"]
+    onUncheck: AscentsProps["onUncheck"],
   ): Omit<AscentProps, "className" | "label"> {
     const disabled = ascent ? ascent.type !== type : false;
     const checked = ascent?.type === type;
@@ -50,7 +52,7 @@ export function Ascents({
         styles.root,
         pending ? styles.isPending : null,
         doubted ? styles.isDoubted : null,
-        styles[`is${capitalize(variant)}`]
+        styles[`is${capitalize(variant)}`],
       )}
     >
       <AscentComponent
@@ -65,11 +67,13 @@ export function Ascents({
         {...getAscentProps("top", userAscent, onCheck, onUncheck)}
       />
 
-      <AscentComponent
-        label={variant !== "horizontal" ? "Resignation (hide)" : undefined}
-        className={styles.item}
-        {...getAscentProps("resignation", userAscent, onCheck, onUncheck)}
-      />
+      {enableResignation ? (
+        <AscentComponent
+          label={variant !== "horizontal" ? "Resignation (hide)" : undefined}
+          className={styles.item}
+          {...getAscentProps("resignation", userAscent, onCheck, onUncheck)}
+        />
+      ) : null}
 
       {doubted ? (
         <span className={styles.doubtedLabel}>Ascent doubted!</span>

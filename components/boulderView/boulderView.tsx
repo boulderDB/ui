@@ -107,7 +107,7 @@ export function BoulderView({
         label: "Area",
         options: uniqBy(
           data.flatMap((boulder) => boulder.areas),
-          "id"
+          "id",
         ),
         getOptionLabel: (option) => option.name,
       }),
@@ -116,7 +116,7 @@ export function BoulderView({
         label: "Hold type",
         options: uniqBy(
           data.flatMap((boulder) => boulder.holdType),
-          "id"
+          "id",
         ),
         getOptionLabel: selectOptionLabels.holdType,
       }),
@@ -125,7 +125,7 @@ export function BoulderView({
         label: "Grade",
         options: uniqBy(
           data.flatMap((boulder) => boulder.grade),
-          "id"
+          "id",
         ),
         getOptionLabel: selectOptionLabels.grade,
       }),
@@ -134,7 +134,7 @@ export function BoulderView({
         label: "Start",
         options: uniqBy(
           data.flatMap((boulder) => boulder.startWall),
-          "id"
+          "id",
         ),
         getOptionLabel: (option) => option.name,
       }),
@@ -143,7 +143,7 @@ export function BoulderView({
         label: "End",
         options: uniqBy(
           data.flatMap((boulder) => boulder.endWall),
-          "id"
+          "id",
         ),
         getOptionLabel: (option) => option.name,
       }),
@@ -152,7 +152,7 @@ export function BoulderView({
         label: "Setter",
         options: uniqBy(
           data.flatMap((boulder) => boulder.setters),
-          "id"
+          "id",
         ),
         getOptionLabel: (option) => option.username,
       }),
@@ -168,7 +168,7 @@ export function BoulderView({
         ),
       }),
     ],
-    [data]
+    [data],
   );
 
   const columns = useMemo(
@@ -272,7 +272,7 @@ export function BoulderView({
               className={cx(
                 styles.name,
                 typography.delta700,
-                utilities.colors.lila
+                utilities.colors.lila,
               )}
             >
               <Details id={props.row.original.id} />
@@ -323,7 +323,7 @@ export function BoulderView({
           }
 
           return row.original.setters.some(
-            (setter) => setter.id === filterValue.id
+            (setter) => setter.id === filterValue.id,
           );
         },
       }),
@@ -333,13 +333,14 @@ export function BoulderView({
       }),
       columnHelper.accessor("userAscent", {
         id: "ascent",
-        header: () => "Flash | Top | Hide",
+        header: () => `Flash | Top ${forEvent === undefined ? "| Hide" : ""}`,
         cell: ({ getValue, row }) => {
           const ascent = getValue();
 
           return (
             <Ascents
               userAscent={ascent}
+              enableResignation={forEvent === undefined}
               onCheck={async (type) => {
                 const mutations = await addAscent({
                   type,
@@ -428,7 +429,7 @@ export function BoulderView({
         },
       }),
     ],
-    [currentLocation]
+    [currentLocation],
   );
 
   const table = useReactTable({
@@ -474,7 +475,7 @@ export function BoulderView({
               .find((column) => column.id === filter.id);
 
             const appliedFilter = columnFilters.find(
-              (columnFilter) => columnFilter.id === filter.id
+              (columnFilter) => columnFilter.id === filter.id,
             );
 
             type Option = (typeof filter.options)[number];
@@ -502,7 +503,7 @@ export function BoulderView({
           <div className={styles.searchTags}>
             {columnFilters.map((columnFilter) => {
               const filter = filters.find(
-                (filter) => filter.id === columnFilter.id
+                (filter) => filter.id === columnFilter.id,
               );
 
               if (!filter || !columnFilter.value) {
@@ -522,7 +523,7 @@ export function BoulderView({
                       setColumnFilters([
                         ...columnFilters.filter(
                           (appliedColumnFilter) =>
-                            appliedColumnFilter.id !== columnFilter.id
+                            appliedColumnFilter.id !== columnFilter.id,
                         ),
                       ])
                     }
@@ -554,7 +555,7 @@ export function BoulderView({
               styles.header,
               hasRole("ROLE_ADMIN") || hasRole("ROLE_SETTER")
                 ? styles.isAdmin
-                : null
+                : null,
             )}
           >
             {headerGroup.headers.map((header) => (
@@ -562,7 +563,7 @@ export function BoulderView({
                 key={header.id}
                 className={cx(
                   styles.headerCell,
-                  styles[`is${capitalize(header.column.id)}HeaderCell`]
+                  styles[`is${capitalize(header.column.id)}HeaderCell`],
                 )}
               >
                 <TableHeaderCell header={header} />
@@ -619,7 +620,7 @@ export function BoulderView({
           <span
             className={cx(
               utilities.typograpy.gamma,
-              utilities.typograpy.nowrap
+              utilities.typograpy.nowrap,
             )}
           >
             Checking boulders for user:{" "}

@@ -13,7 +13,21 @@
 
 .links,
 .button {
-  margin-top: 8px;
+  margin-top: 16px;
+}
+
+.button {
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+  background-color: var(--color-lila);
+  color: var(--color-white);
+  letter-spacing: 0.05em;
+  text-align: center;
+  height: 48px;
+  padding: 6px 16px;
+  text-transform: none;
+  border-radius: 4px;
 }
 
 .links {
